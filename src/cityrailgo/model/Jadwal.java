@@ -1,12 +1,9 @@
 package cityrailgo.model;
 
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import java.time.LocalDateTime;
 import java.time.Duration;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Jadwal {
     public static final String STATUS_TERSEDIA = "TERSEDIA";
@@ -14,64 +11,38 @@ public class Jadwal {
     public static final String STATUS_DIBATALKAN = "DIBATALKAN";
     public static final String STATUS_SELESAI = "SELESAI";
 
-    private final IntegerProperty id;
-    private final ObjectProperty<Kereta> kereta;
-    private final ObjectProperty<Rute> rute;
-    private final ObjectProperty<LocalDateTime> waktuBerangkat;
-    private final ObjectProperty<LocalDateTime> waktuTiba;
-    private final DoubleProperty hargaBase;
-    private final StringProperty status;
-    private final ObservableList<Tiket> tiketList;
+    private int id;
+    private Kereta kereta; // Dibuat oleh temanmu
+    private Rute rute;
+    private LocalDateTime waktuBerangkat;
+    private LocalDateTime waktuTiba;
+    private double hargaBase;
+    private String status;
+    private List<Tiket> tiketList;
 
-    public Jadwal(int id, Kereta kereta, Rute rute, LocalDateTime waktuBerangkat, LocalDateTime waktuTiba, double hargaBase, String status, List<Tiket> tiketList) {
-        this.id = new SimpleIntegerProperty(id);
-        this.kereta = new SimpleObjectProperty<>(kereta);
-        this.rute = new SimpleObjectProperty<>(rute);
-        this.waktuBerangkat = new SimpleObjectProperty<>(waktuBerangkat);
-        this.waktuTiba = new SimpleObjectProperty<>(waktuTiba);
-        this.hargaBase = new SimpleDoubleProperty(hargaBase);
-        this.status = new SimpleStringProperty(status);
-        this.tiketList = FXCollections.observableArrayList(tiketList != null ? tiketList : new ArrayList<>());
+    public Jadwal() {
+        this.tiketList = new ArrayList<>();
+        this.status = STATUS_TERSEDIA;
     }
 
-    public int getId() { return id.get(); }
-    public void setId(int value) { id.set(value); }
-
-    public Kereta getKereta() { return kereta.get(); }
-    public void setKereta(Kereta value) { kereta.set(value); }
-
-    public Rute getRute() { return rute.get(); }
-    public void setRute(Rute value) { rute.set(value); }
-
-    public LocalDateTime getWaktuBerangkat() { return waktuBerangkat.get(); }
-    public void setWaktuBerangkat(LocalDateTime value) { waktuBerangkat.set(value); }
-
-    public LocalDateTime getWaktuTiba() { return waktuTiba.get(); }
-    public void setWaktuTiba(LocalDateTime value) { waktuTiba.set(value); }
-
-    public double getHargaBase() { return hargaBase.get(); }
-    public void setHargaBase(double value) { hargaBase.set(value); }
-
-    public String getStatus() { return status.get(); }
-    public void setStatus(String value) { status.set(value); }
-
-    public ObservableList<Tiket> getTiketList() { return tiketList; }
-
-    public IntegerProperty idProperty() { return id; }
-    public ObjectProperty<Kereta> keretaProperty() { return kereta; }
-    public ObjectProperty<Rute> ruteProperty() { return rute; }
-    public ObjectProperty<LocalDateTime> waktuBerangkatProperty() { return waktuBerangkat; }
-    public ObjectProperty<LocalDateTime> waktuTibaProperty() { return waktuTiba; }
-    public DoubleProperty hargaBaseProperty() { return hargaBase; }
-    public StringProperty statusProperty() { return status; }
+    public Jadwal(int id, Kereta kereta, Rute rute, LocalDateTime waktuBerangkat, LocalDateTime waktuTiba, double hargaBase, String status, List<Tiket> tiketList) {
+        this.id = id;
+        this.kereta = kereta;
+        this.rute = rute;
+        this.waktuBerangkat = waktuBerangkat;
+        this.waktuTiba = waktuTiba;
+        this.hargaBase = hargaBase;
+        this.status = status;
+        this.tiketList = (tiketList != null) ? tiketList : new ArrayList<>();
+    }
 
     public List<Kursi> getKursiTersedia() {
         List<Kursi> kursiKosong = new ArrayList<>();
-        if (getKereta() != null && getKereta().getKursiList() != null) {
-            for (Kursi kursi : getKereta().getKursiList()) {
+        if (kereta != null && kereta.getKursiList() != null) {
+            for (Kursi kursi : kereta.getKursiList()) {
                 boolean sudahDipesan = false;
-                for (Tiket tiket : getTiketList()) {
-                    if (tiket.getKursi() != null && tiket.getKursi().equals(kursi)) {
+                for (Tiket tiket : tiketList) {
+                    if (tiket.getKursi() != null && tiket.getKursi().getId() == kursi.getId()) {
                         sudahDipesan = true;
                         break;
                     }
@@ -81,12 +52,12 @@ public class Jadwal {
                 }
             }
         }
-        return kursiKosong; 
+        return kursiKosong;
     }
 
     public long hitungDurasi() {
-        if (getWaktuBerangkat() != null && getWaktuTiba() != null) {
-            return Duration.between(getWaktuBerangkat(), getWaktuTiba()).toMinutes();
+        if (waktuBerangkat != null && waktuTiba != null) {
+            return Duration.between(waktuBerangkat, waktuTiba).toMinutes();
         }
         return 0;
     }
@@ -99,10 +70,39 @@ public class Jadwal {
     }
 
     public boolean isBisaDipesan() {
-        return STATUS_TERSEDIA.equals(getStatus()) && LocalDateTime.now().isBefore(getWaktuBerangkat());
+        return STATUS_TERSEDIA.equals(status) && LocalDateTime.now().isBefore(waktuBerangkat);
     }
 
     public int getJumlahKursiTerisi() {
         return tiketList.size();
+    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public Kereta getKereta() { return kereta; }
+    public void setKereta(Kereta kereta) { this.kereta = kereta; }
+
+    public Rute getRute() { return rute; }
+    public void setRute(Rute rute) { this.rute = rute; }
+
+    public LocalDateTime getWaktuBerangkat() { return waktuBerangkat; }
+    public void setWaktuBerangkat(LocalDateTime waktuBerangkat) { this.waktuBerangkat = waktuBerangkat; }
+
+    public LocalDateTime getWaktuTiba() { return waktuTiba; }
+    public void setWaktuTiba(LocalDateTime waktuTiba) { this.waktuTiba = waktuTiba; }
+
+    public double getHargaBase() { return hargaBase; }
+    public void setHargaBase(double hargaBase) { this.hargaBase = hargaBase; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public List<Tiket> getTiketList() { return tiketList; }
+    public void setTiketList(List<Tiket> tiketList) { this.tiketList = tiketList; }
+
+    @Override
+    public String toString() {
+        return "Jadwal{" + "id=" + id + ", status='" + status + '\'' + '}';
     }
 }

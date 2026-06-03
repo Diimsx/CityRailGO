@@ -1,101 +1,87 @@
 package cityrailgo.model;
 
-import javafx.beans.property.*;
 import java.time.LocalDateTime;
 
 public class Tiket {
-    private final IntegerProperty id;
-    private final ObjectProperty<Jadwal> jadwal;
-    private final ObjectProperty<Penumpang> penumpang; 
-    private final ObjectProperty<Object> kursi;       
-    private final ObjectProperty<Promo> promo;          
-    private final StringProperty kodeTiket;
-    private final DoubleProperty hargaAkhir;
-    private final ObjectProperty<StatusTiket> status;  
-    private final ObjectProperty<LocalDateTime> tanggalPesan;
+    private int id;
+    private Jadwal jadwal;
+    private Penumpang penumpang; 
+    private Kursi kursi;
+    private Promo promo;        
+    private String kodeTiket;
+    private double hargaAkhir;
+    private String status;      
+    private LocalDateTime tanggalPesan;
 
-    // --- CONSTRUCTOR ---
-    public Tiket(int id, Jadwal jadwal, Penumpang penumpang, Object kursi, Promo promo, String kodeTiket, double hargaAkhir, StatusTiket status, LocalDateTime tanggalPesan) {
-        this.id = new SimpleIntegerProperty(id);
-        this.jadwal = new SimpleObjectProperty<>(jadwal);
-        this.penumpang = new SimpleObjectProperty<>(penumpang);
-        this.kursi = new SimpleObjectProperty<>(kursi);
-        this.promo = new SimpleObjectProperty<>(promo);
-        this.kodeTiket = new SimpleStringProperty(kodeTiket);
-        this.hargaAkhir = new SimpleDoubleProperty(hargaAkhir);
-        this.status = new SimpleObjectProperty<>(status);
-        this.tanggalPesan = new SimpleObjectProperty<>(tanggalPesan);
+    public Tiket() {
+        this.tanggalPesan = LocalDateTime.now();
+        this.status = "AKTIF";
     }
 
-    public int getId() { return id.get(); }
-    public void setId(int value) { id.set(value); }
-
-    public Jadwal getJadwal() { return jadwal.get(); }
-    public void setJadwal(Jadwal value) { jadwal.set(value); }
-
-    public Penumpang getPenumpang() { return penumpang.get(); }
-    public void setPenumpang(Penumpang value) { penumpang.set(value); }
-
-    public Object getKursi() { return kursi.get(); }
-    public void setKursi(Object value) { kursi.set(value); }
-
-    public Promo getPromo() { return promo.get(); }
-    public void setPromo(Promo value) { promo.set(value); }
-
-    public String getKodeTiket() { return kodeTiket.get(); }
-    public void setKodeTiket(String value) { kodeTiket.set(value); }
-
-    public double getHargaAkhir() { return hargaAkhir.get(); }
-    public void setHargaAkhir(double value) { hargaAkhir.set(value); }
-
-    public StatusTiket getStatus() { return status.get(); }
-    public void setStatus(StatusTiket value) { status.set(value); }
-
-    public LocalDateTime getTanggalPesan() { return tanggalPesan.get(); }
-    public void setTanggalPesan(LocalDateTime value) { tanggalPesan.set(value); }
-
-    public IntegerProperty idProperty() { return id; }
-    public ObjectProperty<Jadwal> jadwalProperty() { return jadwal; }
-    public ObjectProperty<Penumpang> penumpangProperty() { return penumpang; }
-    public ObjectProperty<Object> kursiProperty() { return kursi; }
-    public ObjectProperty<Promo> promoProperty() { return promo; }
-    public StringProperty kodeTiketProperty() { return kodeTiket; }
-    public DoubleProperty hargaAkhirProperty() { return hargaAkhir; }
-    public ObjectProperty<StatusTiket> statusProperty() { return status; }
-    public ObjectProperty<LocalDateTime> tanggalPesanProperty() { return tanggalPesan; }
-
+    public Tiket(int id, Jadwal jadwal, Penumpang penumpang, Kursi kursi, Promo promo, String kodeTiket, double hargaAkhir, String status, LocalDateTime tanggalPesan) {
+        this.id = id;
+        this.jadwal = jadwal;
+        this.penumpang = penumpang;
+        this.kursi = kursi;
+        this.promo = promo;
+        this.kodeTiket = kodeTiket;
+        this.hargaAkhir = hargaAkhir;
+        this.status = status;
+        this.tanggalPesan = tanggalPesan;
+    }
 
     public String generateKodeTiket() {
         int randomNum = (int)(Math.random() * 90000) + 10000;
-        String kode = "CRG-" + randomNum;
-        setKodeTiket(kode);
-        return kode;
+        this.kodeTiket = "CRG-" + randomNum;
+        return this.kodeTiket;
     }
 
     public double hitungHargaAkhir() {
         double harga = 0.0;
-        
-        if (getJadwal() != null) {
-            harga = getJadwal().getHargaBase();
+        if (jadwal != null) {
+            harga = jadwal.getHargaBase();
         }
-        
-        if (getPromo() != null) {
-            double diskon = getPromo().hitungDiskon(harga);
+        if (promo != null) {
+            double diskon = promo.hitungDiskon(harga);
             harga = harga - diskon;
         }
-        
-        setHargaAkhir(harga);
+        this.hargaAkhir = harga;
         return harga;
     }
 
-    public void batalkan() 
-        setStatus(StatusTiket.BATAL); 
+    public void batalkan() {
+        this.status = "BATAL";
     }
 
     public String getInfoTiket() {
-        String namaPenumpang = (getPenumpang() != null) ? getPenumpang().getNama() : "Tanpa Nama";
-        String namaKereta = (getJadwal() != null && getJadwal().getKereta() != null) ? getJadwal().getKereta().getNama() : "-";
-        
-        return "Tiket: " + getKodeTiket() + " | Penumpang: " + namaPenumpang + " | Kereta: " + namaKereta + " | Total: Rp" + getHargaAkhir();
+        String namaPen = (penumpang != null) ? penumpang.getNama() : "Tanpa Nama";
+        return "Tiket: " + kodeTiket + " | Penumpang: " + namaPen + " | Total: Rp" + hargaAkhir;
     }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public Jadwal getJadwal() { return jadwal; }
+    public void setJadwal(Jadwal jadwal) { this.jadwal = jadwal; }
+
+    public Penumpang getPenumpang() { return penumpang; }
+    public void setPenumpang(Penumpang penumpang) { this.penumpang = penumpang; }
+
+    public Kursi getKursi() { return kursi; }
+    public void setKursi(Kursi kursi) { this.kursi = kursi; }
+
+    public Promo getPromo() { return promo; }
+    public void setPromo(Promo promo) { this.promo = promo; }
+
+    public String getKodeTiket() { return kodeTiket; }
+    public void setKodeTiket(String kodeTiket) { this.kodeTiket = kodeTiket; }
+
+    public double getHargaAkhir() { return hargaAkhir; }
+    public void setHargaAkhir(double hargaAkhir) { this.hargaAkhir = hargaAkhir; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public LocalDateTime getTanggalPesan() { return tanggalPesan; }
+    public void setTanggalPesan(LocalDateTime tanggalPesan) { this.tanggalPesan = tanggalPesan; }
 }

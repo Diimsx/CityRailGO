@@ -19,6 +19,7 @@ public class JenisKelas {
     public String getNamaKelas() { return namaKelas.get(); }
     public String getDeskripsi() { return deskripsi.get(); }
     public double getMultiplierHarga() { return multiplierHarga.get(); }
+
     public IntegerProperty idProperty() { return id; }
     public StringProperty namaKelasProperty() { return namaKelas; }
     public StringProperty deskripsiProperty() { return deskripsi; }

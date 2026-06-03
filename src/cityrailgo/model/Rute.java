@@ -1,31 +1,38 @@
 package cityrailgo.model;
 
-import javafx.beans.property.*;
-
 public class Rute {
-    private final IntegerProperty id;
-    private final StringProperty asal;
-    private final StringProperty tujuan;
-    private final DoubleProperty jarak;
+    private int id;
+    private String asal;
+    private String tujuan;
+    private double jarak;
+
+    public Rute() {}
 
     public Rute(int id, String asal, String tujuan, double jarak) {
-        this.id = new SimpleIntegerProperty(id);
-        this.asal = new SimpleStringProperty(asal);
-        this.tujuan = new SimpleStringProperty(tujuan);
-        this.jarak = new SimpleDoubleProperty(jarak);
+        this.id = id;
+        this.asal = asal;
+        this.tujuan = tujuan;
+        this.jarak = jarak;
     }
 
-    public int getId() { return id.get(); }
-    public String getAsal() { return asal.get(); }
-    public String getTujuan() { return tujuan.get(); }
-    public double getJarak() { return jarak.get(); }
-
-    public IntegerProperty idProperty() { return id; }
-    public StringProperty asalProperty() { return asal; }
-    public StringProperty tujuanProperty() { return tujuan; }
-    public DoubleProperty jarakProperty() { return jarak; }
-
     public String getInfoRute() {
-        return getAsal() + " -> " + getTujuan() + " (" + getJarak() + " km)";
+        return asal + " -> " + tujuan + " (" + jarak + " km)";
+    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getAsal() { return asal; }
+    public void setAsal(String asal) { this.asal = asal; }
+
+    public String getTujuan() { return tujuan; }
+    public void setTujuan(String tujuan) { this.tujuan = tujuan; }
+
+    public double getJarak() { return jarak; }
+    public void setJarak(double jarak) { this.jarak = jarak; }
+
+    @Override
+    public String toString() {
+        return "Rute{" + "id=" + id + ", rute='" + getInfoRute() + '\'' + '}';
     }
 }
