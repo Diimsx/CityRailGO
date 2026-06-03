@@ -8,6 +8,6 @@ package cityrailgo.model;
  *
  * @author LENOVO
  */
-public class Kursi {
+public class Main {
     
 }
