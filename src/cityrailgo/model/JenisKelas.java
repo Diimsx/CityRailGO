@@ -1,31 +1,66 @@
 package cityrailgo.model;
 
-import javafx.beans.property.*;
-
 public class JenisKelas {
-    private final IntegerProperty id;
-    private final StringProperty namaKelas;
-    private final StringProperty deskripsi;
-    private final DoubleProperty multiplierHarga;
+    private int id;
+    private String namaKelas;
+    private String deskripsi;
+    private double multiplierHarga;
+
+    public JenisKelas() {}
 
     public JenisKelas(int id, String namaKelas, String deskripsi, double multiplierHarga) {
-        this.id = new SimpleIntegerProperty(id);
-        this.namaKelas = new SimpleStringProperty(namaKelas);
-        this.deskripsi = new SimpleStringProperty(deskripsi);
-        this.multiplierHarga = new SimpleDoubleProperty(multiplierHarga);
+        this.id              = id;
+        this.namaKelas       = namaKelas;
+        this.deskripsi       = deskripsi;
+        this.multiplierHarga = multiplierHarga;
     }
 
-    public int getId() { return id.get(); }
-    public String getNamaKelas() { return namaKelas.get(); }
-    public String getDeskripsi() { return deskripsi.get(); }
-    public double getMultiplierHarga() { return multiplierHarga.get(); }
-
-    public IntegerProperty idProperty() { return id; }
-    public StringProperty namaKelasProperty() { return namaKelas; }
-    public StringProperty deskripsiProperty() { return deskripsi; }
-    public DoubleProperty multiplierHargaProperty() { return multiplierHarga; }
-
     public double hitungHarga(double hargaBase) {
-        return hargaBase * getMultiplierHarga();
+        return hargaBase * multiplierHarga;
+    }
+
+    public double getMultiplier() {
+        return multiplierHarga;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNamaKelas() {
+        return namaKelas;
+    }
+
+    public void setNamaKelas(String namaKelas) {
+        this.namaKelas = namaKelas;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
+    }
+
+    public double getMultiplierHarga() {
+        return multiplierHarga;
+    }
+
+    public void setMultiplierHarga(double multiplierHarga) {
+        this.multiplierHarga = multiplierHarga;
+    }
+
+    @Override
+    public String toString() {
+        return "JenisKelas{" +
+                "id=" + id +
+                ", namaKelas='" + namaKelas + '\'' +
+                ", multiplierHarga=" + multiplierHarga +
+                '}';
     }
 }
