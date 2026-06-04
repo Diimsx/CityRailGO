@@ -1,43 +1,56 @@
 package cityrailgo.model;
 
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Kereta {
-    private final IntegerProperty id;
-    private final StringProperty nama;
-    private final IntegerProperty kapasitas;
-    private final ObservableList<Kursi> kursiList; 
 
-    public Kereta(int id, String nama, int kapasitas, List<Kursi> kursiList) {
-        this.id = new SimpleIntegerProperty(id);
-        this.nama = new SimpleStringProperty(nama);
-        this.kapasitas = new SimpleIntegerProperty(kapasitas);
-        this.kursiList = FXCollections.observableArrayList(kursiList != null ? kursiList : new ArrayList<>());
+    private int id;
+    private String nama;
+    private int kapasitas;
+    private List<Kursi> kursiList;
+
+    public Kereta(int id, String nama, int kapasitas) {
+        this.id = id;
+        this.nama = nama;
+        this.kapasitas = kapasitas;
+        this.kursiList = new ArrayList<>();
     }
 
-    public int getId() { return id.get(); }
-    public String getNama() { return nama.get(); }
-    public int getKapasitas() { return kapasitas.get(); }
-    public ObservableList<Kursi> getKursiList() { return kursiList; }
+    public int getId() {
+        return id;
+    }
 
-    public IntegerProperty idProperty() { return id; }
-    public StringProperty namaProperty() { return nama; }
-    public IntegerProperty kapasitasProperty() { return kapasitas; }
+    public String getNama() {
+        return nama;
+    }
+
+    public int getKapasitas() {
+        return kapasitas;
+    }
+
+    public List<Kursi> getKursiList() {
+        return kursiList;
+    }
 
     public void tambahKursi(Kursi kursi) {
-        this.kursiList.add(kursi);
+        kursiList.add(kursi);
     }
 
     public List<Kursi> getKursiTersedia(Jadwal jadwal) {
-        if (jadwal == null) return new ArrayList<>(this.kursiList);
-        return jadwal.getKursiTersedia();
+        return kursiList;
     }
 
     public List<Kursi> getKursiByKelas(JenisKelas jenisKelas) {
-        return new ArrayList<>(this.kursiList);
+
+        List<Kursi> hasil = new ArrayList<>();
+
+        for (Kursi kursi : kursiList) {
+            if (kursi.getJenisKelas().equals(jenisKelas)) {
+                hasil.add(kursi);
+            }
+        }
+
+        return hasil;
     }
 }
