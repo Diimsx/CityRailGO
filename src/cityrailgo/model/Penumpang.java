@@ -1,73 +1,55 @@
 package cityrailgo.model;
 
-public class User {
+import java.time.LocalDate;
 
-    private int id;
-    private String username;
-    private String password;
-    private String email;
-    private String namaLengkap;
-    private String noTelepon;
+public class Penumpang extends User {
 
-    public User(String username,
-                String password,
-                String email,
-                String namaLengkap,
-                String noTelepon) {
+    private String nik;
+    private LocalDate tglLahir;
+    private String jenisKelamin;
 
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.namaLengkap = namaLengkap;
-        this.noTelepon = noTelepon;
+    public Penumpang(String username,
+                     String password,
+                     String email,
+                     String namaLengkap,
+                     String noTelepon,
+                     String nik,
+                     LocalDate tglLahir,
+                     String jenisKelamin) {
+
+        super(username,
+                password,
+                email,
+                namaLengkap,
+                noTelepon);
+
+        this.nik = nik;
+        this.tglLahir = tglLahir;
+        this.jenisKelamin = jenisKelamin;
     }
 
-    public int getId() {
-        return id;
+    public String getNik() {
+        return nik;
     }
 
-    public String getUsername() {
-        return username;
+    public LocalDate getTglLahir() {
+        return tglLahir;
     }
 
-    public String getEmail() {
-        return email;
+    public String getJenisKelamin() {
+        return jenisKelamin;
     }
 
-    public String getNamaLengkap() {
-        return namaLengkap;
+    public void setTglLahir(LocalDate tglLahir) {
+        this.tglLahir = tglLahir;
     }
 
-    public String getNoTelepon() {
-        return noTelepon;
+    public void setJenisKelamin(String jenisKelamin) {
+        this.jenisKelamin = jenisKelamin;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setNamaLengkap(String namaLengkap) {
-        this.namaLengkap = namaLengkap;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean login(String username, String password) {
-        return this.username.equals(username)
-                && this.password.equals(password);
-    }
-
-    public void logout() {
-        System.out.println("Logout berhasil");
-    }
-
+    @Override
     public String getRole() {
-        return "User";
+        return "Penumpang";
     }
 }
