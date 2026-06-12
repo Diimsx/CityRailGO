@@ -1,57 +1,46 @@
 package cityrailgo.dao;
 
-import cityrailgo.model.Rute;
+import cityrailgo.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RuteDAO {
+public class TiketDAO {
 
-    private List<Rute> daftarRute = new ArrayList<>();
+    private List<Tiket> daftarTiket = new ArrayList<>();
 
-    public Rute findById(int id) {
+    public Tiket findById(int id) {
 
-        for (Rute rute : daftarRute) {
-            if (rute.getId() == id) {
-                return rute;
+        for (Tiket tiket : daftarTiket) {
+            if (tiket.getId() == id) {
+                return tiket;
             }
         }
 
         return null;
     }
 
-    public List<Rute> findAll() {
-        return daftarRute;
-    }
+    public List<Tiket> findByPenumpang(Penumpang penumpang) {
 
-    public List<Rute> findByAsal(String stasiunAsal) {
+        List<Tiket> hasil = new ArrayList<>();
 
-        List<Rute> hasil = new ArrayList<>();
-
-        for (Rute rute : daftarRute) {
-            if (rute.getAsal().equalsIgnoreCase(stasiunAsal)) {
-                hasil.add(rute);
+        for (Tiket tiket : daftarTiket) {
+            if (tiket.getPenumpang().equals(penumpang)) {
+                hasil.add(tiket);
             }
         }
 
         return hasil;
     }
 
-    public boolean save(Rute rute) {
-        return daftarRute.add(rute);
+    public List<Tiket> findAll() {
+        return daftarTiket;
     }
 
-    public boolean update(Rute rute) {
+    public boolean save(Tiket tiket) {
+        return daftarTiket.add(tiket);
+    }
+
+    public boolean update(Tiket tiket) {
         return true;
-    }
-
-    public boolean delete(int id) {
-
-        Rute rute = findById(id);
-
-        if (rute != null) {
-            return daftarRute.remove(rute);
-        }
-
-        return false;
     }
 }
