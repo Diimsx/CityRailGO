@@ -1,6 +1,6 @@
-package cityrailgo.model;
+package model;
 
-public class User {
+public abstract class User {
 
     private int id;
     private String username;
@@ -9,12 +9,7 @@ public class User {
     private String namaLengkap;
     private String noTelepon;
 
-    public User(String username,
-                String password,
-                String email,
-                String namaLengkap,
-                String noTelepon) {
-
+    public User(String username, String password, String email, String namaLengkap, String noTelepon) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -42,6 +37,14 @@ public class User {
         return noTelepon;
     }
 
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public void setUsername(String username) {
         this.username = username;
     }
@@ -59,15 +62,12 @@ public class User {
     }
 
     public boolean login(String username, String password) {
-        return this.username.equals(username)
-                && this.password.equals(password);
+        return this.username.equals(username) && this.password.equals(password);
     }
 
     public void logout() {
-        System.out.println("Logout berhasil");
+        System.out.println(this.username + " telah logout.");
     }
 
-    public String getRole() {
-        return "User";
-    }
+    public abstract String getRole();
 }
