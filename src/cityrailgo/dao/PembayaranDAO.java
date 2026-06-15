@@ -1,4 +1,4 @@
-package cityrailgo.dao;
+package dao;
 
 public class PembayaranDAO {
     
