@@ -1,4 +1,4 @@
-package cityrailgo.model;
+package model;
 
 import java.time.LocalDate;
 
@@ -8,21 +8,8 @@ public class Penumpang extends User {
     private LocalDate tglLahir;
     private String jenisKelamin;
 
-    public Penumpang(String username,
-                     String password,
-                     String email,
-                     String namaLengkap,
-                     String noTelepon,
-                     String nik,
-                     LocalDate tglLahir,
-                     String jenisKelamin) {
-
-        super(username,
-                password,
-                email,
-                namaLengkap,
-                noTelepon);
-
+    public Penumpang(String username, String password, String email, String namaLengkap, String noTelepon, String nik, LocalDate tglLahir, String jenisKelamin) {
+        super(username, password, email, namaLengkap, noTelepon);
         this.nik = nik;
         this.tglLahir = tglLahir;
         this.jenisKelamin = jenisKelamin;
@@ -50,6 +37,6 @@ public class Penumpang extends User {
 
     @Override
     public String getRole() {
-        return "Penumpang";
+        return "PENUMPANG";
     }
 }
