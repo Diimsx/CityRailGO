@@ -1,6 +1,6 @@
-package cityrailgo.dao;
+package dao;
 
-import cityrailgo.model.*;
+import model.*;
 import java.util.ArrayList;
 import java.util.List;
 

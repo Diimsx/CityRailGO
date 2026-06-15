@@ -1,4 +1,4 @@
-package cityrailgo.controller;
+package controller;
 
 public class PemesananController {
     
