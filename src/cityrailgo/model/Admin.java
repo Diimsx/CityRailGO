@@ -1,4 +1,4 @@
-package cityrailgo.model;
+package model;
 
 import java.time.LocalDate;
 
@@ -8,21 +8,8 @@ public class Admin extends User {
     private String jenisKelamin;
     private LocalDate tglLahir;
 
-    public Admin(String username,
-                 String password,
-                 String email,
-                 String namaLengkap,
-                 String noTelepon,
-                 String levelAkses,
-                 String jenisKelamin,
-                 LocalDate tglLahir) {
-
-        super(username,
-                password,
-                email,
-                namaLengkap,
-                noTelepon);
-
+    public Admin(String username, String password, String email, String namaLengkap, String noTelepon, String levelAkses, String jenisKelamin, LocalDate tglLahir) {
+        super(username, password, email, namaLengkap, noTelepon);
         this.levelAkses = levelAkses;
         this.jenisKelamin = jenisKelamin;
         this.tglLahir = tglLahir;
@@ -42,6 +29,6 @@ public class Admin extends User {
 
     @Override
     public String getRole() {
-        return "Admin";
+        return "ADMIN";
     }
 }
