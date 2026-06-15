@@ -1,12 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+import util.DBConnection;
+import java.sql.Connection;
 
-/**
- *
- * @author dimas
- */
 public class main {
-    
+    public static void main(String[] args) {
+        Connection conn = DBConnection.getInstance();
+        if (conn != null) {
+            System.out.println("Koneksi ke database 'cityrailgo' berhasil!");
+        } else {
+            System.out.println("Koneksi gagal. Cek pesan error di atas.");
+        }
+        DBConnection.closeConnection();
+    }
 }
