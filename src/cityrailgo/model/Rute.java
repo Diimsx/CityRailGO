@@ -1,63 +1,53 @@
-package cityrailgo.model;
+package model;
 
 public class Rute {
+
     private int id;
-    private String asal;
-    private String tujuan;
-    private double jarak;
+    private String stasiunAsal;
+    private String stasiunTujuan;
+    private double jarakKm;
+    private int estimasiMenit;
 
-    public Rute() {}
-
-    public Rute(int id, String asal, String tujuan, double jarak) {
-        this.id     = id;
-        this.asal   = asal;
-        this.tujuan = tujuan;
-        this.jarak  = jarak;
-    }
-
-    public String getInfoRute() {
-        return asal + " → " + tujuan + " (" + jarak + " km)";
+    public Rute(String stasiunAsal, String stasiunTujuan, double jarakKm, int estimasiMenit) {
+        this.stasiunAsal = stasiunAsal;
+        this.stasiunTujuan = stasiunTujuan;
+        this.jarakKm = jarakKm;
+        this.estimasiMenit = estimasiMenit;
     }
 
     public int getId() {
         return id;
     }
 
+    public String getStasiunAsal() {
+        return stasiunAsal;
+    }
+
+    public String getStasiunTujuan() {
+        return stasiunTujuan;
+    }
+
+    public double getJarakKm() {
+        return jarakKm;
+    }
+
+    public int getEstimasiMenit() {
+        return estimasiMenit;
+    }
+    
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getAsal() {
-        return asal;
+    
+    public void setStasiunAsal(String stasiunAsal) {
+        this.stasiunAsal = stasiunAsal;
     }
 
-    public void setAsal(String asal) {
-        this.asal = asal;
+    public void setStasiunTujuan(String stasiunTujuan) {
+        this.stasiunTujuan = stasiunTujuan;
     }
 
-    public String getTujuan() {
-        return tujuan;
-    }
-
-    public void setTujuan(String tujuan) {
-        this.tujuan = tujuan;
-    }
-
-    public double getJarak() {
-        return jarak;
-    }
-
-    public void setJarak(double jarak) {
-        this.jarak = jarak;
-    }
-
-    @Override
-    public String toString() {
-        return "Rute{" +
-                "id=" + id +
-                ", asal='" + asal + '\'' +
-                ", tujuan='" + tujuan + '\'' +
-                ", jarak=" + jarak + " km" +
-                '}';
+    public void setJarakKm(double jarakKm) {
+        this.jarakKm = jarakKm;
     }
 }
