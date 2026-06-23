@@ -1,0 +1,140 @@
+/* ── REGISTER SCENE ───────────────────────────────────────── */
+
+.register-root {
+    -fx-background-color: #F0F4FF;
+}
+
+.register-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(27,58,122,0.10), 24, 0, 0, 6);
+    -fx-padding: 40 48 40 48;
+    -fx-pref-width: 560px;
+    -fx-max-width: 560px;
+}
+
+.register-pill {
+    -fx-background-color: #EEF2FF;
+    -fx-background-radius: 20;
+    -fx-padding: 6 18 6 18;
+}
+
+.register-pill-text {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3730A3;
+}
+
+.register-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.register-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.register-section-box {
+    -fx-background-color: #F8FAFF;
+    -fx-background-radius: 12;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-padding: 16 16 16 16;
+}
+
+.register-section-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748B;
+}
+
+.register-input-box {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.register-input-box:focused-within {
+    -fx-border-color: #2563EB;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.15), 8, 0, 0, 0);
+}
+
+.register-input-icon {
+    -fx-fill: #9CA3AF;
+    -fx-padding: 0 4 0 12;
+}
+
+.register-input-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 11 12 11 0;
+    -fx-font-size: 13px;
+    -fx-font-family: "Inter", "Roboto", "Segoe UI", sans-serif;
+    -fx-text-fill: #0F172A;
+    -fx-prompt-text-fill: #B0BAD4;
+}
+
+.register-input-field:focused {
+    -fx-background-color: transparent;
+}
+
+.register-error-box {
+    -fx-background-color: #FEF2F2;
+    -fx-border-color: #FCA5A5;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14 10 14;
+}
+
+.register-error-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #DC2626;
+}
+
+.register-btn {
+    -fx-background-color: #1B3A7A;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Inter", "Roboto", "Segoe UI", sans-serif;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-pref-height: 46px;
+    -fx-effect: dropshadow(gaussian, rgba(27,58,122,0.35), 10, 0, 0, 4);
+    -fx-graphic-text-gap: 8;
+}
+
+.register-btn:hover {
+    -fx-background-color: #2563EB;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.45), 14, 0, 0, 5);
+}
+
+.register-btn:pressed {
+    -fx-translate-y: 1;
+    -fx-effect: none;
+}
+
+.register-footer-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.register-login-link {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563EB;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+}
+
+.register-login-link:hover {
+    -fx-text-fill: #1B3A7A;
+    -fx-underline: true;
+}

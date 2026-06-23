@@ -64,7 +64,6 @@ public class PemesananController {
         if (berhasil) {
             return tiket;
         }
-        // rollback status kursi kalau tiket gagal disimpan
         kursi.setStatus("TERSEDIA");
         kursiDAO.update(kursi);
         return null;

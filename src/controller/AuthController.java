@@ -7,7 +7,6 @@ import model.User;
 import java.time.LocalDate;
 
 public class AuthController {
-
     private UserDAO userDAO;
 
     public AuthController() {

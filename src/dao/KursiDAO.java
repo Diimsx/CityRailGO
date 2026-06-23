@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,30 @@ public class KursiDAO {
         return daftarKursi;
     }
 
+    public boolean save(Kursi kursi) {
+        String sql = "INSERT INTO kursi (jadwal_id, jenis_kelas_id, nomor_kursi, status) VALUES (?, ?, ?, ?)";
+        Connection conn = DBConnection.getInstance();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, kursi.getJadwal().getId());
+            ps.setInt(2, kursi.getJenisKelas().getId());
+            ps.setString(3, kursi.getNomorKursi());
+            ps.setString(4, kursi.getStatus());
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    kursi.setId(rs.getInt(1));
+                }
+            }
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Gagal menyimpan kursi: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean update(Kursi kursi) {
         String sql = "UPDATE kursi SET status=? WHERE id=?";
         Connection conn = DBConnection.getInstance();
@@ -128,9 +153,7 @@ public class KursiDAO {
         jenisKelas.setId(rs.getInt("jenis_kelas_id"));
 
         Jadwal jadwal = new Jadwal(
-                kereta,
-                rute,
-                jenisKelas,
+                kereta, rute, jenisKelas,
                 rs.getTimestamp("waktu_berangkat").toLocalDateTime(),
                 rs.getTimestamp("waktu_tiba").toLocalDateTime()
         );

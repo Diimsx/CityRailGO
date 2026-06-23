@@ -1,0 +1,69 @@
+.register-root {
+    -fx-background-color: #EEF2FB;
+}
+
+.register-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(27,58,122,0.13), 24, 0, 0, 6);
+    -fx-padding: 36 44 36 44;
+    -fx-min-width: 480px;
+    -fx-max-width: 480px;
+}
+
+.register-header-box {
+    -fx-background-color: #1B3A7A;
+    -fx-background-radius: 10px;
+    -fx-padding: 10 18 10 18;
+    -fx-alignment: CENTER;
+}
+
+.register-header-text {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-letter-spacing: 1px;
+}
+
+.register-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A2E;
+}
+
+.register-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.register-section-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9CA3AF;
+    -fx-letter-spacing: 1px;
+}
+
+.register-divider {
+    -fx-background-color: #E5E9F5;
+    -fx-min-height: 1px;
+    -fx-pref-height: 1px;
+    -fx-max-height: 1px;
+}
+
+.register-footer-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.register-footer-link {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2563EB;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.register-footer-link:hover {
+    -fx-text-fill: #1B3A7A;
+    -fx-underline: true;
+}

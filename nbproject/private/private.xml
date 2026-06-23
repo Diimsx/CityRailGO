@@ -24,6 +24,20 @@
             <file>file:/D:/Project/CityRailGO/src/dao/RuteDAO.java</file>
             <file>file:/D:/Project/CityRailGO/src/dao/PromoDAO.java</file>
             <file>file:/D:/Project/CityRailGO/src/dao/PembayaranDAO.java</file>
+            <file>file:/D:/Project/CityRailGO/src/util/DateTimeUtil.java</file>
+            <file>file:/D:/Project/CityRailGO/src/dao/KeretaDAO.java</file>
+            <file>file:/D:/Project/CityRailGO/src/util/SessionManager.java</file>
+            <file>file:/D:/Project/CityRailGO/src/util/SceneManager.java</file>
+            <file>file:/D:/Project/CityRailGO/src/controller/LoginController.java</file>
+            <file>file:/D:/Project/CityRailGO/src/controller/RegisterController.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/global.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/dashboard.fxml</file>
+            <file>file:/D:/Project/CityRailGO/src/view/dashboard.css</file>
+            <file>file:/D:/Project/CityRailGO/src/controller/DashboardController.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/login.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/register.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/Login.txt</file>
+            <file>file:/D:/Project/CityRailGO/src/view/login.fxml</file>
         </group>
     </open-files>
 </project-private>

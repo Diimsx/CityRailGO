@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="view.controller.RegisterController"
+           styleClass="register-root"
+           prefWidth="900" prefHeight="640">
+
+    <stylesheets>
+        <URL value="@../css/global.css"/>
+        <URL value="@../css/register.css"/>
+    </stylesheets>
+
+    <ScrollPane fitToWidth="true" fitToHeight="true"
+                styleClass="scroll-pane">
+
+        <VBox alignment="CENTER" spacing="24"
+              style="-fx-padding: 40 0 40 0;">
+
+            <!-- ── CARD ── -->
+            <VBox styleClass="register-card" spacing="0">
+
+                <!-- Header badge -->
+                <HBox alignment="CENTER" style="-fx-padding: 0 0 20 0;">
+                    <HBox styleClass="register-header-box">
+                        <Label text="🚆  CITYRAILGO  —  REGISTRASI"
+                               styleClass="register-header-text"/>
+                    </HBox>
+                </HBox>
+
+                <Label text="Buat Akun Baru"
+                       styleClass="register-title"
+                       style="-fx-padding: 0 0 4 0;"/>
+                <Label text="Isi semua data di bawah ini untuk mendaftar"
+                       styleClass="register-subtitle"
+                       style="-fx-padding: 0 0 20 0;"/>
+
+                <!-- Divider -->
+                <Pane styleClass="register-divider"
+                      style="-fx-padding: 0 0 20 0;" maxWidth="10000"/>
+                <VBox style="-fx-padding: 20 0 0 0;"/>
+
+                <!-- SEKSI: Data Diri -->
+                <Label text="DATA DIRI"
+                       styleClass="register-section-label"
+                       style="-fx-padding: 0 0 12 0;"/>
+
+                <HBox spacing="16">
+                    <!-- Nama Lengkap -->
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Nama Lengkap *" styleClass="label-field"/>
+                        <TextField fx:id="tfNamaLengkap"
+                                   promptText="Sesuai KTP"
+                                   styleClass="text-field"
+                                   maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- NIK -->
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="NIK (16 digit) *" styleClass="label-field"/>
+                        <TextField fx:id="tfNik"
+                                   promptText="3201xxxxxxxxxxxxxxx"
+                                   styleClass="text-field"
+                                   maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <VBox style="-fx-padding: 12 0 0 0;"/>
+
+                <HBox spacing="16">
+                    <!-- Tanggal Lahir -->
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Tanggal Lahir *" styleClass="label-field"/>
+                        <DatePicker fx:id="dpTglLahir"
+                                    promptText="dd/mm/yyyy"
+                                    maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Jenis Kelamin -->
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Jenis Kelamin *" styleClass="label-field"/>
+                        <ComboBox fx:id="cbJenisKelamin"
+                                  promptText="Pilih..."
+                                  maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <VBox style="-fx-padding: 24 0 0 0;"/>
+
+                <!-- Divider -->
+                <Pane styleClass="register-divider" maxWidth="10000"/>
+                <VBox style="-fx-padding: 20 0 0 0;"/>
+
+                <!-- SEKSI: Kontak -->
+                <Label text="INFORMASI KONTAK"
+                       styleClass="register-section-label"
+                       style="-fx-padding: 0 0 12 0;"/>
+
+                <HBox spacing="16">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Email *" styleClass="label-field"/>
+                        <TextField fx:id="tfEmail"
+                                   promptText="contoh@email.com"
+                                   styleClass="text-field"
+                                   maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="No. Telepon *" styleClass="label-field"/>
+                        <TextField fx:id="tfNoTelepon"
+                                   promptText="08xxxxxxxxxx"
+                                   styleClass="text-field"
+                                   maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <VBox style="-fx-padding: 24 0 0 0;"/>
+
+                <!-- Divider -->
+                <Pane styleClass="register-divider" maxWidth="10000"/>
+                <VBox style="-fx-padding: 20 0 0 0;"/>
+
+                <!-- SEKSI: Akun -->
+                <Label text="DATA AKUN"
+                       styleClass="register-section-label"
+                       style="-fx-padding: 0 0 12 0;"/>
+
+                <HBox spacing="16">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Username *" styleClass="label-field"/>
+                        <TextField fx:id="tfUsername"
+                                   promptText="Buat username unik"
+                                   styleClass="text-field"
+                                   maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Password *" styleClass="label-field"/>
+                        <PasswordField fx:id="pfPassword"
+                                       promptText="Minimal 6 karakter"
+                                       styleClass="password-field"
+                                       maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <VBox style="-fx-padding: 20 0 0 0;"/>
+
+                <!-- Error label -->
+                <Label fx:id="lblError"
+                       text=""
+                       styleClass="label-error"
+                       visible="false"
+                       style="-fx-padding: 0 0 8 0;"/>
+
+                <!-- Submit Button -->
+                <Button text="Buat Akun"
+                        onAction="#handleRegister"
+                        styleClass="btn-primary"
+                        maxWidth="Infinity"
+                        prefHeight="44"/>
+
+                <VBox style="-fx-padding: 16 0 0 0;"/>
+
+                <!-- Divider -->
+                <Pane styleClass="register-divider" maxWidth="10000"/>
+                <VBox style="-fx-padding: 14 0 0 0;"/>
+
+                <!-- Footer -->
+                <HBox alignment="CENTER" spacing="4">
+                    <Label text="Sudah punya akun?"
+                           styleClass="register-footer-text"/>
+                    <Hyperlink text="Login di sini"
+                               onAction="#handleGoToLogin"
+                               styleClass="register-footer-link"/>
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</StackPane>

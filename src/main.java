@@ -1,14 +1,19 @@
-import util.DBConnection;
-import java.sql.Connection;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import util.SceneManager;
 
-public class main {
+public class main extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        SceneManager.setPrimaryStage(primaryStage);
+        primaryStage.setTitle("CityRailGO - Sistem Pemesanan Tiket Kereta");
+        primaryStage.setResizable(false);
+        SceneManager.switchScene("Login.fxml");
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
-        Connection conn = DBConnection.getInstance();
-        if (conn != null) {
-            System.out.println("Jarvis : Koneksi ke database cityrailgo berhasil!");
-        } else {
-            System.out.println("Jarvis : Koneksi gagal. Cek pesan error di atas.");
-        }
-        DBConnection.closeConnection();
+        launch(args);
     }
 }

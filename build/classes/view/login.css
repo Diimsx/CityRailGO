@@ -1,0 +1,66 @@
+.login-root {
+    -fx-background-color: #EEF2FB;
+}
+
+.login-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(27,58,122,0.13), 24, 0, 0, 6);
+    -fx-padding: 44 48 44 48;
+    -fx-min-width: 380px;
+    -fx-max-width: 380px;
+}
+
+.login-logo-box {
+    -fx-background-color: #1B3A7A;
+    -fx-background-radius: 14px;
+    -fx-padding: 14;
+    -fx-min-width: 56px;
+    -fx-min-height: 56px;
+    -fx-max-width: 56px;
+    -fx-max-height: 56px;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(27,58,122,0.30), 10, 0, 0, 4);
+}
+
+.login-logo-text {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.login-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A2E;
+}
+
+.login-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.login-divider {
+    -fx-background-color: #E5E9F5;
+    -fx-min-height: 1px;
+    -fx-pref-height: 1px;
+    -fx-max-height: 1px;
+}
+
+.login-footer-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+.login-footer-link {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2563EB;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.login-footer-link:hover {
+    -fx-text-fill: #1B3A7A;
+    -fx-underline: true;
+}
