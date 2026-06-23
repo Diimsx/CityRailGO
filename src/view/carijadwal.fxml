@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controller.CariJadwalController"
+      stylesheets="@../css/CariJadwal.css"
+      prefWidth="1280"
+      prefHeight="860"
+      spacing="0">
+
+    <!-- ══════════════════════════════════════════════
+         NAVBAR
+         ══════════════════════════════════════════════ -->
+    <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="16">
+        <Button fx:id="btnKembali"
+                styleClass="navbar__back-btn"
+                text="← Beranda"
+                onAction="#handleKembali"/>
+        <Label text="/" style="-fx-text-fill: rgba(255,255,255,0.20); -fx-font-size:16px;"/>
+        <Label styleClass="navbar__title" text="Cari Jadwal Kereta"/>
+
+        <HBox HBox.hgrow="ALWAYS"/>
+
+        <Label styleClass="navbar__logo">
+            <graphic>
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Label text="🚆" style="-fx-font-size:18px;"/>
+                    <Label styleClass="navbar__logo">
+                        <text>City<Label styleClass="navbar__logo-accent" text="Rail"/></text>
+                    </Label>
+                </HBox>
+            </graphic>
+        </Label>
+    </HBox>
+
+    <!-- ══════════════════════════════════════════════
+         SEARCH PANEL
+         ══════════════════════════════════════════════ -->
+    <VBox styleClass="search-panel" spacing="16">
+
+        <!-- Heading -->
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <VBox spacing="2">
+                <Label styleClass="search-panel__heading" text="Cari Jadwal Kereta"/>
+                <Label styleClass="search-panel__subheading" text="Temukan jadwal terbaik untuk perjalananmu"/>
+            </VBox>
+        </HBox>
+
+        <!-- Tiket Type Toggle -->
+        <HBox styleClass="tiket-type-box" spacing="2" maxWidth="220">
+            <ToggleGroup fx:id="tgTiketType"/>
+            <RadioButton fx:id="rbSekaliJalan"
+                         styleClass="tiket-type-radio"
+                         text="Sekali Jalan"
+                         toggleGroup="$tgTiketType"
+                         selected="true"/>
+            <RadioButton fx:id="rbPulangPergi"
+                         styleClass="tiket-type-radio"
+                         text="Pulang-Pergi"
+                         toggleGroup="$tgTiketType"/>
+        </HBox>
+
+        <!-- Search Form Card -->
+        <VBox styleClass="search-form-card" spacing="14">
+
+            <!-- Baris 1: Asal ↔ Tujuan -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+
+                <!-- Stasiun Asal -->
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label styleClass="field-label" text="STASIUN ASAL"/>
+                    <ComboBox fx:id="cmbAsalStasiun"
+                              styleClass="station-combo"
+                              promptText="Pilih stasiun asal..."
+                              maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Tombol Tukar -->
+                <VBox alignment="BOTTOM_CENTER">
+                    <padding><Insets bottom="2"/></padding>
+                    <Button fx:id="btnTukarStasiun"
+                            styleClass="btn-swap"
+                            text="⇄"
+                            onAction="#handleTukarStasiun"/>
+                </VBox>
+
+                <!-- Stasiun Tujuan -->
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label styleClass="field-label" text="STASIUN TUJUAN"/>
+                    <ComboBox fx:id="cmbTujuanStasiun"
+                              styleClass="station-combo"
+                              promptText="Pilih stasiun tujuan..."
+                              maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Tanggal Pergi -->
+                <VBox spacing="5">
+                    <Label styleClass="field-label" text="TANGGAL PERGI"/>
+                    <DatePicker fx:id="dpTanggalPergi"
+                                styleClass="search-date-picker"
+                                prefWidth="150"/>
+                </VBox>
+
+                <!-- Tanggal Kembali (pulang-pergi) -->
+                <HBox fx:id="hboxPulangPergiDate" spacing="10" alignment="BOTTOM_LEFT">
+                    <VBox spacing="5">
+                        <Label styleClass="field-label" text="TANGGAL KEMBALI"/>
+                        <DatePicker fx:id="dpTanggalKembali"
+                                    styleClass="search-date-picker"
+                                    prefWidth="150"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Jumlah Penumpang -->
+                <VBox spacing="5">
+                    <Label styleClass="field-label" text="PENUMPANG"/>
+                    <Spinner fx:id="spnJumlahPenumpang"
+                             styleClass="spinner-penumpang"
+                             prefWidth="90"/>
+                </VBox>
+
+                <!-- Kelas -->
+                <VBox spacing="5">
+                    <Label styleClass="field-label" text="KELAS"/>
+                    <ComboBox fx:id="cmbKelasKereta"
+                              styleClass="combo-kelas"
+                              prefWidth="130"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- Baris 2: Tombol Aksi -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="btnReset"
+                        styleClass="btn-reset"
+                        text="Reset"
+                        onAction="#handleReset"/>
+                <Button fx:id="btnCari"
+                        styleClass="btn-cari"
+                        text="🔍  Cari Jadwal"
+                        onAction="#handleCari"
+                        defaultButton="true"/>
+            </HBox>
+
+        </VBox>
+    </VBox>
+
+    <!-- ══════════════════════════════════════════════
+         RESULT AREA
+         ══════════════════════════════════════════════ -->
+    <HBox VBox.vgrow="ALWAYS">
+
+        <!-- ── FILTER SIDEBAR ── -->
+        <VBox styleClass="filter-sidebar" spacing="4">
+
+            <Label styleClass="filter-sidebar__title" text="Filter"/>
+
+            <!-- Filter Kelas -->
+            <Label styleClass="filter-section-label" text="KELAS KERETA"/>
+            <HBox spacing="6">
+                <ToggleButton fx:id="tbFilterEkonomi"
+                              styleClass="filter-toggle"
+                              text="Ekonomi"
+                              onAction="#handleFilterToggle"/>
+                <ToggleButton fx:id="tbFilterBisnis"
+                              styleClass="filter-toggle"
+                              text="Bisnis"
+                              onAction="#handleFilterToggle"/>
+            </HBox>
+            <HBox spacing="6">
+                <ToggleButton fx:id="tbFilterEksekutif"
+                              styleClass="filter-toggle"
+                              text="Eksekutif"
+                              onAction="#handleFilterToggle"/>
+            </HBox>
+
+            <!-- Filter Harga -->
+            <Label styleClass="filter-section-label" text="MAKS. HARGA"/>
+            <Slider fx:id="sliderMaxHarga"
+                    styleClass="harga-slider"
+                    orientation="HORIZONTAL"
+                    showTickLabels="false"
+                    showTickMarks="false"/>
+            <Label fx:id="lblMaxHarga"
+                   styleClass="label-harga-max"
+                   text="Rp 2.000.000"/>
+
+            <!-- Spacer -->
+            <VBox VBox.vgrow="ALWAYS"/>
+
+        </VBox>
+
+        <!-- ── RESULT CONTENT ── -->
+        <VBox HBox.hgrow="ALWAYS" spacing="0">
+
+            <!-- Result Bar (info + sort) -->
+            <HBox styleClass="result-bar" alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="2">
+                    <Label fx:id="lblHasilCount"
+                           styleClass="result-count-label"
+                           text=""/>
+                    <Label fx:id="lblRuteSummary"
+                           styleClass="result-route-label"
+                           text=""/>
+                </VBox>
+
+                <HBox HBox.hgrow="ALWAYS"/>
+
+                <Label style="-fx-font-size:12px; -fx-text-fill:#8A9BBE; -fx-font-weight:600;"
+                       text="Urutkan:"/>
+                <ComboBox fx:id="cmbSortBy"
+                          styleClass="combo-sort"
+                          prefWidth="200"/>
+            </HBox>
+
+            <!-- Content Stack: table | empty | loading -->
+            <StackPane fx:id="stackPaneContent" VBox.vgrow="ALWAYS">
+
+                <!-- TABLE HASIL -->
+                <TableView fx:id="tblJadwal"
+                           styleClass="jadwal-table"
+                           columnResizePolicy="CONSTRAINED_RESIZE_POLICY">
+
+                    <columns>
+
+                        <!-- Kereta -->
+                        <TableColumn fx:id="colKereta"
+                                     text="KERETA"
+                                     prefWidth="160"/>
+
+                        <!-- Kelas -->
+                        <TableColumn fx:id="colKelas"
+                                     text="KELAS"
+                                     prefWidth="110"/>
+
+                        <!-- Berangkat -->
+                        <TableColumn fx:id="colBerangkat"
+                                     text="BERANGKAT"
+                                     prefWidth="100"/>
+
+                        <!-- Tiba -->
+                        <TableColumn fx:id="colTiba"
+                                     text="TIBA"
+                                     prefWidth="100"/>
+
+                        <!-- Durasi -->
+                        <TableColumn fx:id="colDurasi"
+                                     text="DURASI"
+                                     prefWidth="90"/>
+
+                        <!-- Kursi Tersedia -->
+                        <TableColumn fx:id="colKursiTersedia"
+                                     text="KETERSEDIAAN"
+                                     prefWidth="120"/>
+
+                        <!-- Harga -->
+                        <TableColumn fx:id="colHarga"
+                                     text="HARGA"
+                                     prefWidth="130"/>
+
+                        <!-- Aksi -->
+                        <TableColumn fx:id="colAksi"
+                                     text=""
+                                     prefWidth="100"
+                                     sortable="false"/>
+
+                    </columns>
+
+                    <placeholder>
+                        <!-- Ini tidak terpakai, kita handle lewat vboxEmptyState -->
+                        <Label text=""/>
+                    </placeholder>
+
+                </TableView>
+
+                <!-- EMPTY STATE -->
+                <VBox fx:id="vboxEmptyState"
+                      styleClass="empty-state"
+                      alignment="CENTER"
+                      spacing="12"
+                      visible="true"
+                      managed="true">
+                    <Label styleClass="empty-state__icon" text="🚉"/>
+                    <Label styleClass="empty-state__title"
+                           text="Belum ada pencarian"/>
+                    <Label styleClass="empty-state__subtitle"
+                           text="Pilih stasiun asal, tujuan, dan tanggal keberangkatan, lalu tekan Cari Jadwal."
+                           wrapText="true"/>
+                </VBox>
+
+                <!-- LOADING STATE -->
+                <VBox fx:id="vboxLoadingState"
+                      styleClass="loading-state"
+                      alignment="CENTER"
+                      spacing="16"
+                      visible="false"
+                      managed="false">
+                    <ProgressIndicator styleClass="progress-indicator"/>
+                    <Label styleClass="loading-state__label"
+                           text="Sedang mencari jadwal..."/>
+                </VBox>
+
+            </StackPane>
+
+        </VBox>
+    </HBox>
+
+</VBox>
