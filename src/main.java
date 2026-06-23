@@ -9,7 +9,7 @@ public class main extends Application {
         SceneManager.setPrimaryStage(primaryStage);
         primaryStage.setTitle("CityRailGO - Sistem Pemesanan Tiket Kereta");
         primaryStage.setResizable(false);
-        SceneManager.switchScene("Login.fxml");
+        SceneManager.switchScene("login.fxml");
         primaryStage.show();
     }
 

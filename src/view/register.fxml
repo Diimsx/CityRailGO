@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
+
+    <!-- Panel kiri: branding -->
+    <VBox alignment="CENTER" prefHeight="720" prefWidth="640" spacing="20" style="-fx-background-color: #0d1b3e;">
+        <Label style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: white;" text="CityRailGO" />
+        <Label style="-fx-font-size: 15px; -fx-text-fill: #9fb4e0;" text="Daftar sekarang untuk mulai memesan" />
+    </VBox>
+
+    <!-- Panel kanan: form registrasi -->
+    <VBox alignment="CENTER" prefHeight="720" prefWidth="640" spacing="10" style="-fx-background-color: #f0f4ff; -fx-padding: 20 0 20 0;">
+
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a3c8f;" text="Daftar akun" />
+
+        <Label style="-fx-font-size: 12px; -fx-text-fill: #666666;" text="Buat akun penumpang CityRailGO" />
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Nama Lengkap" />
+            <TextField fx:id="tfNamaLengkap" prefWidth="320" promptText="Masukkan nama lengkap" style="-fx-background-radius: 8; -fx-border-radius: 8;                               -fx-border-color: #c0c8e8; -fx-padding: 8;" />
+        </VBox>
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="NIK" />
+            <TextField fx:id="tfNik" prefWidth="320" promptText="16 digit NIK" style="-fx-background-radius: 8; -fx-border-radius: 8;                               -fx-border-color: #c0c8e8; -fx-padding: 8;" />
+        </VBox>
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Email" />
+            <TextField fx:id="tfEmail" prefWidth="320" promptText="Masukkan email" style="-fx-background-radius: 8; -fx-border-radius: 8;                               -fx-border-color: #c0c8e8; -fx-padding: 8;" />
+        </VBox>
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="No. Telepon" />
+            <TextField fx:id="tfNoTelepon" prefWidth="320" promptText="Masukkan no. telepon" style="-fx-background-radius: 8; -fx-border-radius: 8;                               -fx-border-color: #c0c8e8; -fx-padding: 8;" />
+        </VBox>
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Tanggal Lahir" />
+            <DatePicker fx:id="dpTglLahir" prefWidth="320" style="-fx-background-radius: 8; -fx-border-radius: 8;                                -fx-border-color: #c0c8e8;" />
+        </VBox>
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Jenis Kelamin" />
+            <ComboBox fx:id="cbJenisKelamin" prefWidth="320" promptText="Pilih jenis kelamin" style="-fx-background-radius: 8; -fx-border-radius: 8;                              -fx-border-color: #c0c8e8;" />
+        </VBox>
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Username" />
+            <TextField fx:id="tfUsername" prefWidth="320" promptText="Masukkan username" style="-fx-background-radius: 8; -fx-border-radius: 8;                               -fx-border-color: #c0c8e8; -fx-padding: 8;" />
+        </VBox>
+
+        <VBox maxWidth="320" spacing="4">
+            <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Password" />
+            <PasswordField fx:id="pfPassword" prefWidth="320" promptText="Minimal 6 karakter" style="-fx-background-radius: 8; -fx-border-radius: 8;                                   -fx-border-color: #c0c8e8; -fx-padding: 8;" />
+        </VBox>
+
+        <Label fx:id="lblError" maxWidth="320" style="-fx-text-fill: #d32f2f; -fx-font-size: 12px;" text="" visible="false" wrapText="true" />
+
+        <Button fx:id="btnRegister" onAction="#handleRegister" prefHeight="40" prefWidth="320" style="-fx-background-color: #1a3c8f; -fx-text-fill: white;                        -fx-font-size: 14px; -fx-font-weight: bold;                        -fx-background-radius: 8; -fx-cursor: hand;" text="Daftar" />
+
+        <HBox alignment="CENTER" spacing="4">
+            <Label style="-fx-font-size: 12px;" text="Sudah punya akun?" />
+            <Hyperlink onAction="#handleGoToLogin" style="-fx-font-size: 12px; -fx-text-fill: #1a3c8f;" text="Login di sini" />
+        </HBox>
+    </VBox>
+</HBox>
