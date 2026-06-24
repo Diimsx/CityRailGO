@@ -48,9 +48,9 @@ public class PromoDAO {
         return null;
     }
 
-    public List<Promo> findAllAktif() {
+    public List<Promo> findAll() {
         List<Promo> daftarPromo = new ArrayList<>();
-        String sql = "SELECT * FROM promo WHERE aktif = TRUE";
+        String sql = "SELECT * FROM promo";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql);
@@ -59,7 +59,7 @@ public class PromoDAO {
                 daftarPromo.add(buildPromoFromResultSet(rs));
             }
         } catch (SQLException e) {
-            System.out.println("Gagal mengambil promo aktif: " + e.getMessage());
+            System.out.println("Gagal mengambil semua promo: " + e.getMessage());
         }
         return daftarPromo;
     }

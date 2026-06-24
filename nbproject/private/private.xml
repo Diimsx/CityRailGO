@@ -41,6 +41,9 @@
             <file>file:/D:/Project/CityRailGO/src/view/carijadwal.fxml</file>
             <file>file:/D:/Project/CityRailGO/src/controller/CariJadwalController.java</file>
             <file>file:/D:/Project/CityRailGO/src/view/carijadwal.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/homeadmin.fxml</file>
+            <file>file:/D:/Project/CityRailGO/src/view/homeadmin.css</file>
+            <file>file:/D:/Project/CityRailGO/src/controller/HomeAdminController.java</file>
         </group>
     </open-files>
 </project-private>
