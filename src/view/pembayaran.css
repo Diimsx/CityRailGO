@@ -1,0 +1,369 @@
+/* =============================================
+   payment.css — CityRailGO Payment Screen
+   Dark theme sesuai desain flowchart
+   ============================================= */
+
+/* ---- ROOT & GLOBAL ---- */
+.root-pane {
+    -fx-background-color: #1a1a2e;
+    -fx-font-family: "Segoe UI", "Inter", sans-serif;
+}
+
+/* ---- HEADER ---- */
+.header {
+    -fx-background-color: #16213e;
+    -fx-padding: 16 24 16 24;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+}
+
+.header-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.header-subtitle {
+    -fx-text-fill: #8888aa;
+    -fx-font-size: 12px;
+}
+
+.btn-back {
+    -fx-background-color: #2a2a4a;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+    -fx-background-radius: 8;
+    -fx-padding: 6 14 6 14;
+    -fx-border-color: transparent;
+}
+
+.btn-back:hover {
+    -fx-background-color: #3a3a6a;
+}
+
+/* ---- SCROLL PANE ---- */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ---- COLUMNS ---- */
+.content-area {
+    -fx-padding: 0;
+}
+
+.left-column {
+    -fx-min-width: 420px;
+}
+
+.right-column {
+    /* sticky feel with consistent width */
+}
+
+/* ---- CARD ---- */
+.card {
+    -fx-background-color: #16213e;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-spacing: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4);
+}
+
+.price-card {
+    -fx-background-color: #1e2a4a;
+    -fx-border-color: #3a4a7a;
+}
+
+.card-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* ---- DIVIDERS ---- */
+.divider {
+    -fx-background-color: #2a2a4a;
+    -fx-padding: 0;
+}
+
+.thin-divider {
+    -fx-background-color: #252540;
+    -fx-padding: 0;
+}
+
+/* ---- TRIP INFO ---- */
+.trip-row {
+    -fx-padding: 8 0 8 0;
+}
+
+.icon-label {
+    -fx-font-size: 22px;
+}
+
+.route-text {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.train-info {
+    -fx-text-fill: #1db88a;
+    -fx-font-size: 12px;
+}
+
+.info-grid {
+    -fx-padding: 8 0 0 0;
+}
+
+.info-label {
+    -fx-text-fill: #8888aa;
+    -fx-font-size: 13px;
+    -fx-min-width: 120px;
+}
+
+.info-value {
+    -fx-text-fill: #ccccdd;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* ---- INPUT FIELD ---- */
+.input-field {
+    -fx-background-color: #0f1628;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #555577;
+    -fx-border-color: #2a2a4a;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 13px;
+}
+
+.input-field:focused {
+    -fx-border-color: #1db88a;
+    -fx-effect: dropshadow(gaussian, rgba(29,184,138,0.25), 6, 0, 0, 0);
+}
+
+.combo-field {
+    -fx-background-color: #0f1628;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #555577;
+    -fx-border-color: #2a2a4a;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 13px;
+    -fx-pref-height: 40px;
+}
+
+.combo-field .list-view {
+    -fx-background-color: #16213e;
+    -fx-border-color: #2a2a4a;
+}
+
+.combo-field .list-cell {
+    -fx-text-fill: #ccccdd;
+    -fx-background-color: #16213e;
+}
+
+.combo-field .list-cell:hover {
+    -fx-background-color: #252545;
+}
+
+/* ---- PROMO ---- */
+.promo-message {
+    -fx-font-size: 12px;
+    -fx-padding: 4 0 0 0;
+}
+
+.promo-message.success {
+    -fx-text-fill: #1db88a;
+}
+
+.promo-message.error {
+    -fx-text-fill: #ff5f6d;
+}
+
+/* ---- PAYMENT OPTIONS ---- */
+.payment-option {
+    -fx-padding: 10 0 10 0;
+}
+
+.radio-option {
+    -fx-text-fill: #ccccdd;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.radio-option:selected {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.radio-option .radio {
+    -fx-border-color: #2a2a4a;
+}
+
+.radio-option:selected .radio {
+    -fx-border-color: #1db88a;
+}
+
+.radio-option:selected .dot {
+    -fx-background-color: #1db88a;
+}
+
+.method-detail {
+    -fx-padding: 10 0 4 28;
+    -fx-spacing: 8;
+}
+
+.method-hint {
+    -fx-text-fill: #8888aa;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+/* ---- PRICE ROWS ---- */
+.price-rows {
+    -fx-padding: 4 0 4 0;
+}
+
+.price-row {
+    -fx-spacing: 8;
+}
+
+.price-label {
+    -fx-text-fill: #8888aa;
+    -fx-font-size: 13px;
+}
+
+.price-value {
+    -fx-text-fill: #ccccdd;
+    -fx-font-size: 13px;
+}
+
+.discount-label {
+    -fx-text-fill: #1db88a;
+}
+
+.discount-value {
+    -fx-text-fill: #1db88a;
+    -fx-font-weight: bold;
+}
+
+.total-row {
+    -fx-padding: 4 0 4 0;
+}
+
+.total-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.total-value {
+    -fx-text-fill: #1db88a;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* ---- COUNTDOWN ---- */
+.countdown-box {
+    -fx-background-color: rgba(255, 95, 109, 0.12);
+    -fx-border-color: rgba(255, 95, 109, 0.35);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 10 14 10 14;
+}
+
+.countdown-hint {
+    -fx-text-fill: #ff9999;
+    -fx-font-size: 11px;
+}
+
+.countdown-timer {
+    -fx-text-fill: #ff5f6d;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Courier New", monospace;
+}
+
+/* ---- BUTTONS ---- */
+.btn-primary {
+    -fx-background-color: #1db88a;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 10;
+    -fx-padding: 14 20 14 20;
+    -fx-effect: dropshadow(gaussian, rgba(29,184,138,0.4), 10, 0, 0, 4);
+}
+
+.btn-primary:hover {
+    -fx-background-color: #17a07a;
+    -fx-effect: dropshadow(gaussian, rgba(29,184,138,0.6), 14, 0, 0, 4);
+}
+
+.btn-primary:pressed {
+    -fx-background-color: #138c6a;
+    -fx-effect: none;
+}
+
+.btn-primary:disabled {
+    -fx-background-color: #2a4a3a;
+    -fx-text-fill: #557766;
+    -fx-effect: none;
+    -fx-cursor: default;
+}
+
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1db88a;
+    -fx-border-color: #1db88a;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-cursor: hand;
+    -fx-padding: 8 18 8 18;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: rgba(29,184,138,0.12);
+}
+
+/* ---- T&C TEXT ---- */
+.tnc-text {
+    -fx-text-fill: #555577;
+    -fx-font-size: 11px;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+}
+
+/* ---- LOADING OVERLAY ---- */
+.loading-overlay {
+    -fx-background-color: rgba(10, 10, 30, 0.82);
+}
+
+.loading-text {
+    -fx-text-fill: #ccccdd;
+    -fx-font-size: 14px;
+}
+
+.loading-spinner {
+    -fx-accent: #1db88a;
+}

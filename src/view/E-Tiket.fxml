@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="controller.EtiketController"
+           stylesheets="@../css/etiket.css"
+           styleClass="root-stack">
+
+    <!-- Background overlay -->
+    <VBox styleClass="page-bg" alignment="TOP_CENTER">
+
+        <!-- ===== HEADER BAR ===== -->
+        <HBox styleClass="header-bar" alignment="CENTER_LEFT">
+            <Button fx:id="btnKembali" styleClass="btn-back" onAction="#handleKembali" text="← Kembali" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="CityRailGO" styleClass="header-logo"/>
+        </HBox>
+
+        <!-- ===== SCROLLABLE CONTENT ===== -->
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+            <VBox styleClass="content-wrapper" alignment="TOP_CENTER" spacing="20">
+                <padding><Insets top="24" right="20" bottom="40" left="20"/></padding>
+
+                <!-- Status Badge -->
+                <HBox alignment="CENTER">
+                    <Label fx:id="lblStatus" text="✓  TIKET DIKONFIRMASI" styleClass="badge-confirmed"/>
+                </HBox>
+
+                <!-- ===== TIKET CARD ===== -->
+                <VBox styleClass="ticket-card" maxWidth="480">
+
+                    <!-- Ticket Header -->
+                    <HBox styleClass="ticket-header" alignment="CENTER_LEFT" spacing="12">
+                        <VBox spacing="2">
+                            <Label text="TIKET KERETA API" styleClass="ticket-label-sm"/>
+                            <Label fx:id="lblNamaKereta" text="Argo Bromo Anggrek" styleClass="ticket-train-name"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <VBox alignment="CENTER_RIGHT" spacing="2">
+                            <Label text="KELAS" styleClass="ticket-label-sm"/>
+                            <Label fx:id="lblKelas" text="EKSEKUTIF" styleClass="ticket-class-badge"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Route Section -->
+                    <HBox styleClass="route-section" alignment="CENTER" spacing="0">
+                        <!-- Asal -->
+                        <VBox alignment="CENTER" styleClass="station-box">
+                            <Label fx:id="lblJamBerangkat" text="07:00" styleClass="time-big"/>
+                            <Label fx:id="lblStasiunAsal" text="Gambir" styleClass="station-name"/>
+                            <Label fx:id="lblKotaAsal" text="Jakarta" styleClass="city-name"/>
+                        </VBox>
+
+                        <!-- Arrow Divider -->
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="route-divider-box">
+                            <Label fx:id="lblDurasi" text="9j 15m" styleClass="durasi-label"/>
+                            <Line styleClass="route-line" startX="0" endX="120" startY="0" endY="0"/>
+                            <Label text="⟶" styleClass="arrow-label"/>
+                        </VBox>
+
+                        <!-- Tujuan -->
+                        <VBox alignment="CENTER" styleClass="station-box">
+                            <Label fx:id="lblJamTiba" text="16:15" styleClass="time-big"/>
+                            <Label fx:id="lblStasiunTujuan" text="Pasar Turi" styleClass="station-name"/>
+                            <Label fx:id="lblKotaTujuan" text="Surabaya" styleClass="city-name"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Perforated Divider -->
+                    <HBox styleClass="perforation-row" alignment="CENTER" spacing="6">
+                        <Circle radius="14" styleClass="perforation-circle-left"/>
+                        <Region HBox.hgrow="ALWAYS" styleClass="dashed-line"/>
+                        <Circle radius="14" styleClass="perforation-circle-right"/>
+                    </HBox>
+
+                    <!-- Detail Grid -->
+                    <GridPane styleClass="detail-grid" hgap="12" vgap="14">
+                        <padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Baris 1 -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="2">
+                            <Label text="TANGGAL" styleClass="detail-label"/>
+                            <Label fx:id="lblTanggal" text="Senin, 24 Jun 2026" styleClass="detail-value"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="2">
+                            <Label text="NO. KURSI" styleClass="detail-label"/>
+                            <Label fx:id="lblKursi" text="3A" styleClass="detail-value"/>
+                        </VBox>
+
+                        <!-- Baris 2 -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="2">
+                            <Label text="NAMA PENUMPANG" styleClass="detail-label"/>
+                            <Label fx:id="lblNamaPenumpang" text="Budi Santoso" styleClass="detail-value"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="2">
+                            <Label text="NO. ID" styleClass="detail-label"/>
+                            <Label fx:id="lblNoId" text="3171234567890001" styleClass="detail-value"/>
+                        </VBox>
+
+                        <!-- Baris 3 -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="2">
+                            <Label text="GERBONG" styleClass="detail-label"/>
+                            <Label fx:id="lblGerbong" text="1" styleClass="detail-value"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="2">
+                            <Label text="METODE BAYAR" styleClass="detail-label"/>
+                            <Label fx:id="lblMetodeBayar" text="Transfer Bank" styleClass="detail-value"/>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Harga Total -->
+                    <HBox styleClass="harga-bar" alignment="CENTER_SPACE_BETWEEN">
+                        <Label text="TOTAL PEMBAYARAN" styleClass="harga-label"/>
+                        <Label fx:id="lblHarga" text="Rp 450.000" styleClass="harga-value"/>
+                    </HBox>
+
+                    <!-- Perforated Divider 2 -->
+                    <HBox styleClass="perforation-row" alignment="CENTER" spacing="6">
+                        <Circle radius="14" styleClass="perforation-circle-left"/>
+                        <Region HBox.hgrow="ALWAYS" styleClass="dashed-line"/>
+                        <Circle radius="14" styleClass="perforation-circle-right"/>
+                    </HBox>
+
+                    <!-- Kode Tiket + QR Section -->
+                    <VBox styleClass="qr-section" alignment="CENTER" spacing="12">
+                        <padding><Insets top="20" right="24" bottom="24" left="24"/></padding>
+
+                        <Label text="KODE TIKET" styleClass="detail-label"/>
+                        <Label fx:id="lblKodeTiket" text="CRG-2026-00421" styleClass="kode-tiket"/>
+
+                        <!-- QR Code placeholder (diganti ImageView saat runtime) -->
+                        <StackPane styleClass="qr-placeholder" prefWidth="160" prefHeight="160">
+                            <ImageView fx:id="imgQr" fitWidth="140" fitHeight="140" preserveRatio="true"/>
+                            <Label fx:id="lblQrPlaceholder" text="[QR Code]" styleClass="qr-placeholder-text"/>
+                        </StackPane>
+
+                        <Label text="Tunjukkan kode ini kepada petugas" styleClass="qr-hint"/>
+                    </VBox>
+
+                </VBox>
+                <!-- end ticket-card -->
+
+                <!-- ===== ACTION BUTTONS ===== -->
+                <VBox spacing="12" maxWidth="480" fillWidth="true">
+                    <Button fx:id="btnUnduh" text="⬇  Unduh E-Tiket (PDF)"
+                            styleClass="btn-primary" maxWidth="Infinity"
+                            onAction="#handleUnduh"/>
+                    <Button fx:id="btnBagikan" text="↗  Bagikan Tiket"
+                            styleClass="btn-secondary" maxWidth="Infinity"
+                            onAction="#handleBagikan"/>
+                    <Button fx:id="btnBerandaUtama" text="Kembali ke Beranda"
+                            styleClass="btn-ghost" maxWidth="Infinity"
+                            onAction="#handleKembaliBerandaUtama"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+
+    </VBox>
+</StackPane>
