@@ -50,4 +50,14 @@
     nbproject/build-impl.xml and nbproject/jfx-impl.xml.
 
     -->
+
+    <target name="-post-compile">
+        <copy todir="${build.classes.dir}/view">
+            <fileset dir="${src.dir}/view">
+                <include name="**/*.fxml"/>
+                <include name="**/*.css"/>
+            </fileset>
+        </copy>
+    </target>
+
 </project>

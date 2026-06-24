@@ -36,7 +36,7 @@ public class SceneManager {
     public static <T> T switchSceneAndGetController(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                SceneManager.class.getResource("/view" + fxmlPath)
+                SceneManager.class.getResource("/view/" + fxmlPath)
             );
             Parent root = loader.load();
             Scene scene = new Scene(root);
