@@ -12,7 +12,7 @@
 
     <stylesheets>
         <String fx:value="@global.css"/>
-        <String fx:value="@home_admin.css"/>
+        <String fx:value="@HomeAdmin.css"/>
     </stylesheets>
 
     <!-- ══════════════════════════════════════════════════════════
