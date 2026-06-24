@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.PilihKursiController"
+            styleClass="root-pilih-kursi"
+            prefWidth="700" prefHeight="600">
+
+    <!-- ===================== HEADER ===================== -->
+    <top>
+        <VBox spacing="4" styleClass="header-box">
+            <padding><Insets top="16" right="20" bottom="12" left="20"/></padding>
+
+            <Label text="Pilih Kursi" styleClass="header-title"/>
+            <Label fx:id="lblNamaKereta" text="Nama Kereta - Kelas" styleClass="info-text"/>
+            <Label fx:id="lblRute" text="Asal -> Tujuan" styleClass="info-text"/>
+            <Label fx:id="lblTanggalJam" text="Tanggal | Jam" styleClass="info-text"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="gerbong-row">
+                <Label text="Pilih Gerbong:" styleClass="label-bold"/>
+                <ComboBox fx:id="cbGerbong" onAction="#handlePilihGerbong" prefWidth="180"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ===================== KURSI GRID ===================== -->
+    <center>
+        <VBox spacing="14" alignment="CENTER" styleClass="center-box">
+            <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
+
+            <ScrollPane fitToWidth="true" styleClass="scroll-kursi">
+                <GridPane fx:id="gridKursi" hgap="10" vgap="10" alignment="CENTER" styleClass="grid-kursi"/>
+            </ScrollPane>
+
+            <!-- Legenda -->
+            <HBox spacing="20" alignment="CENTER" styleClass="legend-box">
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Region styleClass="legend-swatch, seat-kosong"/>
+                    <Label text="Kosong"/>
+                </HBox>
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Region styleClass="legend-swatch, seat-terpilih"/>
+                    <Label text="Dipilih"/>
+                </HBox>
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Region styleClass="legend-swatch, seat-terisi"/>
+                    <Label text="Terisi"/>
+                </HBox>
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- ===================== FOOTER ===================== -->
+    <bottom>
+        <HBox spacing="16" alignment="CENTER_LEFT" styleClass="footer-box">
+            <padding><Insets top="12" right="20" bottom="16" left="20"/></padding>
+
+            <VBox spacing="2">
+                <Label fx:id="lblTerpilih" text="Kursi terpilih: -" styleClass="info-text"/>
+                <Label fx:id="lblSisaKuota" text="Sisa kuota: 0 kursi" styleClass="info-text"/>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="btnKembali" text="Kembali" onAction="#handleKembali" styleClass="btn-secondary"/>
+            <Button fx:id="btnKonfirmasi" text="Konfirmasi" onAction="#handleKonfirmasi" styleClass="btn-primary"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
