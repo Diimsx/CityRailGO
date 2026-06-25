@@ -1,56 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- You may freely edit this file. See commented blocks below for --><!-- some examples of how to customize the build. --><!-- (If you delete it and reopen the project it will be recreated.) --><!-- By default, only the Clean and Build commands use this build script. --><project name="CityRailGO" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CityRailGO" default="default" basedir=".">
     <description>Builds, tests, and runs the project CityRailGO.</description>
     <import file="nbproject/build-impl.xml"/>
-    <!--
 
-    There exist several targets which are by default empty and which can be 
-    used for execution of your tasks. These targets are usually executed 
-    before and after some main targets. Those of them relevant for JavaFX project are: 
+    <!-- Fix JDK 15+: bypass Nashorn requirement -->
+    <property name="fallback.no.javascript" value="true"/>
 
-      -pre-init:                 called before initialization of project properties
-      -post-init:                called after initialization of project properties
-      -pre-compile:              called before javac compilation
-      -post-compile:             called after javac compilation
-      -pre-compile-test:         called before javac compilation of JUnit tests
-      -post-compile-test:        called after javac compilation of JUnit tests
-      -pre-jfx-jar:              called before FX SDK specific <fx:jar> task
-      -post-jfx-jar:             called after FX SDK specific <fx:jar> task
-      -pre-jfx-deploy:           called before FX SDK specific <fx:deploy> task
-      -post-jfx-deploy:          called after FX SDK specific <fx:deploy> task
-      -pre-jfx-native:           called just after -pre-jfx-deploy if <fx:deploy> runs in native packaging mode
-      -post-jfx-native:          called just after -post-jfx-deploy if <fx:deploy> runs in native packaging mode
-      -post-clean:               called after cleaning build products
-
-    (Targets beginning with '-' are not intended to be called on their own.)
-
-    Example of inserting a HTML postprocessor after javaFX SDK deployment:
-
-        <target name="-post-jfx-deploy">
-            <basename property="jfx.deployment.base" file="${jfx.deployment.jar}" suffix=".jar"/>
-            <property name="jfx.deployment.html" location="${jfx.deployment.dir}${file.separator}${jfx.deployment.base}.html"/>
-            <custompostprocess>
-                <fileset dir="${jfx.deployment.html}"/>
-            </custompostprocess>
-        </target>
-
-    Example of calling an Ant task from JavaFX SDK. Note that access to JavaFX SDK Ant tasks must be
-    initialized; to ensure this is done add the dependence on -check-jfx-sdk-version target:
-
-        <target name="-post-jfx-jar" depends="-check-jfx-sdk-version">
-            <echo message="Calling jar task from JavaFX SDK"/>
-            <fx:jar ...>
-                ...
-            </fx:jar>
-        </target>
-
-    For more details about JavaFX SDK Ant tasks go to
-    http://docs.oracle.com/javafx/2/deployment/jfxpub-deployment.htm
-
-    For list of available properties check the files
-    nbproject/build-impl.xml and nbproject/jfx-impl.xml.
-
-    -->
-
+    <!-- Fix: copy FXML dan CSS ke build dir setelah compile -->
     <target name="-post-compile">
         <copy todir="${build.classes.dir}/view">
             <fileset dir="${src.dir}/view">
@@ -60,4 +16,24 @@
         </copy>
     </target>
 
+    <!-- Fix: bypass jfx-impl.xml copylibs yang butuh Nashorn -->
+    <target name="-jfx-copylibs" depends="init,compile,-pre-pre-jar,-pre-jar">
+    </target>
+
+    <!-- Fix: bypass cek ant-javafx.jar yang tidak ada di JDK 11+ -->
+    <target name="-check-jfx-sdk-version">
+        <property name="jfx.sdk.version.checked" value="true"/>
+    </target>
+
+    <!-- Fix: ganti fx:jar task dengan standard Ant jar task -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.jar}" basedir="${build.classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="main"/>
+                <attribute name="Class-Path" value="libs/mysql-connector-j-9.7.0/mysql-connector-j-9.7.0.jar libs/ikonli-core-12.3.1.jar libs/ikonli-fontawesome5-pack-12.3.1.jar libs/ikonli-javafx-12.3.1.jar"/>
+            </manifest>
+        </jar>
+        <echo message="BUILD SUCCESS: ${dist.jar}"/>
+    </target>
 </project>
