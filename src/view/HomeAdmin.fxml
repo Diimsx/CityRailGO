@@ -1,702 +1,354 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.HomeAdminController"
-      prefWidth="1280" prefHeight="720"
-      styleClass="root-container">
+<BorderPane
+    xmlns="http://javafx.com/javafx/17"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="controller.HomeAdminController"
+    stylesheets="@../css/HomeAdmin.css"
+    prefWidth="1280"
+    prefHeight="760">
 
-    <stylesheets>
-        <String fx:value="@global.css"/>
-        <String fx:value="@HomeAdmin.css"/>
-    </stylesheets>
+    <!-- ═══════════════════════════════════
+         SIDEBAR (LEFT)
+    ═══════════════════════════════════ -->
+    <left>
+        <VBox styleClass="sidebar">
 
-    <!-- ══════════════════════════════════════════════════════════
-         SIDEBAR
-         ══════════════════════════════════════════════════════════ -->
-    <VBox styleClass="sidebar" prefWidth="220" minWidth="220" spacing="0">
-
-        <!-- Brand -->
-        <HBox styleClass="sidebar-brand" alignment="CENTER_LEFT" spacing="12">
-            <padding><Insets top="24" bottom="24" left="20" right="20"/></padding>
-            <HBox styleClass="brand-icon-wrap" alignment="CENTER" minWidth="36" minHeight="36">
-                <Label text="🚆" styleClass="brand-icon-glyph"/>
+            <!-- Logo -->
+            <HBox styleClass="sidebar-logo" alignment="CENTER_LEFT">
+                <FontIcon iconLiteral="fas-train" iconSize="22" styleClass="logo-icon"/>
+                <Label text="CityRailGO" styleClass="logo-text"/>
             </HBox>
-            <VBox spacing="1">
-                <Label text="CityRailGO" styleClass="brand-name"/>
-                <Label text="Admin Panel" styleClass="brand-sub"/>
+
+            <!-- Admin Profile Card -->
+            <HBox styleClass="admin-profile" alignment="CENTER_LEFT">
+                <StackPane styleClass="avatar">
+                    <Label fx:id="labelAvatarInitial" text="A" styleClass="avatar-label"/>
+                </StackPane>
+                <VBox styleClass="admin-info">
+                    <Label fx:id="labelAdminName" text="Administrator" styleClass="admin-name"/>
+                    <Label text="Super Admin" styleClass="admin-role"/>
+                </VBox>
+            </HBox>
+
+            <!-- Divider -->
+            <Region styleClass="sidebar-divider"/>
+
+            <!-- Navigation Section Label -->
+            <Label text="MENU UTAMA" styleClass="nav-section-label"/>
+
+            <!-- Nav Items -->
+            <VBox styleClass="nav-items" VBox.vgrow="ALWAYS">
+
+                <Button fx:id="btnDashboard" styleClass="nav-btn" maxWidth="Infinity"
+                        mnemonicParsing="false" onAction="#handleDashboard">
+                    <graphic>
+                        <HBox styleClass="nav-btn-content" alignment="CENTER_LEFT">
+                            <FontIcon iconLiteral="fas-th-large" iconSize="15" styleClass="nav-icon"/>
+                            <Label text="Dashboard" styleClass="nav-label" mouseTransparent="true"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnKereta" styleClass="nav-btn" maxWidth="Infinity"
+                        mnemonicParsing="false" onAction="#handleKereta">
+                    <graphic>
+                        <HBox styleClass="nav-btn-content" alignment="CENTER_LEFT">
+                            <FontIcon iconLiteral="fas-train" iconSize="15" styleClass="nav-icon"/>
+                            <Label text="Manajemen Kereta" styleClass="nav-label" mouseTransparent="true"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnRute" styleClass="nav-btn" maxWidth="Infinity"
+                        mnemonicParsing="false" onAction="#handleRute">
+                    <graphic>
+                        <HBox styleClass="nav-btn-content" alignment="CENTER_LEFT">
+                            <FontIcon iconLiteral="fas-route" iconSize="15" styleClass="nav-icon"/>
+                            <Label text="Manajemen Rute" styleClass="nav-label" mouseTransparent="true"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnJadwal" styleClass="nav-btn" maxWidth="Infinity"
+                        mnemonicParsing="false" onAction="#handleJadwal">
+                    <graphic>
+                        <HBox styleClass="nav-btn-content" alignment="CENTER_LEFT">
+                            <FontIcon iconLiteral="fas-calendar-alt" iconSize="15" styleClass="nav-icon"/>
+                            <Label text="Manajemen Jadwal" styleClass="nav-label" mouseTransparent="true"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnPenumpang" styleClass="nav-btn" maxWidth="Infinity"
+                        mnemonicParsing="false" onAction="#handlePenumpang">
+                    <graphic>
+                        <HBox styleClass="nav-btn-content" alignment="CENTER_LEFT">
+                            <FontIcon iconLiteral="fas-users" iconSize="15" styleClass="nav-icon"/>
+                            <Label text="Data Penumpang" styleClass="nav-label" mouseTransparent="true"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnPemesanan" styleClass="nav-btn" maxWidth="Infinity"
+                        mnemonicParsing="false" onAction="#handlePemesanan">
+                    <graphic>
+                        <HBox styleClass="nav-btn-content" alignment="CENTER_LEFT">
+                            <FontIcon iconLiteral="fas-ticket-alt" iconSize="15" styleClass="nav-icon"/>
+                            <Label text="Data Pemesanan" styleClass="nav-label" mouseTransparent="true"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <!-- Spacer pushes logout to bottom -->
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <!-- Divider -->
+                <Region styleClass="sidebar-divider"/>
+
+                <!-- Logout -->
+                <Button fx:id="btnLogout" styleClass="nav-btn nav-btn-logout" maxWidth="Infinity"
+                        mnemonicParsing="false" onAction="#handleLogout">
+                    <graphic>
+                        <HBox styleClass="nav-btn-content" alignment="CENTER_LEFT">
+                            <FontIcon iconLiteral="fas-sign-out-alt" iconSize="15" styleClass="nav-icon"/>
+                            <Label text="Keluar" styleClass="nav-label" mouseTransparent="true"/>
+                        </HBox>
+                    </graphic>
+                </Button>
             </VBox>
-        </HBox>
-
-        <!-- Divider -->
-        <HBox styleClass="sidebar-divider"/>
-
-        <!-- Nav section label -->
-        <Label text="MENU" styleClass="nav-section-label">
-            <padding><Insets top="16" bottom="8" left="20" right="0"/></padding>
-        </Label>
-
-        <!-- Nav items -->
-        <VBox spacing="2">
-            <padding><Insets left="12" right="12"/></padding>
-
-            <Button fx:id="btnNavDashboard" onAction="#handleNavDashboard"
-                    styleClass="nav-btn, nav-active" maxWidth="Infinity">
-                <graphic><HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="📊" styleClass="nav-icon"/>
-                    <Label text="Dashboard" styleClass="nav-label"/>
-                </HBox></graphic>
-            </Button>
-
-            <Button fx:id="btnNavKereta" onAction="#handleNavKereta"
-                    styleClass="nav-btn" maxWidth="Infinity">
-                <graphic><HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="🚆" styleClass="nav-icon"/>
-                    <Label text="Kereta" styleClass="nav-label"/>
-                </HBox></graphic>
-            </Button>
-
-            <Button fx:id="btnNavJadwal" onAction="#handleNavJadwal"
-                    styleClass="nav-btn" maxWidth="Infinity">
-                <graphic><HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="📅" styleClass="nav-icon"/>
-                    <Label text="Jadwal" styleClass="nav-label"/>
-                </HBox></graphic>
-            </Button>
-
-            <Button fx:id="btnNavPromo" onAction="#handleNavPromo"
-                    styleClass="nav-btn" maxWidth="Infinity">
-                <graphic><HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="🏷" styleClass="nav-icon"/>
-                    <Label text="Promo" styleClass="nav-label"/>
-                </HBox></graphic>
-            </Button>
-
-            <Button fx:id="btnNavPembayaran" onAction="#handleNavPembayaran"
-                    styleClass="nav-btn" maxWidth="Infinity">
-                <graphic><HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="💳" styleClass="nav-icon"/>
-                    <Label text="Pembayaran" styleClass="nav-label"/>
-                </HBox></graphic>
-            </Button>
         </VBox>
+    </left>
 
-        <!-- Spacer -->
-        <Region VBox.vgrow="ALWAYS"/>
+    <!-- ═══════════════════════════════════
+         MAIN CONTENT (CENTER)
+    ═══════════════════════════════════ -->
+    <center>
+        <VBox styleClass="main-content">
 
-        <!-- Divider -->
-        <HBox styleClass="sidebar-divider"/>
-
-        <!-- User info + logout -->
-        <VBox spacing="8">
-            <padding><Insets top="14" bottom="14" left="16" right="16"/></padding>
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <HBox styleClass="avatar-wrap" alignment="CENTER" minWidth="34" minHeight="34">
-                    <Label text="👤" styleClass="avatar-icon"/>
-                </HBox>
-                <VBox spacing="1">
-                    <Label fx:id="lblAdminName" text="Admin" styleClass="user-name"/>
-                    <Label fx:id="lblAdminRole" text="Administrator" styleClass="user-role"/>
+            <!-- Top Header Bar -->
+            <HBox styleClass="top-header" alignment="CENTER_LEFT">
+                <VBox HBox.hgrow="ALWAYS" spacing="2">
+                    <Label text="Dashboard" styleClass="page-title"/>
+                    <Label fx:id="labelDateTime" text="Memuat tanggal..." styleClass="page-subtitle"/>
                 </VBox>
+                <HBox alignment="CENTER_RIGHT" spacing="8">
+                    <Button styleClass="icon-btn" mnemonicParsing="false"
+                            onAction="#handleRefresh" tooltip-text="refresh">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-sync-alt" iconSize="14" styleClass="icon-btn-icon"/>
+                        </graphic>
+                    </Button>
+                    <Button styleClass="icon-btn" mnemonicParsing="false">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-bell" iconSize="14" styleClass="icon-btn-icon"/>
+                        </graphic>
+                    </Button>
+                </HBox>
             </HBox>
-            <Button fx:id="btnLogout" onAction="#handleLogout"
-                    styleClass="logout-btn" maxWidth="Infinity">
-                <graphic><HBox spacing="8" alignment="CENTER">
-                    <Label text="🚪" styleClass="logout-icon"/>
-                    <Label text="Keluar" styleClass="logout-label"/>
-                </HBox></graphic>
-            </Button>
+
+            <!-- Scrollable Content Area -->
+            <ScrollPane styleClass="main-scroll" fitToWidth="true" VBox.vgrow="ALWAYS"
+                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                <VBox styleClass="content-area" spacing="20">
+
+                    <!-- ─── STAT CARDS ROW ─── -->
+                    <GridPane styleClass="stats-grid" hgap="16" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <!-- Card: Total Pemesanan -->
+                        <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="0">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <StackPane styleClass="stat-icon-wrap stat-icon-blue">
+                                    <FontIcon iconLiteral="fas-ticket-alt" iconSize="18" styleClass="stat-icon"/>
+                                </StackPane>
+                                <Label text="Total Pemesanan" styleClass="stat-label"/>
+                            </HBox>
+                            <Label fx:id="labelTotalPemesanan" text="—" styleClass="stat-value"/>
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <FontIcon iconLiteral="fas-arrow-up" iconSize="9" styleClass="trend-icon-up"/>
+                                <Label fx:id="labelTrendPemesanan" text="+0% bulan ini" styleClass="stat-trend"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Card: Total Pendapatan -->
+                        <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="1">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <StackPane styleClass="stat-icon-wrap stat-icon-green">
+                                    <FontIcon iconLiteral="fas-money-bill-wave" iconSize="18" styleClass="stat-icon"/>
+                                </StackPane>
+                                <Label text="Total Pendapatan" styleClass="stat-label"/>
+                            </HBox>
+                            <Label fx:id="labelTotalPendapatan" text="—" styleClass="stat-value"/>
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <FontIcon iconLiteral="fas-arrow-up" iconSize="9" styleClass="trend-icon-up"/>
+                                <Label fx:id="labelTrendPendapatan" text="+0% bulan ini" styleClass="stat-trend"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Card: Total Penumpang -->
+                        <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="2">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <StackPane styleClass="stat-icon-wrap stat-icon-purple">
+                                    <FontIcon iconLiteral="fas-users" iconSize="18" styleClass="stat-icon"/>
+                                </StackPane>
+                                <Label text="Total Penumpang" styleClass="stat-label"/>
+                            </HBox>
+                            <Label fx:id="labelTotalPenumpang" text="—" styleClass="stat-value"/>
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <FontIcon iconLiteral="fas-arrow-up" iconSize="9" styleClass="trend-icon-up"/>
+                                <Label fx:id="labelTrendPenumpang" text="+0% bulan ini" styleClass="stat-trend"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Card: Jadwal Aktif -->
+                        <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="3">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <StackPane styleClass="stat-icon-wrap stat-icon-amber">
+                                    <FontIcon iconLiteral="fas-calendar-check" iconSize="18" styleClass="stat-icon"/>
+                                </StackPane>
+                                <Label text="Jadwal Aktif" styleClass="stat-label"/>
+                            </HBox>
+                            <Label fx:id="labelJadwalAktif" text="—" styleClass="stat-value"/>
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <FontIcon iconLiteral="fas-clock" iconSize="9" styleClass="trend-icon-flat"/>
+                                <Label text="Hari ini" styleClass="stat-trend"/>
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- ─── BOTTOM ROW: TABLE + SIDE PANELS ─── -->
+                    <HBox spacing="16" alignment="TOP_LEFT">
+
+                        <!-- Recent Pemesanan Table Panel -->
+                        <VBox styleClass="panel-card" HBox.hgrow="ALWAYS" spacing="0">
+
+                            <!-- Panel Header -->
+                            <HBox styleClass="panel-header" alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT" spacing="8" HBox.hgrow="ALWAYS">
+                                    <FontIcon iconLiteral="fas-list-alt" iconSize="14" styleClass="panel-header-icon"/>
+                                    <Label text="Pemesanan Terbaru" styleClass="panel-title"/>
+                                </HBox>
+                                <Button styleClass="btn-text-link" text="Lihat Semua →"
+                                        mnemonicParsing="false" onAction="#handlePemesanan"/>
+                            </HBox>
+
+                            <!-- Table -->
+                            <TableView fx:id="tablePemesanan" styleClass="modern-table"
+                                       VBox.vgrow="ALWAYS" minHeight="320">
+                                <columns>
+                                    <TableColumn fx:id="colKode" text="Kode Booking" prefWidth="140"/>
+                                    <TableColumn fx:id="colNama" text="Penumpang" prefWidth="160"/>
+                                    <TableColumn fx:id="colRute" text="Rute" prefWidth="190"/>
+                                    <TableColumn fx:id="colTanggal" text="Tanggal Berangkat" prefWidth="150"/>
+                                    <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
+                                </columns>
+                                <placeholder>
+                                    <VBox alignment="CENTER" spacing="10" style="-fx-padding: 48;">
+                                        <FontIcon iconLiteral="fas-inbox" iconSize="36"
+                                                  style="-fx-icon-color: #CBD5E1;"/>
+                                        <Label text="Belum ada data pemesanan"
+                                               style="-fx-text-fill: #94A3B8; -fx-font-size: 13px;"/>
+                                    </VBox>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+
+                        <!-- Right Side Panels -->
+                        <VBox spacing="16" prefWidth="256" minWidth="240">
+
+                            <!-- Quick Actions Panel -->
+                            <VBox styleClass="panel-card" spacing="12">
+                                <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8">
+                                    <FontIcon iconLiteral="fas-bolt" iconSize="13" styleClass="panel-header-icon"/>
+                                    <Label text="Aksi Cepat" styleClass="panel-title"/>
+                                </HBox>
+                                <VBox spacing="8">
+                                    <Button styleClass="quick-btn" maxWidth="Infinity"
+                                            mnemonicParsing="false" onAction="#handleKereta">
+                                        <graphic>
+                                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                                <FontIcon iconLiteral="fas-plus-circle" iconSize="13"
+                                                          styleClass="quick-btn-icon"/>
+                                                <Label text="Tambah Kereta" mouseTransparent="true"
+                                                       styleClass="quick-btn-label"/>
+                                            </HBox>
+                                        </graphic>
+                                    </Button>
+                                    <Button styleClass="quick-btn" maxWidth="Infinity"
+                                            mnemonicParsing="false" onAction="#handleRute">
+                                        <graphic>
+                                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                                <FontIcon iconLiteral="fas-plus-circle" iconSize="13"
+                                                          styleClass="quick-btn-icon"/>
+                                                <Label text="Tambah Rute" mouseTransparent="true"
+                                                       styleClass="quick-btn-label"/>
+                                            </HBox>
+                                        </graphic>
+                                    </Button>
+                                    <Button styleClass="quick-btn" maxWidth="Infinity"
+                                            mnemonicParsing="false" onAction="#handleJadwal">
+                                        <graphic>
+                                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                                <FontIcon iconLiteral="fas-plus-circle" iconSize="13"
+                                                          styleClass="quick-btn-icon"/>
+                                                <Label text="Buat Jadwal" mouseTransparent="true"
+                                                       styleClass="quick-btn-label"/>
+                                            </HBox>
+                                        </graphic>
+                                    </Button>
+                                </VBox>
+                            </VBox>
+
+                            <!-- System Status Panel -->
+                            <VBox styleClass="panel-card" spacing="14">
+                                <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8">
+                                    <FontIcon iconLiteral="fas-server" iconSize="13" styleClass="panel-header-icon"/>
+                                    <Label text="Status Sistem" styleClass="panel-title"/>
+                                </HBox>
+                                <VBox spacing="12">
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <StackPane styleClass="dot dot-green"/>
+                                        <Label text="Database" styleClass="status-item-label" HBox.hgrow="ALWAYS"/>
+                                        <Label text="Online" styleClass="status-item-value status-ok"/>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <StackPane styleClass="dot dot-green"/>
+                                        <Label text="Aplikasi" styleClass="status-item-label" HBox.hgrow="ALWAYS"/>
+                                        <Label text="Aktif" styleClass="status-item-value status-ok"/>
+                                    </HBox>
+                                    <Region styleClass="status-divider"/>
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <StackPane styleClass="dot dot-blue"/>
+                                        <Label text="Versi" styleClass="status-item-label" HBox.hgrow="ALWAYS"/>
+                                        <Label text="v1.0.0" styleClass="status-item-value status-info"/>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <StackPane styleClass="dot dot-blue"/>
+                                        <Label text="Mode" styleClass="status-item-label" HBox.hgrow="ALWAYS"/>
+                                        <Label text="Admin" styleClass="status-item-value status-info"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                        </VBox>
+                    </HBox>
+
+                    <!-- Bottom padding -->
+                    <Region minHeight="8"/>
+                </VBox>
+            </ScrollPane>
         </VBox>
-
-    </VBox>
-
-    <!-- ══════════════════════════════════════════════════════════
-         MAIN CONTENT
-         ══════════════════════════════════════════════════════════ -->
-    <VBox HBox.hgrow="ALWAYS" spacing="0">
-
-        <!-- Topbar -->
-        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="0">
-            <padding><Insets top="0" bottom="0" left="28" right="24"/></padding>
-            <Label text="Sistem Pemesanan Kereta API" styleClass="topbar-title"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <HBox spacing="6" alignment="CENTER">
-                <Label text="●" styleClass="status-dot"/>
-                <Label text="Online" styleClass="topbar-status"/>
-            </HBox>
-        </HBox>
-
-        <!-- Content Area -->
-        <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS" styleClass="content-bg">
-
-            <!-- ── PANEL: DASHBOARD ── -->
-            <VBox fx:id="panelDashboard" spacing="0" VBox.vgrow="ALWAYS">
-
-                <!-- Topbar in-panel: quick actions -->
-                <HBox styleClass="dash-qabar" alignment="CENTER_LEFT" spacing="8">
-                    <padding><Insets top="10" bottom="10" left="24" right="24"/></padding>
-                    <VBox spacing="1" HBox.hgrow="ALWAYS">
-                        <Label text="Dashboard" styleClass="page-title"/>
-                        <Label text="Ringkasan data sistem hari ini" styleClass="page-sub"/>
-                    </VBox>
-                    <Button styleClass="qa-btn" onAction="#handleNavKereta">
-                        <graphic><HBox spacing="6" alignment="CENTER">
-                            <FontIcon iconLiteral="fas-plus" iconSize="11" styleClass="qa-icon"/>
-                            <Label text="Tambah Kereta" styleClass="qa-label"/>
-                        </HBox></graphic>
-                    </Button>
-                    <Button styleClass="qa-btn" onAction="#handleNavJadwal">
-                        <graphic><HBox spacing="6" alignment="CENTER">
-                            <FontIcon iconLiteral="fas-calendar-plus" iconSize="11" styleClass="qa-icon"/>
-                            <Label text="Tambah Jadwal" styleClass="qa-label"/>
-                        </HBox></graphic>
-                    </Button>
-                    <Button styleClass="qa-btn" onAction="#handleNavPromo">
-                        <graphic><HBox spacing="6" alignment="CENTER">
-                            <FontIcon iconLiteral="fas-tags" iconSize="11" styleClass="qa-icon"/>
-                            <Label text="Tambah Promo" styleClass="qa-label"/>
-                        </HBox></graphic>
-                    </Button>
-                    <Button styleClass="qa-btn" onAction="#handleNavPembayaran">
-                        <graphic><HBox spacing="6" alignment="CENTER">
-                            <FontIcon iconLiteral="fas-search" iconSize="11" styleClass="qa-icon"/>
-                            <Label text="Cari Pemesanan" styleClass="qa-label"/>
-                        </HBox></graphic>
-                    </Button>
-                </HBox>
-
-                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="dash-scroll" hbarPolicy="NEVER">
-                <VBox spacing="0">
-                <padding><Insets top="16" bottom="16" left="20" right="20"/></padding>
-
-                <!-- ── Stat cards ── -->
-                <HBox spacing="10">
-                    <padding><Insets bottom="14"/></padding>
-
-                    <!-- Total Pemesanan -->
-                    <VBox styleClass="d-stat" HBox.hgrow="ALWAYS">
-                        <HBox styleClass="d-stat-accent" style="-fx-background-color: rgba(29,95,186,0.09);"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <FontIcon iconLiteral="fas-ticket-alt" iconSize="13" style="-fx-icon-color:#1d5fba;"/>
-                            <Label text="TOTAL PEMESANAN" styleClass="d-stat-lbl"/>
-                        </HBox>
-                        <Label fx:id="lblStatTiket" text="0" styleClass="d-stat-val"/>
-                        <HBox spacing="4" alignment="CENTER_LEFT">
-                            <FontIcon iconLiteral="fas-arrow-up" iconSize="10" styleClass="d-delta-icon-up"/>
-                            <Label text="dari DB" styleClass="d-delta-up"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Pendapatan -->
-                    <VBox styleClass="d-stat" HBox.hgrow="ALWAYS">
-                        <HBox styleClass="d-stat-accent" style="-fx-background-color: rgba(22,163,74,0.09);"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <FontIcon iconLiteral="fas-money-bill-wave" iconSize="13" style="-fx-icon-color:#16a34a;"/>
-                            <Label text="TOTAL KERETA" styleClass="d-stat-lbl"/>
-                        </HBox>
-                        <Label fx:id="lblStatKereta" text="0" styleClass="d-stat-val"/>
-                        <HBox spacing="4" alignment="CENTER_LEFT">
-                            <FontIcon iconLiteral="fas-train" iconSize="10" styleClass="d-delta-icon-neu"/>
-                            <Label text="armada aktif" styleClass="d-delta-neu"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Jadwal -->
-                    <VBox styleClass="d-stat" HBox.hgrow="ALWAYS">
-                        <HBox styleClass="d-stat-accent" style="-fx-background-color: rgba(217,119,6,0.09);"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <FontIcon iconLiteral="fas-users" iconSize="13" style="-fx-icon-color:#d97706;"/>
-                            <Label text="JADWAL TERSEDIA" styleClass="d-stat-lbl"/>
-                        </HBox>
-                        <Label fx:id="lblStatJadwal" text="0" styleClass="d-stat-val"/>
-                        <HBox spacing="4" alignment="CENTER_LEFT">
-                            <FontIcon iconLiteral="fas-calendar-check" iconSize="10" styleClass="d-delta-icon-neu"/>
-                            <Label text="jadwal aktif" styleClass="d-delta-neu"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Promo -->
-                    <VBox styleClass="d-stat" HBox.hgrow="ALWAYS">
-                        <HBox styleClass="d-stat-accent" style="-fx-background-color: rgba(220,38,38,0.09);"/>
-                        <HBox alignment="CENTER_LEFT" spacing="6">
-                            <FontIcon iconLiteral="fas-calendar-day" iconSize="13" style="-fx-icon-color:#dc2626;"/>
-                            <Label text="PROMO BERJALAN" styleClass="d-stat-lbl"/>
-                        </HBox>
-                        <Label fx:id="lblStatPromo" text="0" styleClass="d-stat-val"/>
-                        <HBox spacing="4" alignment="CENTER_LEFT">
-                            <FontIcon iconLiteral="fas-minus" iconSize="10" styleClass="d-delta-icon-neu"/>
-                            <Label text="promo aktif" styleClass="d-delta-neu"/>
-                        </HBox>
-                    </VBox>
-                </HBox>
-
-                <!-- ── Row 2: Bar chart + Pie chart ── -->
-                <HBox spacing="10">
-                    <padding><Insets bottom="14"/></padding>
-
-                    <!-- Bar chart: Tren Pendapatan -->
-                    <VBox styleClass="d-card" HBox.hgrow="ALWAYS">
-                        <HBox styleClass="d-card-hdr" alignment="CENTER_LEFT" spacing="8">
-                            <HBox styleClass="d-hdr-icon, d-hdr-blue" alignment="CENTER" minWidth="26" minHeight="26">
-                                <FontIcon iconLiteral="fas-chart-bar" iconSize="13" style="-fx-icon-color:#1d5fba;"/>
-                            </HBox>
-                            <VBox spacing="1" HBox.hgrow="ALWAYS">
-                                <Label text="Tren Pemesanan" styleClass="d-card-title"/>
-                                <Label text="6 bulan terakhir" styleClass="d-card-sub"/>
-                            </VBox>
-                        </HBox>
-                        <!-- Bar chart via StackPane + Rectangle approximation -->
-                        <HBox styleClass="d-chart-area" alignment="BOTTOM_LEFT" spacing="4">
-                            <padding><Insets top="12" bottom="12" left="14" right="14"/></padding>
-                            <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-                                <Region styleClass="d-bar" prefHeight="52" maxWidth="Infinity"/>
-                                <Label text="Jan" styleClass="d-bar-lbl"/>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-                                <Region styleClass="d-bar" prefHeight="72" maxWidth="Infinity"/>
-                                <Label text="Feb" styleClass="d-bar-lbl"/>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-                                <Region styleClass="d-bar" prefHeight="58" maxWidth="Infinity"/>
-                                <Label text="Mar" styleClass="d-bar-lbl"/>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-                                <Region styleClass="d-bar" prefHeight="91" maxWidth="Infinity"/>
-                                <Label text="Apr" styleClass="d-bar-lbl"/>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-                                <Region styleClass="d-bar" prefHeight="80" maxWidth="Infinity"/>
-                                <Label text="Mei" styleClass="d-bar-lbl"/>
-                            </VBox>
-                            <VBox alignment="BOTTOM_CENTER" HBox.hgrow="ALWAYS">
-                                <Region styleClass="d-bar, d-bar-hi" prefHeight="110" maxWidth="Infinity"/>
-                                <Label text="Jun" styleClass="d-bar-lbl"/>
-                            </VBox>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Pie chart: Distribusi Kelas -->
-                    <VBox styleClass="d-card" prefWidth="260" minWidth="240">
-                        <HBox styleClass="d-card-hdr" alignment="CENTER_LEFT" spacing="8">
-                            <HBox styleClass="d-hdr-icon, d-hdr-grn" alignment="CENTER" minWidth="26" minHeight="26">
-                                <FontIcon iconLiteral="fas-chart-pie" iconSize="13" style="-fx-icon-color:#16a34a;"/>
-                            </HBox>
-                            <VBox spacing="1">
-                                <Label text="Distribusi Kelas" styleClass="d-card-title"/>
-                                <Label text="Pemesanan bulan ini" styleClass="d-card-sub"/>
-                            </VBox>
-                        </HBox>
-                        <HBox alignment="CENTER" spacing="16" prefHeight="130">
-                            <padding><Insets top="8" bottom="8" left="14" right="14"/></padding>
-                            <!-- Donut rings via nested circles (CSS) -->
-                            <StackPane styleClass="d-donut" prefWidth="90" prefHeight="90">
-                                <VBox alignment="CENTER" spacing="0">
-                                    <Label text="100%" styleClass="d-donut-pct"/>
-                                    <Label text="total" styleClass="d-donut-sub"/>
-                                </VBox>
-                            </StackPane>
-                            <VBox spacing="8">
-                                <HBox spacing="6" alignment="CENTER_LEFT">
-                                    <Region styleClass="d-pie-dot" style="-fx-background-color:#1d5fba;" prefWidth="8" prefHeight="8"/>
-                                    <Label text="Bisnis  " styleClass="d-pie-lbl"/>
-                                    <Label text="40%" styleClass="d-pie-val"/>
-                                </HBox>
-                                <HBox spacing="6" alignment="CENTER_LEFT">
-                                    <Region styleClass="d-pie-dot" style="-fx-background-color:#16a34a;" prefWidth="8" prefHeight="8"/>
-                                    <Label text="Ekonomi" styleClass="d-pie-lbl"/>
-                                    <Label text="25%" styleClass="d-pie-val"/>
-                                </HBox>
-                                <HBox spacing="6" alignment="CENTER_LEFT">
-                                    <Region styleClass="d-pie-dot" style="-fx-background-color:#f5a623;" prefWidth="8" prefHeight="8"/>
-                                    <Label text="Eksekutif" styleClass="d-pie-lbl"/>
-                                    <Label text="35%" styleClass="d-pie-val"/>
-                                </HBox>
-                            </VBox>
-                        </HBox>
-                    </VBox>
-                </HBox>
-
-                <!-- ── Row 3: Tabel pemesanan + Jadwal hari ini ── -->
-                <HBox spacing="10">
-
-                    <!-- Tabel pemesanan terbaru -->
-                    <VBox styleClass="d-card" HBox.hgrow="ALWAYS">
-                        <HBox styleClass="d-card-hdr" alignment="CENTER_LEFT" spacing="8">
-                            <HBox styleClass="d-hdr-icon, d-hdr-blue" alignment="CENTER" minWidth="26" minHeight="26">
-                                <FontIcon iconLiteral="fas-list" iconSize="13" style="-fx-icon-color:#1d5fba;"/>
-                            </HBox>
-                            <VBox spacing="1" HBox.hgrow="ALWAYS">
-                                <Label text="Pemesanan Terbaru" styleClass="d-card-title"/>
-                                <Label text="10 transaksi terakhir" styleClass="d-card-sub"/>
-                            </VBox>
-                            <Button styleClass="d-see-all" onAction="#handleNavPembayaran">
-                                <graphic><HBox spacing="3" alignment="CENTER">
-                                    <Label text="Lihat semua" styleClass="d-see-all-lbl"/>
-                                    <FontIcon iconLiteral="fas-arrow-right" iconSize="10" styleClass="d-see-all-icon"/>
-                                </HBox></graphic>
-                            </Button>
-                        </HBox>
-
-                        <TableView fx:id="tblPemesananDash" styleClass="d-table" VBox.vgrow="ALWAYS">
-                            <columns>
-                                <TableColumn fx:id="colDashKode"      text="KODE"      prefWidth="90"/>
-                                <TableColumn fx:id="colDashPenumpang" text="PENUMPANG" prefWidth="130"/>
-                                <TableColumn fx:id="colDashRute"      text="RUTE"      prefWidth="110"/>
-                                <TableColumn fx:id="colDashTotal"     text="TOTAL"     prefWidth="110"/>
-                                <TableColumn fx:id="colDashStatus"    text="STATUS"    prefWidth="90"/>
-                            </columns>
-                            <placeholder>
-                                <VBox alignment="CENTER" spacing="6">
-                                    <FontIcon iconLiteral="fas-inbox" iconSize="28" styleClass="table-empty-icon"/>
-                                    <Label text="Belum ada pemesanan" styleClass="table-empty-text"/>
-                                </VBox>
-                            </placeholder>
-                        </TableView>
-                    </VBox>
-
-                    <!-- Jadwal hari ini -->
-                    <VBox styleClass="d-card" prefWidth="250" minWidth="230">
-                        <HBox styleClass="d-card-hdr" alignment="CENTER_LEFT" spacing="8">
-                            <HBox styleClass="d-hdr-icon, d-hdr-blue" alignment="CENTER" minWidth="26" minHeight="26">
-                                <FontIcon iconLiteral="fas-train" iconSize="13" style="-fx-icon-color:#1d5fba;"/>
-                            </HBox>
-                            <VBox spacing="1" HBox.hgrow="ALWAYS">
-                                <Label text="Jadwal Hari Ini" styleClass="d-card-title"/>
-                                <Label text="Keberangkatan aktif" styleClass="d-card-sub"/>
-                            </VBox>
-                            <Button styleClass="d-see-all" onAction="#handleNavJadwal">
-                                <graphic><FontIcon iconLiteral="fas-arrow-right" iconSize="10" styleClass="d-see-all-icon"/></graphic>
-                            </Button>
-                        </HBox>
-
-                        <VBox fx:id="boxJadwalDash" spacing="0" VBox.vgrow="ALWAYS">
-                            <!-- Diisi dari controller: loadJadwalDash() -->
-                            <!-- Placeholder rows (static, diganti runtime) -->
-                            <HBox styleClass="d-jadwal-item" alignment="CENTER_LEFT" spacing="10">
-                                <padding><Insets top="10" bottom="10" left="14" right="14"/></padding>
-                                <Label text="06:00" styleClass="d-jd-time"/>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Argo Bromo Anggrek" styleClass="d-jd-name"/>
-                                    <Label text="JKT → SBY" styleClass="d-jd-route"/>
-                                </VBox>
-                                <Label text="48 kursi" styleClass="d-jd-kursi-ok"/>
-                            </HBox>
-                            <HBox styleClass="d-jadwal-item" alignment="CENTER_LEFT" spacing="10">
-                                <padding><Insets top="10" bottom="10" left="14" right="14"/></padding>
-                                <Label text="08:30" styleClass="d-jd-time"/>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Gajayana" styleClass="d-jd-name"/>
-                                    <Label text="JKT → MLG" styleClass="d-jd-route"/>
-                                </VBox>
-                                <Label text="7 kursi" styleClass="d-jd-kursi-warn"/>
-                            </HBox>
-                            <HBox styleClass="d-jadwal-item" alignment="CENTER_LEFT" spacing="10">
-                                <padding><Insets top="10" bottom="10" left="14" right="14"/></padding>
-                                <Label text="10:00" styleClass="d-jd-time"/>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Argo Lawu" styleClass="d-jd-name"/>
-                                    <Label text="JKT → SLO" styleClass="d-jd-route"/>
-                                </VBox>
-                                <Label text="Habis" styleClass="d-jd-kursi-full"/>
-                            </HBox>
-                            <HBox styleClass="d-jadwal-item" alignment="CENTER_LEFT" spacing="10">
-                                <padding><Insets top="10" bottom="10" left="14" right="14"/></padding>
-                                <Label text="13:15" styleClass="d-jd-time"/>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Taksaka" styleClass="d-jd-name"/>
-                                    <Label text="JKT → YOG" styleClass="d-jd-route"/>
-                                </VBox>
-                                <Label text="32 kursi" styleClass="d-jd-kursi-ok"/>
-                            </HBox>
-                            <HBox styleClass="d-jadwal-item" alignment="CENTER_LEFT" spacing="10">
-                                <padding><Insets top="10" bottom="10" left="14" right="14"/></padding>
-                                <Label text="17:45" styleClass="d-jd-time"/>
-                                <VBox HBox.hgrow="ALWAYS" spacing="2">
-                                    <Label text="Sembrani" styleClass="d-jd-name"/>
-                                    <Label text="JKT → SBY" styleClass="d-jd-route"/>
-                                </VBox>
-                                <Label text="55 kursi" styleClass="d-jd-kursi-ok"/>
-                            </HBox>
-                        </VBox>
-                    </VBox>
-
-                </HBox>
-
-                </VBox>
-                </ScrollPane>
-
-            </VBox>
-
-            <!-- ── PANEL: KERETA ── -->
-            <VBox fx:id="panelKereta" spacing="0" visible="false" managed="false">
-                <padding><Insets top="28" bottom="28" left="28" right="28"/></padding>
-
-                <HBox alignment="CENTER_LEFT">
-                    <Label text="Manajemen Kereta" styleClass="page-title"/>
-                </HBox>
-                <Label text="Tambah, edit, dan hapus data armada kereta" styleClass="page-sub"/>
-
-                <HBox spacing="16" VBox.vgrow="ALWAYS">
-                    <padding><Insets top="20"/></padding>
-
-                    <!-- Table -->
-                    <VBox HBox.hgrow="ALWAYS" spacing="0" styleClass="table-card">
-                        <TableView fx:id="tblKereta" VBox.vgrow="ALWAYS"
-                                   onMouseClicked="#handleSelectKereta"
-                                   styleClass="data-table">
-                            <columns>
-                                <TableColumn fx:id="colKeretaNama"    text="Nama"      prefWidth="160"/>
-                                <TableColumn fx:id="colKeretaNomor"   text="Nomor"     prefWidth="110"/>
-                                <TableColumn fx:id="colKeretaJenis"   text="Jenis"     prefWidth="110"/>
-                                <TableColumn fx:id="colKeretaKapasitas" text="Kapasitas" prefWidth="90"/>
-                            </columns>
-                            <placeholder>
-                                <VBox alignment="CENTER" spacing="8">
-                                    <Label text="🚆" styleClass="table-empty-icon"/>
-                                    <Label text="Belum ada data kereta" styleClass="table-empty-text"/>
-                                </VBox>
-                            </placeholder>
-                        </TableView>
-                    </VBox>
-
-                    <!-- Form -->
-                    <VBox styleClass="form-card" spacing="14" prefWidth="260" minWidth="260">
-                        <Label text="Form Kereta" styleClass="form-title"/>
-
-                        <VBox spacing="5">
-                            <Label text="Nama Kereta" styleClass="form-label"/>
-                            <TextField fx:id="tfKeretaNama" promptText="Contoh: Argo Bromo" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Nomor Kereta" styleClass="form-label"/>
-                            <TextField fx:id="tfKeretaNomor" promptText="Contoh: KA-001" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Jenis" styleClass="form-label"/>
-                            <TextField fx:id="tfKeretaJenis" promptText="Eksekutif / Bisnis" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Kapasitas" styleClass="form-label"/>
-                            <TextField fx:id="tfKeretaKapasitas" promptText="Contoh: 60" styleClass="form-input"/>
-                        </VBox>
-
-                        <Region VBox.vgrow="ALWAYS"/>
-
-                        <Button onAction="#handleTambahKereta" styleClass="btn-primary" maxWidth="Infinity">
-                            <graphic><HBox spacing="7" alignment="CENTER">
-                                <Label text="＋" styleClass="btn-icon"/>
-                                <Label text="Tambah" styleClass="btn-label"/>
-                            </HBox></graphic>
-                        </Button>
-                        <Button onAction="#handleEditKereta" styleClass="btn-secondary" maxWidth="Infinity">
-                            <graphic><HBox spacing="7" alignment="CENTER">
-                                <Label text="✏" styleClass="btn-icon"/>
-                                <Label text="Update" styleClass="btn-label"/>
-                            </HBox></graphic>
-                        </Button>
-                        <Button onAction="#handleHapusKereta" styleClass="btn-danger" maxWidth="Infinity">
-                            <graphic><HBox spacing="7" alignment="CENTER">
-                                <Label text="🗑" styleClass="btn-icon"/>
-                                <Label text="Hapus" styleClass="btn-label"/>
-                            </HBox></graphic>
-                        </Button>
-                    </VBox>
-                </HBox>
-            </VBox>
-
-            <!-- ── PANEL: JADWAL ── -->
-            <VBox fx:id="panelJadwal" spacing="0" visible="false" managed="false">
-                <padding><Insets top="28" bottom="28" left="28" right="28"/></padding>
-
-                <Label text="Manajemen Jadwal" styleClass="page-title"/>
-                <Label text="Kelola jadwal keberangkatan — kursi dibuat otomatis saat jadwal ditambahkan" styleClass="page-sub"/>
-
-                <HBox spacing="16" VBox.vgrow="ALWAYS">
-                    <padding><Insets top="20"/></padding>
-
-                    <VBox HBox.hgrow="ALWAYS" spacing="0" styleClass="table-card">
-                        <TableView fx:id="tblJadwal" VBox.vgrow="ALWAYS" styleClass="data-table">
-                            <columns>
-                                <TableColumn fx:id="colJadwalKereta"    text="Kereta"      prefWidth="140"/>
-                                <TableColumn fx:id="colJadwalRute"      text="Rute"        prefWidth="180"/>
-                                <TableColumn fx:id="colJadwalBerangkat" text="Berangkat"   prefWidth="120"/>
-                                <TableColumn fx:id="colJadwalTiba"      text="Tiba"        prefWidth="120"/>
-                                <TableColumn fx:id="colJadwalStatus"    text="Status"      prefWidth="90"/>
-                            </columns>
-                            <placeholder>
-                                <VBox alignment="CENTER" spacing="8">
-                                    <Label text="📅" styleClass="table-empty-icon"/>
-                                    <Label text="Belum ada jadwal" styleClass="table-empty-text"/>
-                                </VBox>
-                            </placeholder>
-                        </TableView>
-                    </VBox>
-
-                    <VBox styleClass="form-card" spacing="14" prefWidth="260" minWidth="260">
-                        <Label text="Form Jadwal" styleClass="form-title"/>
-                        <VBox spacing="5">
-                            <Label text="ID Kereta" styleClass="form-label"/>
-                            <TextField fx:id="tfJadwalKeretaId" promptText="ID dari tabel kereta" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="ID Rute" styleClass="form-label"/>
-                            <TextField fx:id="tfJadwalRuteId" promptText="ID dari tabel rute" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="ID Kelas" styleClass="form-label"/>
-                            <TextField fx:id="tfJadwalKelasId" promptText="ID jenis kelas" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Waktu Berangkat" styleClass="form-label"/>
-                            <TextField fx:id="tfJadwalBerangkat" promptText="dd/MM/yyyy HH:mm" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Waktu Tiba" styleClass="form-label"/>
-                            <TextField fx:id="tfJadwalTiba" promptText="dd/MM/yyyy HH:mm" styleClass="form-input"/>
-                        </VBox>
-
-                        <Region VBox.vgrow="ALWAYS"/>
-
-                        <Button onAction="#handleTambahJadwal" styleClass="btn-primary" maxWidth="Infinity">
-                            <graphic><HBox spacing="7" alignment="CENTER">
-                                <Label text="＋" styleClass="btn-icon"/>
-                                <Label text="Tambah Jadwal" styleClass="btn-label"/>
-                            </HBox></graphic>
-                        </Button>
-                        <Button onAction="#handleHapusJadwal" styleClass="btn-danger" maxWidth="Infinity">
-                            <graphic><HBox spacing="7" alignment="CENTER">
-                                <Label text="🗑" styleClass="btn-icon"/>
-                                <Label text="Hapus Jadwal" styleClass="btn-label"/>
-                            </HBox></graphic>
-                        </Button>
-                    </VBox>
-                </HBox>
-            </VBox>
-
-            <!-- ── PANEL: PROMO ── -->
-            <VBox fx:id="panelPromo" spacing="0" visible="false" managed="false">
-                <padding><Insets top="28" bottom="28" left="28" right="28"/></padding>
-
-                <Label text="Manajemen Promo" styleClass="page-title"/>
-                <Label text="Buat dan kelola kode promo diskon untuk penumpang" styleClass="page-sub"/>
-
-                <HBox spacing="16" VBox.vgrow="ALWAYS">
-                    <padding><Insets top="20"/></padding>
-
-                    <VBox HBox.hgrow="ALWAYS" spacing="0" styleClass="table-card">
-                        <TableView fx:id="tblPromo" VBox.vgrow="ALWAYS"
-                                   onMouseClicked="#handleSelectPromo"
-                                   styleClass="data-table">
-                            <columns>
-                                <TableColumn fx:id="colPromoKode"     text="Kode"      prefWidth="110"/>
-                                <TableColumn fx:id="colPromoDeskripsi" text="Deskripsi" prefWidth="160"/>
-                                <TableColumn fx:id="colPromoDiskon"   text="Diskon %"  prefWidth="80"/>
-                                <TableColumn fx:id="colPromoMulai"    text="Mulai"     prefWidth="100"/>
-                                <TableColumn fx:id="colPromoAkhir"    text="Berakhir"  prefWidth="100"/>
-                                <TableColumn fx:id="colPromoStatus"   text="Status"    prefWidth="80"/>
-                            </columns>
-                            <placeholder>
-                                <VBox alignment="CENTER" spacing="8">
-                                    <Label text="🏷" styleClass="table-empty-icon"/>
-                                    <Label text="Belum ada promo" styleClass="table-empty-text"/>
-                                </VBox>
-                            </placeholder>
-                        </TableView>
-                    </VBox>
-
-                    <VBox styleClass="form-card" spacing="14" prefWidth="260" minWidth="260">
-                        <Label text="Form Promo" styleClass="form-title"/>
-                        <VBox spacing="5">
-                            <Label text="Kode Promo" styleClass="form-label"/>
-                            <TextField fx:id="tfPromoKode" promptText="Contoh: RAILGO10" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Deskripsi" styleClass="form-label"/>
-                            <TextField fx:id="tfPromoDeskripsi" promptText="Keterangan promo" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Diskon (%)" styleClass="form-label"/>
-                            <TextField fx:id="tfPromoDiskon" promptText="Contoh: 10" styleClass="form-input"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Tanggal Mulai" styleClass="form-label"/>
-                            <DatePicker fx:id="dpPromoMulai" styleClass="form-input" maxWidth="Infinity"/>
-                        </VBox>
-                        <VBox spacing="5">
-                            <Label text="Tanggal Berakhir" styleClass="form-label"/>
-                            <DatePicker fx:id="dpPromoAkhir" styleClass="form-input" maxWidth="Infinity"/>
-                        </VBox>
-
-                        <Region VBox.vgrow="ALWAYS"/>
-
-                        <Button onAction="#handleTambahPromo" styleClass="btn-primary" maxWidth="Infinity">
-                            <graphic><HBox spacing="7" alignment="CENTER">
-                                <Label text="＋" styleClass="btn-icon"/>
-                                <Label text="Tambah Promo" styleClass="btn-label"/>
-                            </HBox></graphic>
-                        </Button>
-                        <Button onAction="#handleHapusPromo" styleClass="btn-danger" maxWidth="Infinity">
-                            <graphic><HBox spacing="7" alignment="CENTER">
-                                <Label text="🗑" styleClass="btn-icon"/>
-                                <Label text="Hapus Promo" styleClass="btn-label"/>
-                            </HBox></graphic>
-                        </Button>
-                    </VBox>
-                </HBox>
-            </VBox>
-
-            <!-- ── PANEL: PEMBAYARAN ── -->
-            <VBox fx:id="panelPembayaran" spacing="0" visible="false" managed="false">
-                <padding><Insets top="28" bottom="28" left="28" right="28"/></padding>
-
-                <Label text="Validasi Pembayaran" styleClass="page-title"/>
-                <Label text="Konfirmasi pembayaran PENDING menjadi LUNAS" styleClass="page-sub"/>
-
-                <VBox VBox.vgrow="ALWAYS" spacing="0" styleClass="table-card">
-                    <padding><Insets top="20"/></padding>
-                    <TableView fx:id="tblPembayaran" VBox.vgrow="ALWAYS" styleClass="data-table">
-                        <columns>
-                            <TableColumn fx:id="colPembayaranId"      text="#"          prefWidth="50"/>
-                            <TableColumn fx:id="colPembayaranJumlah"  text="Jumlah (Rp)" prefWidth="160"/>
-                            <TableColumn fx:id="colPembayaranMetode"  text="Metode"     prefWidth="130"/>
-                            <TableColumn fx:id="colPembayaranStatus"  text="Status"     prefWidth="100"/>
-                            <TableColumn fx:id="colPembayaranTanggal" text="Tanggal"    prefWidth="140"/>
-                        </columns>
-                        <placeholder>
-                            <VBox alignment="CENTER" spacing="8">
-                                <Label text="✓" styleClass="table-empty-icon"/>
-                                <Label text="Tidak ada pembayaran" styleClass="table-empty-text"/>
-                            </VBox>
-                        </placeholder>
-                    </TableView>
-                </VBox>
-
-                <HBox alignment="CENTER_RIGHT" spacing="10">
-                    <padding><Insets top="14"/></padding>
-                    <Button onAction="#handleValidasiPembayaran" styleClass="btn-primary" prefHeight="38">
-                        <graphic><HBox spacing="8" alignment="CENTER">
-                            <Label text="✓" styleClass="btn-icon"/>
-                            <Label text="Validasi Pembayaran Terpilih" styleClass="btn-label"/>
-                        </HBox></graphic>
-                    </Button>
-                </HBox>
-            </VBox>
-
-        </StackPane>
-
-        <!-- Status bar -->
-        <HBox styleClass="statusbar" alignment="CENTER_LEFT" spacing="8">
-            <padding><Insets top="0" bottom="0" left="24" right="24"/></padding>
-            <Label text="ℹ" styleClass="statusbar-icon"/>
-            <Label fx:id="lblStatus" text="Selamat datang di Admin Panel CityRailGO"
-                   styleClass="statusbar-text, status-ok"/>
-        </HBox>
-
-    </VBox>
-
-</HBox>
+    </center>
+</BorderPane>

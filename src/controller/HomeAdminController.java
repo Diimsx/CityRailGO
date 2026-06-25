@@ -1,452 +1,384 @@
 package controller;
 
 import dao.JadwalDAO;
-import dao.KeretaDAO;
-import dao.PembayaranDAO;
-import dao.PromoDAO;
-import dao.TiketDAO;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import model.*;
-import util.SceneManager;
-import util.SessionManager;
-
+import dao.PemesananDAO;
+import dao.PenumpangDAO;
+import java.io.IOException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import model.Admin;
+import model.Pemesanan;
 
+/**
+ * Controller untuk halaman utama Admin (Dashboard).
+ *
+ * Cara pakai dari halaman sebelumnya (contoh Login):
+ * <pre>
+ *   FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HomeAdmin.fxml"));
+ *   Parent root = loader.load();
+ *   HomeAdminController ctrl = loader.getController();
+ *   ctrl.setAdminSession(adminYangLogin);
+ *   stage.setScene(new Scene(root));
+ * </pre>
+ */
 public class HomeAdminController implements Initializable {
 
-    // ── Sidebar nav buttons ──────────────────────────────────────
-    @FXML private Button btnNavDashboard;
-    @FXML private Button btnNavKereta;
-    @FXML private Button btnNavJadwal;
-    @FXML private Button btnNavPromo;
-    @FXML private Button btnNavPembayaran;
-    @FXML private Button btnLogout;
+    // ══════════════════════════════════════════════
+    //  FXML BINDINGS — SIDEBAR
+    // ══════════════════════════════════════════════
+    @FXML private Label   labelAvatarInitial;
+    @FXML private Label   labelAdminName;
+    @FXML private Button  btnDashboard;
+    @FXML private Button  btnKereta;
+    @FXML private Button  btnRute;
+    @FXML private Button  btnJadwal;
+    @FXML private Button  btnPenumpang;
+    @FXML private Button  btnPemesanan;
+    @FXML private Button  btnLogout;
 
-    // ── Sidebar user info ────────────────────────────────────────
-    @FXML private Label lblAdminName;
-    @FXML private Label lblAdminRole;
+    // ══════════════════════════════════════════════
+    //  FXML BINDINGS — HEADER
+    // ══════════════════════════════════════════════
+    @FXML private Label labelDateTime;
 
-    // ── Content panels ───────────────────────────────────────────
-    @FXML private StackPane contentArea;
-    @FXML private VBox panelDashboard;
-    @FXML private VBox panelKereta;
-    @FXML private VBox panelJadwal;
-    @FXML private VBox panelPromo;
-    @FXML private VBox panelPembayaran;
+    // ══════════════════════════════════════════════
+    //  FXML BINDINGS — STAT LABELS
+    // ══════════════════════════════════════════════
+    @FXML private Label labelTotalPemesanan;
+    @FXML private Label labelTotalPendapatan;
+    @FXML private Label labelTotalPenumpang;
+    @FXML private Label labelJadwalAktif;
+    @FXML private Label labelTrendPemesanan;
+    @FXML private Label labelTrendPendapatan;
+    @FXML private Label labelTrendPenumpang;
 
-    // ── Dashboard stat labels ────────────────────────────────────
-    @FXML private Label lblStatKereta;
-    @FXML private Label lblStatJadwal;
-    @FXML private Label lblStatTiket;
-    @FXML private Label lblStatPromo;
+    // ══════════════════════════════════════════════
+    //  FXML BINDINGS — TABLE
+    // ══════════════════════════════════════════════
+    @FXML private TableView<Pemesanan>         tablePemesanan;
+    @FXML private TableColumn<Pemesanan, String> colKode;
+    @FXML private TableColumn<Pemesanan, String> colNama;
+    @FXML private TableColumn<Pemesanan, String> colRute;
+    @FXML private TableColumn<Pemesanan, String> colTanggal;
+    @FXML private TableColumn<Pemesanan, String> colStatus;
 
-    // ── Dashboard tabel pemesanan ─────────────────────────────────
-    @FXML private TableView<Tiket> tblPemesananDash;
-    @FXML private TableColumn<Tiket, String>  colDashKode;
-    @FXML private TableColumn<Tiket, String>  colDashPenumpang;
-    @FXML private TableColumn<Tiket, String>  colDashRute;
-    @FXML private TableColumn<Tiket, String>  colDashTotal;
-    @FXML private TableColumn<Tiket, String>  colDashStatus;
+    // ══════════════════════════════════════════════
+    //  STATE
+    // ══════════════════════════════════════════════
+    private Admin adminSession;
 
-    // ── Dashboard jadwal hari ini ─────────────────────────────────
-    @FXML private VBox boxJadwalDash;
+    private static final String[] NAV_FXML_PATHS = {
+        "/view/KeretaAdmin.fxml",
+        "/view/RuteAdmin.fxml",
+        "/view/JadwalAdmin.fxml",
+        "/view/PenumpangAdmin.fxml",
+        "/view/PemesananAdmin.fxml",
+        "/view/Login.fxml"
+    };
 
-    // ── Kereta panel ─────────────────────────────────────────────
-    @FXML private TableView<Kereta> tblKereta;
-    @FXML private TableColumn<Kereta, String> colKeretaNama;
-    @FXML private TableColumn<Kereta, String> colKeretaNomor;
-    @FXML private TableColumn<Kereta, String> colKeretaJenis;
-    @FXML private TableColumn<Kereta, Integer> colKeretaKapasitas;
-    @FXML private TextField tfKeretaNama;
-    @FXML private TextField tfKeretaNomor;
-    @FXML private TextField tfKeretaJenis;
-    @FXML private TextField tfKeretaKapasitas;
-
-    // ── Jadwal panel ─────────────────────────────────────────────
-    @FXML private TableView<Jadwal> tblJadwal;
-    @FXML private TableColumn<Jadwal, String> colJadwalKereta;
-    @FXML private TableColumn<Jadwal, String> colJadwalRute;
-    @FXML private TableColumn<Jadwal, String> colJadwalBerangkat;
-    @FXML private TableColumn<Jadwal, String> colJadwalTiba;
-    @FXML private TableColumn<Jadwal, String> colJadwalStatus;
-    @FXML private TextField tfJadwalKeretaId;
-    @FXML private TextField tfJadwalRuteId;
-    @FXML private TextField tfJadwalKelasId;
-    @FXML private TextField tfJadwalBerangkat;
-    @FXML private TextField tfJadwalTiba;
-
-    // ── Promo panel ───────────────────────────────────────────────
-    @FXML private TableView<Promo> tblPromo;
-    @FXML private TableColumn<Promo, String> colPromoKode;
-    @FXML private TableColumn<Promo, String> colPromoDeskripsi;
-    @FXML private TableColumn<Promo, Double> colPromoDiskon;
-    @FXML private TableColumn<Promo, String> colPromoMulai;
-    @FXML private TableColumn<Promo, String> colPromoAkhir;
-    @FXML private TableColumn<Promo, String> colPromoStatus;
-    @FXML private TextField tfPromoKode;
-    @FXML private TextField tfPromoDeskripsi;
-    @FXML private TextField tfPromoDiskon;
-    @FXML private DatePicker dpPromoMulai;
-    @FXML private DatePicker dpPromoAkhir;
-
-    // ── Pembayaran panel ──────────────────────────────────────────
-    @FXML private TableView<Pembayaran> tblPembayaran;
-    @FXML private TableColumn<Pembayaran, Integer> colPembayaranId;
-    @FXML private TableColumn<Pembayaran, Double> colPembayaranJumlah;
-    @FXML private TableColumn<Pembayaran, String> colPembayaranMetode;
-    @FXML private TableColumn<Pembayaran, String> colPembayaranStatus;
-    @FXML private TableColumn<Pembayaran, String> colPembayaranTanggal;
-
-    // ── Status bar ────────────────────────────────────────────────
-    @FXML private Label lblStatus;
-
-    // ── DAOs & controllers ────────────────────────────────────────
-    private final AdminController adminController = new AdminController();
-    private final KeretaDAO keretaDAO = new KeretaDAO();
-    private final JadwalDAO jadwalDAO = new JadwalDAO();
-    private final PromoDAO promoDAO = new PromoDAO();
-    private final TiketDAO tiketDAO = new TiketDAO();
-    private final PembayaranDAO pembayaranDAO = new PembayaranDAO();
-
-    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    private static final DateTimeFormatter DF  = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    // ══════════════════════════════════════════════
+    //  INITIALIZE
+    // ══════════════════════════════════════════════
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setupAdminInfo();
-        setupKeretaTable();
-        setupJadwalTable();
-        setupPromoTable();
-        setupPembayaranTable();
-        setupDashboardTable();
-        loadDashboardStats();
-        showPanel(panelDashboard, btnNavDashboard);
+        loadInterFont();
+        setDateTimeLabel();
+        setupTable();
+        setActiveNav(btnDashboard);
+        loadDashboardDataAsync();
     }
 
-    // ── Setup ─────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════
+    //  SESSION — dipanggil dari controller sebelumnya
+    // ══════════════════════════════════════════════
 
-    private void setupAdminInfo() {
-        var user = SessionManager.getInstance().getCurrentUser();
-        if (user != null) {
-            lblAdminName.setText(user.getNamaLengkap());
-            lblAdminRole.setText("Administrator");
+    /**
+     * Inject sesi Admin setelah FXML di-load.
+     * Panggil sebelum menampilkan Scene.
+     */
+    public void setAdminSession(Admin admin) {
+        this.adminSession = admin;
+        if (admin == null) return;
+
+        String nama = (admin.getNamaLengkap() != null && !admin.getNamaLengkap().isBlank())
+                ? admin.getNamaLengkap()
+                : admin.getUsername();
+
+        labelAdminName.setText(nama);
+        labelAvatarInitial.setText(
+            nama.isEmpty() ? "A" : String.valueOf(nama.charAt(0)).toUpperCase()
+        );
+    }
+
+    // ══════════════════════════════════════════════
+    //  SETUP HELPERS
+    // ══════════════════════════════════════════════
+
+    /** Muat font Inter dari resources/fonts agar CSS dapat mengenalinya. */
+    private void loadInterFont() {
+        String[] variants = {
+            "Inter-Regular.ttf", "Inter-Medium.ttf",
+            "Inter-SemiBold.ttf", "Inter-Bold.ttf"
+        };
+        for (String variant : variants) {
+            try (var stream = getClass().getResourceAsStream("/fonts/" + variant)) {
+                if (stream != null) Font.loadFont(stream, 14);
+            } catch (Exception ignored) {
+                // Font tidak tersedia — JavaFX akan fallback ke Segoe UI / system font
+            }
         }
     }
 
-    private void setupKeretaTable() {
-        colKeretaNama.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNama()));
-        colKeretaNomor.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNomorKereta()));
-        colKeretaJenis.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getJenis()));
-        colKeretaKapasitas.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getKapasitasTotal()).asObject());
-        loadKereta();
+    private void setDateTimeLabel() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(
+                "EEEE, dd MMMM yyyy", new Locale("id", "ID"));
+        labelDateTime.setText(LocalDate.now().format(fmt));
     }
 
-    private void setupJadwalTable() {
-        colJadwalKereta.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getKereta().getNama()));
-        colJadwalRute.setCellValueFactory(c -> {
-            Rute r = c.getValue().getRute();
-            return new SimpleStringProperty(r.getStasiunAsal() + " → " + r.getStasiunTujuan());
+    private void setupTable() {
+        // Mapping kolom → property getter di model Pemesanan
+        // Sesuaikan nama properti dengan getter yang ada di class Pemesanan kamu
+        colKode.setCellValueFactory(new PropertyValueFactory<>("kode"));
+        colNama.setCellValueFactory(new PropertyValueFactory<>("namaPenumpang"));
+        colRute.setCellValueFactory(new PropertyValueFactory<>("ruteDisplay"));
+        colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalFormatted"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        // Status column dengan warna badge
+        colStatus.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String status, boolean empty) {
+                super.updateItem(status, empty);
+                if (empty || status == null) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+                setText(status);
+                setStyle(resolveStatusStyle(status));
+            }
         });
-        colJadwalBerangkat.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getWaktuBerangkat().format(DTF)));
-        colJadwalTiba.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getWaktuTiba().format(DTF)));
-        colJadwalStatus.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatus()));
-        loadJadwal();
+
+        // Nonaktifkan sort bawaan JavaFX di kolom status (opsional)
+        colStatus.setSortable(false);
     }
 
-    private void setupPromoTable() {
-        colPromoKode.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getKodePromo()));
-        colPromoDeskripsi.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDeskripsi()));
-        colPromoDiskon.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getDiskonPersen()).asObject());
-        colPromoMulai.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTanggalMulai().format(DF)));
-        colPromoAkhir.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTanggalBerakhir().format(DF)));
-        colPromoStatus.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().isAktif() ? "Aktif" : "Nonaktif"));
-        loadPromo();
+    private String resolveStatusStyle(String status) {
+        return switch (status.toLowerCase()) {
+            case "dikonfirmasi", "confirmed", "aktif" ->
+                "-fx-text-fill: #059669; -fx-font-weight: 600;";
+            case "menunggu", "pending" ->
+                "-fx-text-fill: #D97706; -fx-font-weight: 600;";
+            case "dibatalkan", "cancelled", "batal" ->
+                "-fx-text-fill: #DC2626; -fx-font-weight: 600;";
+            default ->
+                "-fx-text-fill: #64748B;";
+        };
     }
 
-    private void setupPembayaranTable() {
-        colPembayaranId.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getId()).asObject());
-        colPembayaranJumlah.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getJumlahBayar()).asObject());
-        colPembayaranMetode.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMetodePembayaran()));
-        colPembayaranStatus.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatus()));
-        colPembayaranTanggal.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTanggalBayar().format(DTF)));
-        loadPembayaran();
-    }
+    // ══════════════════════════════════════════════
+    //  DATA LOADING (async agar UI tidak freeze)
+    // ══════════════════════════════════════════════
 
-    // ── Load data ─────────────────────────────────────────────────
+    private void loadDashboardDataAsync() {
+        Task<DashboardStats> task = new Task<>() {
+            @Override
+            protected DashboardStats call() {
+                DashboardStats stats = new DashboardStats();
+                try {
+                    PemesananDAO pDao = new PemesananDAO();
+                    PenumpangDAO uDao = new PenumpangDAO();
+                    JadwalDAO    jDao = new JadwalDAO();
 
-    private void setupDashboardTable() {
-        colDashKode.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getKodeTiket()));
-        colDashPenumpang.setCellValueFactory(c -> {
-            User u = c.getValue().getPenumpang();
-            return new SimpleStringProperty(u != null ? u.getNamaLengkap() : "-");
+                    stats.totalPemesanan  = pDao.countAll();
+                    stats.totalPendapatan = pDao.sumPendapatan();
+                    stats.totalPenumpang  = uDao.countAll();
+                    stats.jadwalAktif     = jDao.countAktif();
+                    stats.recentPemesanan = pDao.findRecent(10);
+                } catch (Exception e) {
+                    System.err.println("[HomeAdmin] Gagal memuat data: " + e.getMessage());
+                }
+                return stats;
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            DashboardStats stats = task.getValue();
+            Platform.runLater(() -> applyStats(stats));
         });
-        colDashRute.setCellValueFactory(c -> {
-            Jadwal j = c.getValue().getJadwal();
-            if (j == null || j.getRute() == null) return new SimpleStringProperty("-");
-            return new SimpleStringProperty(j.getRute().getStasiunAsal() + " → " + j.getRute().getStasiunTujuan());
-        });
-        colDashTotal.setCellValueFactory(c -> new SimpleStringProperty(
-            String.format("Rp %,.0f", c.getValue().getHargaTotal())));
-        colDashStatus.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatus()));
+
+        task.setOnFailed(e ->
+            System.err.println("[HomeAdmin] Task gagal: " + task.getException())
+        );
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
-    private void loadDashboardStats() {
-        lblStatKereta.setText(String.valueOf(keretaDAO.findAll().size()));
-        lblStatJadwal.setText(String.valueOf(jadwalDAO.findAll().size()));
-        List<Tiket> tikets = tiketDAO.findAll();
-        lblStatTiket.setText(String.valueOf(tikets.size()));
-        lblStatPromo.setText(String.valueOf(promoDAO.findAll().size()));
+    private void applyStats(DashboardStats stats) {
+        labelTotalPemesanan.setText(String.valueOf(stats.totalPemesanan));
+        labelTotalPendapatan.setText(formatRupiah(stats.totalPendapatan));
+        labelTotalPenumpang.setText(String.valueOf(stats.totalPenumpang));
+        labelJadwalAktif.setText(String.valueOf(stats.jadwalAktif));
 
-        // Load tabel pemesanan terbaru (max 10)
-        List<Tiket> recent = tikets.size() > 10 ? tikets.subList(tikets.size() - 10, tikets.size()) : tikets;
-        tblPemesananDash.setItems(FXCollections.observableArrayList(recent));
-    }
-
-    private void loadKereta() {
-        tblKereta.setItems(FXCollections.observableArrayList(keretaDAO.findAll()));
-    }
-
-    private void loadJadwal() {
-        tblJadwal.setItems(FXCollections.observableArrayList(jadwalDAO.findAll()));
-    }
-
-    private void loadPromo() {
-        tblPromo.setItems(FXCollections.observableArrayList(promoDAO.findAll()));
-    }
-
-    private void loadPembayaran() {
-        tblPembayaran.setItems(FXCollections.observableArrayList(pembayaranDAO.findAll()));
-    }
-
-    // ── Nav ───────────────────────────────────────────────────────
-
-    private void showPanel(VBox panel, Button activeBtn) {
-        panelDashboard.setVisible(false);   panelDashboard.setManaged(false);
-        panelKereta.setVisible(false);      panelKereta.setManaged(false);
-        panelJadwal.setVisible(false);      panelJadwal.setManaged(false);
-        panelPromo.setVisible(false);       panelPromo.setManaged(false);
-        panelPembayaran.setVisible(false);  panelPembayaran.setManaged(false);
-
-        panel.setVisible(true);
-        panel.setManaged(true);
-
-        for (Button b : new Button[]{btnNavDashboard, btnNavKereta, btnNavJadwal, btnNavPromo, btnNavPembayaran}) {
-            b.getStyleClass().remove("nav-active");
+        if (stats.recentPemesanan != null) {
+            ObservableList<Pemesanan> items =
+                    FXCollections.observableArrayList(stats.recentPemesanan);
+            tablePemesanan.setItems(items);
         }
-        activeBtn.getStyleClass().add("nav-active");
     }
 
-    @FXML private void handleNavDashboard() {
-        loadDashboardStats();
-        showPanel(panelDashboard, btnNavDashboard);
+    // ══════════════════════════════════════════════
+    //  NAVIGATION HANDLERS
+    // ══════════════════════════════════════════════
+
+    @FXML private void handleDashboard() {
+        setActiveNav(btnDashboard);
+        loadDashboardDataAsync(); // refresh saat kembali ke dashboard
     }
 
-    @FXML private void handleNavKereta() {
-        loadKereta();
-        showPanel(panelKereta, btnNavKereta);
+    @FXML private void handleKereta() {
+        setActiveNav(btnKereta);
+        navigateTo("/view/KeretaAdmin.fxml", "CityRailGO — Manajemen Kereta");
     }
 
-    @FXML private void handleNavJadwal() {
-        loadJadwal();
-        showPanel(panelJadwal, btnNavJadwal);
+    @FXML private void handleRute() {
+        setActiveNav(btnRute);
+        navigateTo("/view/RuteAdmin.fxml", "CityRailGO — Manajemen Rute");
     }
 
-    @FXML private void handleNavPromo() {
-        loadPromo();
-        showPanel(panelPromo, btnNavPromo);
+    @FXML private void handleJadwal() {
+        setActiveNav(btnJadwal);
+        navigateTo("/view/JadwalAdmin.fxml", "CityRailGO — Manajemen Jadwal");
     }
 
-    @FXML private void handleNavPembayaran() {
-        loadPembayaran();
-        showPanel(panelPembayaran, btnNavPembayaran);
+    @FXML private void handlePenumpang() {
+        setActiveNav(btnPenumpang);
+        navigateTo("/view/PenumpangAdmin.fxml", "CityRailGO — Data Penumpang");
+    }
+
+    @FXML private void handlePemesanan() {
+        setActiveNav(btnPemesanan);
+        navigateTo("/view/PemesananAdmin.fxml", "CityRailGO — Data Pemesanan");
+    }
+
+    @FXML private void handleRefresh() {
+        // Animasi sederhana: reset teks → async reload
+        labelTotalPemesanan.setText("...");
+        labelTotalPendapatan.setText("...");
+        labelTotalPenumpang.setText("...");
+        labelJadwalAktif.setText("...");
+        tablePemesanan.setItems(FXCollections.observableArrayList());
+        loadDashboardDataAsync();
     }
 
     @FXML private void handleLogout() {
-        SessionManager.getInstance().logout();
-        SceneManager.switchScene("login.fxml");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Konfirmasi Keluar");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Apakah Anda yakin ingin keluar dari sesi ini?");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                navigateTo("/view/Login.fxml", "CityRailGO — Login");
+            }
+        });
     }
 
-    // ── KERETA CRUD ───────────────────────────────────────────────
+    // ══════════════════════════════════════════════
+    //  NAVIGATION HELPER
+    // ══════════════════════════════════════════════
 
-    @FXML private void handleTambahKereta() {
+    private void setActiveNav(Button active) {
+        Button[] all = {btnDashboard, btnKereta, btnRute, btnJadwal, btnPenumpang, btnPemesanan};
+        for (Button b : all) {
+            b.getStyleClass().remove("nav-btn-active");
+        }
+        if (active != null && !active.getStyleClass().contains("nav-btn-active")) {
+            active.getStyleClass().add("nav-btn-active");
+        }
+    }
+
+    /**
+     * Ganti Scene ke halaman lain.
+     * Jika target tidak ditemukan, tampilkan error alert.
+     */
+    private void navigateTo(String fxmlPath, String windowTitle) {
         try {
-            String nama     = tfKeretaNama.getText().trim();
-            String nomor    = tfKeretaNomor.getText().trim();
-            String jenis    = tfKeretaJenis.getText().trim();
-            int kapasitas   = Integer.parseInt(tfKeretaKapasitas.getText().trim());
-            if (nama.isEmpty() || nomor.isEmpty() || jenis.isEmpty()) {
-                setStatus("Semua field wajib diisi.", true); return;
+            URL resource = getClass().getResource(fxmlPath);
+            if (resource == null) {
+                showError("Halaman tidak ditemukan", "File " + fxmlPath + " belum tersedia.");
+                return;
             }
-            Kereta k = new Kereta(nama, nomor, jenis, kapasitas);
-            if (adminController.tambahKereta(k)) {
-                setStatus("Kereta berhasil ditambahkan.", false);
-                clearKeretaForm(); loadKereta();
-            } else {
-                setStatus("Gagal menambahkan kereta.", true);
-            }
-        } catch (NumberFormatException e) {
-            setStatus("Kapasitas harus berupa angka.", true);
+            FXMLLoader loader = new FXMLLoader(resource);
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnDashboard.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle(windowTitle);
+            stage.centerOnScreen();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Navigasi Gagal",
+                      "Tidak dapat membuka halaman.\n" + e.getMessage());
         }
     }
 
-    @FXML private void handleEditKereta() {
-        Kereta selected = tblKereta.getSelectionModel().getSelectedItem();
-        if (selected == null) { setStatus("Pilih kereta yang ingin diedit.", true); return; }
-        try {
-            selected.setNama(tfKeretaNama.getText().trim());
-            selected.setJenis(tfKeretaJenis.getText().trim());
-            if (adminController.editKereta(selected)) {
-                setStatus("Kereta berhasil diperbarui.", false);
-                clearKeretaForm(); loadKereta();
-            } else {
-                setStatus("Gagal memperbarui kereta.", true);
-            }
-        } catch (Exception e) {
-            setStatus("Error: " + e.getMessage(), true);
-        }
+    // ══════════════════════════════════════════════
+    //  UTILITY
+    // ══════════════════════════════════════════════
+
+    private String formatRupiah(double amount) {
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        String result = fmt.format(amount);
+        // Hapus ",00" di belakang agar lebih bersih
+        return result.endsWith(",00") ? result.substring(0, result.length() - 3) : result;
     }
 
-    @FXML private void handleHapusKereta() {
-        Kereta selected = tblKereta.getSelectionModel().getSelectedItem();
-        if (selected == null) { setStatus("Pilih kereta yang ingin dihapus.", true); return; }
-        if (adminController.hapusKereta(selected.getId())) {
-            setStatus("Kereta berhasil dihapus.", false);
-            loadKereta();
-        } else {
-            setStatus("Gagal menghapus kereta.", true);
-        }
+    private void showError(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
-    @FXML private void handleSelectKereta() {
-        Kereta k = tblKereta.getSelectionModel().getSelectedItem();
-        if (k == null) return;
-        tfKeretaNama.setText(k.getNama());
-        tfKeretaNomor.setText(k.getNomorKereta());
-        tfKeretaJenis.setText(k.getJenis());
-        tfKeretaKapasitas.setText(String.valueOf(k.getKapasitasTotal()));
-    }
+    // ══════════════════════════════════════════════
+    //  INNER CLASS — Data Transfer Object
+    // ══════════════════════════════════════════════
 
-    private void clearKeretaForm() {
-        tfKeretaNama.clear(); tfKeretaNomor.clear();
-        tfKeretaJenis.clear(); tfKeretaKapasitas.clear();
-    }
-
-    // ── JADWAL CRUD ───────────────────────────────────────────────
-
-    @FXML private void handleTambahJadwal() {
-        try {
-            int keretaId = Integer.parseInt(tfJadwalKeretaId.getText().trim());
-            int ruteId   = Integer.parseInt(tfJadwalRuteId.getText().trim());
-            int kelasId  = Integer.parseInt(tfJadwalKelasId.getText().trim());
-            LocalDateTime berangkat = LocalDateTime.parse(tfJadwalBerangkat.getText().trim(), DTF);
-            LocalDateTime tiba      = LocalDateTime.parse(tfJadwalTiba.getText().trim(), DTF);
-
-            Kereta kereta       = keretaDAO.findById(keretaId);
-            if (kereta == null) { setStatus("ID Kereta tidak ditemukan.", true); return; }
-
-            // Jadwal constructor requires Rute and JenisKelas — build minimal placeholders from IDs
-            // Full impl needs RuteDAO and JenisKelasDAO; for now show intent
-            setStatus("Fitur tambah jadwal membutuhkan RuteDAO & JenisKelasDAO (ID: rute=" + ruteId + ", kelas=" + kelasId + ").", true);
-        } catch (Exception e) {
-            setStatus("Format salah. Tanggal: dd/MM/yyyy HH:mm", true);
-        }
-    }
-
-    @FXML private void handleHapusJadwal() {
-        Jadwal selected = tblJadwal.getSelectionModel().getSelectedItem();
-        if (selected == null) { setStatus("Pilih jadwal yang ingin dihapus.", true); return; }
-        if (adminController.hapusJadwal(selected.getId())) {
-            setStatus("Jadwal berhasil dihapus.", false);
-            loadJadwal();
-        } else {
-            setStatus("Gagal menghapus jadwal.", true);
-        }
-    }
-
-    // ── PROMO CRUD ────────────────────────────────────────────────
-
-    @FXML private void handleTambahPromo() {
-        try {
-            String kode    = tfPromoKode.getText().trim();
-            String desk    = tfPromoDeskripsi.getText().trim();
-            double diskon  = Double.parseDouble(tfPromoDiskon.getText().trim());
-            LocalDate mulai  = dpPromoMulai.getValue();
-            LocalDate akhir  = dpPromoAkhir.getValue();
-            if (kode.isEmpty() || mulai == null || akhir == null) {
-                setStatus("Semua field promo wajib diisi.", true); return;
-            }
-            Promo p = new Promo(kode, desk, diskon, mulai, akhir);
-            if (adminController.tambahPromo(p)) {
-                setStatus("Promo berhasil ditambahkan.", false);
-                clearPromoForm(); loadPromo();
-            } else {
-                setStatus("Gagal menambahkan promo.", true);
-            }
-        } catch (NumberFormatException e) {
-            setStatus("Diskon harus berupa angka.", true);
-        }
-    }
-
-    @FXML private void handleHapusPromo() {
-        Promo selected = tblPromo.getSelectionModel().getSelectedItem();
-        if (selected == null) { setStatus("Pilih promo yang ingin dihapus.", true); return; }
-        if (adminController.hapusPromo(selected.getId())) {
-            setStatus("Promo berhasil dihapus.", false);
-            loadPromo();
-        } else {
-            setStatus("Gagal menghapus promo.", true);
-        }
-    }
-
-    @FXML private void handleSelectPromo() {
-        Promo p = tblPromo.getSelectionModel().getSelectedItem();
-        if (p == null) return;
-        tfPromoKode.setText(p.getKodePromo());
-        tfPromoDeskripsi.setText(p.getDeskripsi());
-        tfPromoDiskon.setText(String.valueOf(p.getDiskonPersen()));
-        dpPromoMulai.setValue(p.getTanggalMulai());
-        dpPromoAkhir.setValue(p.getTanggalBerakhir());
-    }
-
-    private void clearPromoForm() {
-        tfPromoKode.clear(); tfPromoDeskripsi.clear();
-        tfPromoDiskon.clear(); dpPromoMulai.setValue(null); dpPromoAkhir.setValue(null);
-    }
-
-    // ── PEMBAYARAN ────────────────────────────────────────────────
-
-    @FXML private void handleValidasiPembayaran() {
-        Pembayaran selected = tblPembayaran.getSelectionModel().getSelectedItem();
-        if (selected == null) { setStatus("Pilih pembayaran yang ingin divalidasi.", true); return; }
-        if ("LUNAS".equals(selected.getStatus())) { setStatus("Pembayaran ini sudah LUNAS.", true); return; }
-        if (adminController.validasiPembayaran(selected)) {
-            setStatus("Pembayaran #" + selected.getId() + " berhasil divalidasi.", false);
-            loadPembayaran();
-        } else {
-            setStatus("Gagal memvalidasi pembayaran.", true);
-        }
-    }
-
-    // ── Helpers ───────────────────────────────────────────────────
-
-    private void setStatus(String msg, boolean isError) {
-        lblStatus.setText(msg);
-        lblStatus.getStyleClass().removeAll("status-ok", "status-err");
-        lblStatus.getStyleClass().add(isError ? "status-err" : "status-ok");
+    /** Wadah data yang diambil di background thread. */
+    private static class DashboardStats {
+        int              totalPemesanan  = 0;
+        double           totalPendapatan = 0.0;
+        int              totalPenumpang  = 0;
+        int              jadwalAktif     = 0;
+        List<Pemesanan>  recentPemesanan = null;
     }
 }

@@ -8,6 +8,12 @@
             <file>file:/D:/Project/CityRailGO/src/view/homepenumpang.fxml</file>
             <file>file:/D:/Project/CityRailGO/src/view/login.fxml</file>
             <file>file:/D:/Project/CityRailGO/src/view/register.fxml</file>
+            <file>file:/D:/Project/CityRailGO/build.xml</file>
+            <file>file:/D:/Project/CityRailGO/nbproject/project.properties</file>
+            <file>file:/D:/Project/CityRailGO/src/main.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.fxml</file>
+            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.css</file>
+            <file>file:/D:/Project/CityRailGO/src/controller/HomeAdminController.java</file>
         </group>
     </open-files>
 </project-private>
