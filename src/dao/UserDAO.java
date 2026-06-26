@@ -175,6 +175,21 @@ public class UserDAO {
         }
     }
 
+    public int countPenumpang() {
+        String sql = "SELECT COUNT(*) FROM penumpang";
+        Connection conn = DBConnection.getInstance();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Gagal menghitung jumlah penumpang: " + e.getMessage());
+        }
+        return 0;
+    }
+
     private User buildUserFromResultSet(ResultSet rs) throws SQLException {
         String username = rs.getString("username");
         String password = rs.getString("password");

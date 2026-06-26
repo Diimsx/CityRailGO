@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.HomeAdminController"
+            prefWidth="1280" prefHeight="720"
+            stylesheets="@HomeAdmin.css"
+            styleClass="root-bg">
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <left>
+        <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
+
+            <VBox alignment="CENTER" spacing="4" styleClass="brand-box">
+                <FontIcon iconLiteral="fas-train" iconSize="26" styleClass="brand-icon"/>
+                <Label text="CityRailGO" styleClass="brand-text"/>
+                <Label text="Admin Panel" styleClass="brand-subtext"/>
+            </VBox>
+
+            <VBox styleClass="nav-list">
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active" onMouseClicked="#handleNavDashboard">
+                    <FontIcon iconLiteral="fas-th-large" styleClass="nav-icon-active"/>
+                    <Label text="Dashboard" styleClass="nav-label-active"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavKereta">
+                    <FontIcon iconLiteral="fas-train" styleClass="nav-icon"/>
+                    <Label text="Kelola Kereta" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavJadwal">
+                    <FontIcon iconLiteral="fas-calendar-alt" styleClass="nav-icon"/>
+                    <Label text="Kelola Jadwal" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavPromo">
+                    <FontIcon iconLiteral="fas-percent" styleClass="nav-icon"/>
+                    <Label text="Kelola Promo" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavValidasi">
+                    <FontIcon iconLiteral="fas-check-circle" styleClass="nav-icon"/>
+                    <Label text="Validasi Pembayaran" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavLaporan">
+                    <FontIcon iconLiteral="fas-chart-bar" styleClass="nav-icon"/>
+                    <Label text="Laporan Penjualan" styleClass="nav-label"/>
+                </HBox>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="logout-item" onMouseClicked="#handleLogout">
+                <FontIcon iconLiteral="fas-sign-out-alt" styleClass="logout-icon"/>
+                <Label text="Logout" styleClass="logout-label"/>
+            </HBox>
+
+        </VBox>
+    </left>
+
+    <!-- ===================== KONTEN UTAMA ===================== -->
+    <center>
+        <VBox styleClass="content-area">
+
+            <HBox alignment="CENTER_LEFT" styleClass="topbar">
+                <VBox>
+                    <Label text="Dashboard" styleClass="page-title"/>
+                    <Label text="Ringkasan aktivitas CityRailGO" styleClass="page-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
+            </HBox>
+
+            <HBox spacing="20" styleClass="stat-row">
+
+                <VBox alignment="CENTER_LEFT" spacing="8" styleClass="stat-card">
+                    <FontIcon iconLiteral="fas-ticket-alt" styleClass="stat-icon icon-blue"/>
+                    <Label fx:id="lblTotalTiket" text="0" styleClass="stat-value"/>
+                    <Label text="Total Tiket Terjual" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox alignment="CENTER_LEFT" spacing="8" styleClass="stat-card">
+                    <FontIcon iconLiteral="fas-money-bill-wave" styleClass="stat-icon icon-green"/>
+                    <Label fx:id="lblTotalPendapatan" text="Rp 0" styleClass="stat-value"/>
+                    <Label text="Total Pendapatan" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox alignment="CENTER_LEFT" spacing="8" styleClass="stat-card">
+                    <FontIcon iconLiteral="fas-train" styleClass="stat-icon icon-purple"/>
+                    <Label fx:id="lblTotalKereta" text="0" styleClass="stat-value"/>
+                    <Label text="Total Kereta" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox alignment="CENTER_LEFT" spacing="8" styleClass="stat-card">
+                    <FontIcon iconLiteral="fas-users" styleClass="stat-icon icon-orange"/>
+                    <Label fx:id="lblTotalPenumpang" text="0" styleClass="stat-value"/>
+                    <Label text="Total Penumpang" styleClass="stat-label"/>
+                </VBox>
+
+            </HBox>
+
+            <VBox spacing="14" styleClass="table-card">
+                <Label text="Tiket Terbaru" styleClass="card-title"/>
+                <TableView fx:id="tblTiketTerbaru" styleClass="ticket-table" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colKodeTiket" text="Kode Tiket" prefWidth="140"/>
+                        <TableColumn fx:id="colPenumpang" text="Penumpang" prefWidth="180"/>
+                        <TableColumn fx:id="colKereta" text="Kereta" prefWidth="150"/>
+                        <TableColumn fx:id="colRute" text="Rute" prefWidth="230"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
