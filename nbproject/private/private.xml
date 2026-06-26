@@ -3,17 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Project/CityRailGO/src/model/User.java</file>
-            <file>file:/D:/Project/CityRailGO/src/dao/UserDAO.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/homepenumpang.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/login.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/register.fxml</file>
-            <file>file:/D:/Project/CityRailGO/build.xml</file>
-            <file>file:/D:/Project/CityRailGO/nbproject/project.properties</file>
-            <file>file:/D:/Project/CityRailGO/src/main.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.css</file>
             <file>file:/D:/Project/CityRailGO/src/controller/HomeAdminController.java</file>
+            <file>file:/D:/Project/CityRailGO/src/model/Rute.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.fxml</file>
         </group>
     </open-files>
 </project-private>
