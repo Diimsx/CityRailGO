@@ -1,0 +1,178 @@
+/* =========================================================
+   register.css
+   Tema   : modern minimalis - auth screen (split layout)
+   Navbar/Brand panel : #0A192F
+   Background utama   : #F0F4F8
+========================================================= */
+
+.auth-root {
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* ===== Panel kiri - branding ===== */
+.brand-panel {
+    -fx-background-color: #0A192F;
+}
+
+.brand-icon-circle {
+    -fx-background-color: #112240;
+    -fx-background-radius: 100;
+    -fx-min-width: 84;
+    -fx-min-height: 84;
+    -fx-max-width: 84;
+    -fx-max-height: 84;
+    -fx-alignment: center;
+}
+
+.brand-icon {
+    -fx-icon-size: 34;
+    -fx-icon-color: #4D8AFF;
+}
+
+.brand-title {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.brand-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #8AA0C4;
+}
+
+.feature-list {
+    -fx-padding: 38 0 0 0;
+}
+
+.feature-icon {
+    -fx-icon-size: 14;
+    -fx-icon-color: #4D8AFF;
+}
+
+.feature-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #C2CEE0;
+}
+
+/* ===== Panel kanan - form ===== */
+.form-panel {
+    -fx-background-color: #F0F4F8;
+}
+
+.auth-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 32 40 28 40;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.10), 24, 0, 0, 8);
+}
+
+.card-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+.card-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6E84A8;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+.input-field {
+    -fx-background-color: #F7F9FC;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #DCE3EE;
+    -fx-border-width: 1;
+    -fx-padding: 10 14 10 38;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0A192F;
+    -fx-prompt-text-fill: #9CACC4;
+    -fx-pref-height: 42;
+}
+
+.input-field:focused {
+    -fx-border-color: #0A192F;
+    -fx-background-color: white;
+}
+
+.input-icon {
+    -fx-icon-size: 14;
+    -fx-icon-color: #8AA0C4;
+    -fx-padding: 0 0 0 14;
+}
+
+/* ===== DatePicker & ComboBox ===== */
+.date-field,
+.combo-field {
+    -fx-background-color: #F7F9FC;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #DCE3EE;
+    -fx-border-width: 1;
+    -fx-font-size: 13px;
+    -fx-pref-height: 42;
+}
+
+.date-field:focused,
+.combo-field:focused {
+    -fx-border-color: #0A192F;
+}
+
+.date-field > .text-field,
+.combo-field .text-field {
+    -fx-background-color: transparent;
+    -fx-padding: 8 0 8 12;
+    -fx-text-fill: #0A192F;
+}
+
+.date-field .arrow-button,
+.combo-field .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.date-field .arrow,
+.combo-field .arrow {
+    -fx-background-color: #8AA0C4;
+}
+
+.error-label {
+    -fx-text-fill: #D64545;
+    -fx-font-size: 12px;
+}
+
+.btn-primary {
+    -fx-background-color: #0A192F;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 12 0 12 0;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 10;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #112240;
+}
+
+.btn-icon {
+    -fx-icon-size: 14;
+    -fx-icon-color: white;
+}
+
+.footer-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6E84A8;
+}
+
+.footer-link {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4D8AFF;
+    -fx-font-weight: bold;
+}

@@ -18,7 +18,7 @@ public class UserDAO {
 
     private static final String SQL_SELECT_BASE =
             "SELECT u.id, u.username, u.password, u.email, u.nama_lengkap, u.no_telepon, " +
-            "a.level_akses, a.jenis_kelamin AS admin_jenis_kelamin, a.tgl_lahir AS admin_tgl_lahir, " +
+            "a.level_akses, " +
             "p.nik, p.jenis_kelamin AS penumpang_jenis_kelamin, p.tgl_lahir AS penumpang_tgl_lahir " +
             "FROM users u " +
             "LEFT JOIN admin a ON u.id = a.id " +
@@ -81,12 +81,10 @@ public class UserDAO {
             }
 
             if (user instanceof Admin admin) {
-                String sqlAdmin = "INSERT INTO admin (id, level_akses, jenis_kelamin, tgl_lahir) VALUES (?, ?, ?, ?)";
+                String sqlAdmin = "INSERT INTO admin (id, level_akses) VALUES (?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(sqlAdmin)) {
                     ps.setInt(1, admin.getId());
                     ps.setString(2, admin.getLevelAkses());
-                    ps.setString(3, admin.getJenisKelamin());
-                    setNullableDate(ps, 4, admin.getTglLahir());
                     ps.executeUpdate();
                 }
             } else if (user instanceof Penumpang penumpang) {
@@ -130,12 +128,10 @@ public class UserDAO {
             }
 
             if (user instanceof Admin admin) {
-                String sqlAdmin = "UPDATE admin SET level_akses=?, jenis_kelamin=?, tgl_lahir=? WHERE id=?";
+                String sqlAdmin = "UPDATE admin SET level_akses=? WHERE id=?";
                 try (PreparedStatement ps = conn.prepareStatement(sqlAdmin)) {
                     ps.setString(1, admin.getLevelAkses());
-                    ps.setString(2, admin.getJenisKelamin());
-                    setNullableDate(ps, 3, admin.getTglLahir());
-                    ps.setInt(4, admin.getId());
+                    ps.setInt(2, admin.getId());
                     ps.executeUpdate();
                 }
             } else if (user instanceof Penumpang penumpang) {
@@ -201,9 +197,7 @@ public class UserDAO {
 
         if (rs.getString("level_akses") != null) {
             String levelAkses = rs.getString("level_akses");
-            String jenisKelamin = rs.getString("admin_jenis_kelamin");
-            LocalDate tglLahir = toLocalDate(rs.getDate("admin_tgl_lahir"));
-            user = new Admin(username, password, email, namaLengkap, noTelepon, levelAkses, jenisKelamin, tglLahir);
+            user = new Admin(username, password, email, namaLengkap, noTelepon, levelAkses);
 
         } else if (rs.getString("nik") != null) {
             String nik = rs.getString("nik");
