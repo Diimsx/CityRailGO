@@ -1,6 +1,6 @@
 /* =========================================================
-   HomeAdmin.css
-   Tema: modern minimalis, sidebar dashboard
+   LaporanPenjualan.css
+   Tema: modern minimalis, konsisten dengan screen admin lainnya
    Navbar : #0A192F
    Background utama : #F0F4F8
 ========================================================= */
@@ -10,7 +10,7 @@
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Sidebar ===== */
+/* ===== Sidebar (sama seperti screen admin lainnya) ===== */
 .sidebar {
     -fx-background-color: #0A192F;
 }
@@ -94,7 +94,7 @@
 /* ===== Konten utama ===== */
 .content-area {
     -fx-padding: 30 36 30 36;
-    -fx-spacing: 24;
+    -fx-spacing: 22;
 }
 
 .topbar {
@@ -147,6 +147,10 @@
     -fx-icon-color: #FF9F40;
 }
 
+.icon-red {
+    -fx-icon-color: #E05C5C;
+}
+
 .stat-value {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
@@ -158,7 +162,103 @@
     -fx-text-fill: #6E84A8;
 }
 
-/* ===== Tabel tiket terbaru ===== */
+/* ===== Toolbar filter ===== */
+.search-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-pref-width: 260;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.06), 8, 0, 0, 2);
+}
+
+.search-icon {
+    -fx-icon-size: 14;
+    -fx-icon-color: #6E84A8;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0A192F;
+    -fx-prompt-text-fill: #9AAAC4;
+    -fx-padding: 0;
+}
+
+.date-range-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 8 14 8 14;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.06), 8, 0, 0, 2);
+}
+
+.date-range-field {
+    -fx-background-color: transparent;
+    -fx-pref-width: 108;
+}
+
+.date-range-field .text-field {
+    -fx-background-color: transparent;
+    -fx-font-size: 12px;
+    -fx-text-fill: #0A192F;
+    -fx-padding: 0;
+}
+
+.date-range-field .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 4 0 4;
+}
+
+.date-range-separator {
+    -fx-text-fill: #9AAAC4;
+    -fx-font-size: 12px;
+}
+
+.filter-field {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12 6 12;
+    -fx-font-size: 12px;
+    -fx-text-fill: #0A192F;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.06), 8, 0, 0, 2);
+}
+
+.btn-primary {
+    -fx-background-color: #2979FF;
+    -fx-background-radius: 10;
+    -fx-padding: 11 20 11 20;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1E63D6;
+}
+
+.btn-icon {
+    -fx-icon-size: 13;
+    -fx-icon-color: white;
+}
+
+.btn-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.btn-secondary {
+    -fx-background-color: #EEF1F6;
+    -fx-background-radius: 10;
+    -fx-padding: 11 18 11 18;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6E84A8;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #E2E7EF;
+}
+
+/* ===== Tabel laporan ===== */
 .table-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -172,33 +272,58 @@
     -fx-text-fill: #0A192F;
 }
 
-.ticket-table {
+.laporan-table {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
-.ticket-table .column-header-background {
+.laporan-table .column-header-background {
     -fx-background-color: #F0F4F8;
     -fx-background-radius: 8 8 0 0;
 }
 
-.ticket-table .column-header-background .label {
+.laporan-table .column-header-background .label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: #6E84A8;
 }
 
-.ticket-table .table-row-cell {
+.laporan-table .table-row-cell {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #EEF1F6 transparent;
 }
 
-.ticket-table .table-row-cell:odd {
+.laporan-table .table-row-cell:odd {
     -fx-background-color: #FAFBFD;
 }
 
-.ticket-table .table-cell {
+.laporan-table .table-cell {
     -fx-font-size: 12px;
     -fx-text-fill: #0A192F;
     -fx-alignment: CENTER_LEFT;
+}
+
+/* Nilai harga */
+.harga-value {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+/* Badge status tiket */
+.badge-status {
+    -fx-background-radius: 20;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.badge-aktif {
+    -fx-background-color: #E5F7EE;
+    -fx-text-fill: #2BB673;
+}
+
+.badge-dibatalkan {
+    -fx-background-color: #FCE9E9;
+    -fx-text-fill: #E05C5C;
 }

@@ -20,7 +20,10 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class HomeAdminController implements Initializable {
 
@@ -94,7 +97,6 @@ public class HomeAdminController implements Initializable {
 
     @FXML
     private void handleNavDashboard() {
-        // sudah berada di halaman dashboard
     }
 
     @FXML
@@ -124,7 +126,15 @@ public class HomeAdminController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        SessionManager.getInstance().logout();
-        SceneManager.switchScene("login.fxml");
+        Alert konfirmasi = new Alert(Alert.AlertType.CONFIRMATION);
+        konfirmasi.setTitle("Logout");
+        konfirmasi.setHeaderText(null);
+        konfirmasi.setContentText("Yakin logout?");
+
+        Optional<ButtonType> hasil = konfirmasi.showAndWait();
+        if (hasil.isPresent() && hasil.get() == ButtonType.OK) {
+            SessionManager.getInstance().logout();
+            SceneManager.switchScene("login.fxml");
+        }
     }
 }
