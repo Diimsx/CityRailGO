@@ -2,26 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/Project/CityRailGO/src/controller/HomeAdminController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/model/Rute.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/HomePenumpangController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/homepenumpang.css</file>
-            <file>file:/D:/Project/CityRailGO/src/dao/UserDAO.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaKereta.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaKereta.css</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/KelolaKeretaController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/KelolaJadwalController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaJadwal.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaJadwal.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/KelolaPromoController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaPromo.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaPromo.css</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/LaporanPenjualanController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/LaporanPenjualan.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/LaporanPenjualan.fxml</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
