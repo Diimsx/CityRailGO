@@ -51,7 +51,7 @@
                     <StackPane>
                         <TextField fx:id="tfUsername" promptText="Masukkan username" styleClass="input-field" />
                         <FontIcon iconLiteral="fas-user" styleClass="input-icon" StackPane.alignment="CENTER_LEFT" />
-                    </StackPane>
+                   </StackPane>
                 </VBox>
 
                 <VBox spacing="6">
@@ -78,8 +78,6 @@
             </HBox>
 
         </VBox>
-
-        <Label styleClass="system-note" text="Sistem otomatis mendeteksi peran Anda (admin/penumpang) setelah login" />
 
     </VBox>
 

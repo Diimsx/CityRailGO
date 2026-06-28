@@ -26,18 +26,9 @@
             </VBox>
 
             <VBox spacing="14" styleClass="feature-list">
-                <HBox alignment="CENTER_LEFT" spacing="12">
-                    <FontIcon iconLiteral="fas-bolt" styleClass="feature-icon" />
-                    <Label styleClass="feature-text" text="Pemesanan tiket dalam hitungan detik" />
-                </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="12">
-                    <FontIcon iconLiteral="fas-shield-alt" styleClass="feature-icon" />
-                    <Label styleClass="feature-text" text="Transaksi aman dan terenkripsi" />
-                </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="12">
-                    <FontIcon iconLiteral="fas-route" styleClass="feature-icon" />
-                    <Label styleClass="feature-text" text="Rute kereta di seluruh kota" />
-                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="12" />
+                <HBox alignment="CENTER_LEFT" spacing="12" />
+                <HBox alignment="CENTER_LEFT" spacing="12" />
             </VBox>
 
         </VBox>
@@ -60,7 +51,7 @@
                     <StackPane>
                         <TextField fx:id="tfUsername" promptText="Masukkan username" styleClass="input-field" />
                         <FontIcon iconLiteral="fas-user" styleClass="input-icon" StackPane.alignment="CENTER_LEFT" />
-                    </StackPane>
+                   </StackPane>
                 </VBox>
 
                 <VBox spacing="6">
@@ -87,8 +78,6 @@
             </HBox>
 
         </VBox>
-
-        <Label styleClass="system-note" text="Sistem otomatis mendeteksi peran Anda (admin/penumpang) setelah login" />
 
     </VBox>
 

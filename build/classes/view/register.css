@@ -104,7 +104,7 @@
 .input-icon {
     -fx-icon-size: 14;
     -fx-icon-color: #8AA0C4;
-    -fx-padding: 0 0 0 14;
+    -fx-translate-x: 14;
 }
 
 /* ===== DatePicker & ComboBox ===== */
