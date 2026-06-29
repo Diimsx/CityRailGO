@@ -166,7 +166,6 @@ public class PembayaranDAO {
         Kereta kereta = new Kereta(
                 rs.getString("kereta_nama"),
                 rs.getString("nomor_kereta"),
-                rs.getString("kereta_jenis"),
                 rs.getInt("kapasitas_total")
         );
         kereta.setId(rs.getInt("kereta_id"));

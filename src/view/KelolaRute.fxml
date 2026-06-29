@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -17,9 +14,9 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.KelolaPromoController"
+            fx:controller="controller.KelolaRuteController"
             prefWidth="1280" prefHeight="720"
-            stylesheets="@KelolaPromo.css"
+            stylesheets="@KelolaRute.css"
             styleClass="root-bg">
 
     <!-- ===================== SIDEBAR ===================== -->
@@ -41,17 +38,17 @@
                     <FontIcon iconLiteral="fas-train" styleClass="nav-icon"/>
                     <Label text="Kelola Kereta" styleClass="nav-label"/>
                 </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavRute">
-                    <FontIcon iconLiteral="fas-route" styleClass="nav-icon"/>
-                    <Label text="Kelola Rute" styleClass="nav-label"/>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active" onMouseClicked="#handleNavRute">
+                    <FontIcon iconLiteral="fas-route" styleClass="nav-icon-active"/>
+                    <Label text="Kelola Rute" styleClass="nav-label-active"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavJadwal">
                     <FontIcon iconLiteral="fas-calendar-alt" styleClass="nav-icon"/>
                     <Label text="Kelola Jadwal" styleClass="nav-label"/>
                 </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active" onMouseClicked="#handleNavPromo">
-                    <FontIcon iconLiteral="fas-percent" styleClass="nav-icon-active"/>
-                    <Label text="Kelola Promo" styleClass="nav-label-active"/>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavPromo">
+                    <FontIcon iconLiteral="fas-percent" styleClass="nav-icon"/>
+                    <Label text="Kelola Promo" styleClass="nav-label"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavLaporan">
                     <FontIcon iconLiteral="fas-chart-bar" styleClass="nav-icon"/>
@@ -78,8 +75,8 @@
                 <!-- Topbar -->
                 <HBox alignment="CENTER_LEFT" styleClass="topbar">
                     <VBox>
-                        <Label text="Kelola Promo" styleClass="page-title"/>
-                        <Label text="Manajemen kode promo dan diskon CityRailGO" styleClass="page-subtitle"/>
+                        <Label text="Kelola Rute" styleClass="page-title"/>
+                        <Label text="Manajemen data rute perjalanan CityRailGO" styleClass="page-subtitle"/>
                     </VBox>
                     <Region HBox.hgrow="ALWAYS"/>
                     <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
@@ -89,31 +86,30 @@
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="toolbar">
                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-box">
                         <FontIcon iconLiteral="fas-search" styleClass="search-icon"/>
-                        <TextField fx:id="tfSearch" promptText="Cari kode atau deskripsi promo..." styleClass="search-field"/>
+                        <TextField fx:id="tfSearch" promptText="Cari stasiun asal atau tujuan..." styleClass="search-field"/>
                     </HBox>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnTambah" styleClass="btn-primary" onAction="#handleTambahPromo">
+                    <Button fx:id="btnTambah" styleClass="btn-primary" onAction="#handleTambahRute">
                         <graphic>
                             <HBox alignment="CENTER" spacing="8">
                                 <FontIcon iconLiteral="fas-plus" styleClass="btn-icon"/>
-                                <Label text="Tambah Promo" styleClass="btn-label"/>
+                                <Label text="Tambah Rute" styleClass="btn-label"/>
                             </HBox>
                         </graphic>
                     </Button>
                 </HBox>
 
-                <!-- Tabel promo -->
+                <!-- Tabel rute -->
                 <VBox spacing="14" styleClass="table-card" VBox.vgrow="ALWAYS">
-                    <Label text="Daftar Promo" styleClass="card-title"/>
-                    <TableView fx:id="tblPromo" styleClass="promo-table" VBox.vgrow="ALWAYS">
+                    <Label text="Daftar Rute" styleClass="card-title"/>
+                    <TableView fx:id="tblRute" styleClass="rute-table" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="colNo" text="No" prefWidth="44"/>
-                            <TableColumn fx:id="colKodePromo" text="Kode Promo" prefWidth="140"/>
-                            <TableColumn fx:id="colDeskripsi" text="Deskripsi" prefWidth="280"/>
-                            <TableColumn fx:id="colDiskon" text="Diskon" prefWidth="90"/>
-                            <TableColumn fx:id="colPeriode" text="Periode" prefWidth="220"/>
-                            <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
-                            <TableColumn fx:id="colAksi" text="Aksi" prefWidth="100"/>
+                            <TableColumn fx:id="colNo" text="No" prefWidth="50"/>
+                            <TableColumn fx:id="colStasiunAsal" text="Stasiun Asal" prefWidth="260"/>
+                            <TableColumn fx:id="colStasiunTujuan" text="Stasiun Tujuan" prefWidth="260"/>
+                            <TableColumn fx:id="colJarak" text="Jarak" prefWidth="160"/>
+                            <TableColumn fx:id="colEstimasi" text="Estimasi" prefWidth="170"/>
+                            <TableColumn fx:id="colAksi" text="Aksi" prefWidth="120"/>
                         </columns>
                     </TableView>
                 </VBox>
@@ -122,50 +118,42 @@
 
             <!-- ===================== MODAL TAMBAH/EDIT ===================== -->
             <StackPane fx:id="modalOverlay" styleClass="modal-backdrop" alignment="CENTER" visible="false" managed="false">
-                <VBox styleClass="modal-card" maxWidth="440" maxHeight="680" spacing="14">
+                <VBox styleClass="modal-card" maxWidth="420" maxHeight="560" spacing="20">
                     <padding>
-                        <Insets top="24" right="28" bottom="24" left="28"/>
+                        <Insets top="26" right="28" bottom="26" left="28"/>
                     </padding>
 
                     <HBox alignment="CENTER_LEFT">
-                        <Label fx:id="lblModalTitle" text="Tambah Promo" styleClass="modal-title"/>
+                        <Label fx:id="lblModalTitle" text="Tambah Rute" styleClass="modal-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
                         <FontIcon iconLiteral="fas-times" styleClass="modal-close-icon" onMouseClicked="#handleTutupModal"/>
                     </HBox>
 
                     <VBox spacing="6">
-                        <Label text="Kode Promo" styleClass="form-label"/>
-                        <TextField fx:id="tfKodePromo" promptText="Contoh: DISKON10" styleClass="form-field"/>
+                        <Label text="Stasiun Asal" styleClass="form-label"/>
+                        <TextField fx:id="tfStasiunAsal" promptText="Contoh: Jakarta" styleClass="form-field"/>
                     </VBox>
 
                     <VBox spacing="6">
-                        <Label text="Deskripsi" styleClass="form-label"/>
-                        <TextArea fx:id="taDeskripsi" promptText="Contoh: Diskon spesial akhir tahun" styleClass="form-textarea" wrapText="true" prefRowCount="2"/>
+                        <Label text="Stasiun Tujuan" styleClass="form-label"/>
+                        <TextField fx:id="tfStasiunTujuan" promptText="Contoh: Surabaya" styleClass="form-field"/>
                     </VBox>
 
                     <VBox spacing="6">
-                        <Label text="Diskon (%)" styleClass="form-label"/>
-                        <TextField fx:id="tfDiskonPersen" promptText="Contoh: 15" styleClass="form-field"/>
+                        <Label text="Jarak (km)" styleClass="form-label"/>
+                        <TextField fx:id="tfJarakKm" promptText="Contoh: 725" styleClass="form-field"/>
                     </VBox>
 
-                    <HBox spacing="14">
-                        <VBox spacing="6" HBox.hgrow="ALWAYS">
-                            <Label text="Tanggal Mulai" styleClass="form-label"/>
-                            <DatePicker fx:id="dpTanggalMulai" styleClass="form-field" maxWidth="Infinity"/>
-                        </VBox>
-                        <VBox spacing="6" HBox.hgrow="ALWAYS">
-                            <Label text="Tanggal Berakhir" styleClass="form-label"/>
-                            <DatePicker fx:id="dpTanggalBerakhir" styleClass="form-field" maxWidth="Infinity"/>
-                        </VBox>
-                    </HBox>
-
-                    <CheckBox fx:id="chkAktif" text="Promo Aktif" styleClass="checkbox-aktif" selected="true"/>
+                    <VBox spacing="6">
+                        <Label text="Estimasi Waktu (menit)" styleClass="form-label"/>
+                        <TextField fx:id="tfEstimasiMenit" promptText="Contoh: 480" styleClass="form-field"/>
+                    </VBox>
 
                     <Label fx:id="lblModalError" styleClass="modal-error" wrapText="true" visible="false" managed="false"/>
 
                     <HBox spacing="12" alignment="CENTER_RIGHT">
                         <Button text="Batal" styleClass="btn-secondary" onAction="#handleTutupModal"/>
-                        <Button fx:id="btnSimpan" text="Simpan" styleClass="btn-primary" onAction="#handleSimpanPromo"/>
+                        <Button fx:id="btnSimpan" text="Simpan" styleClass="btn-primary" onAction="#handleSimpanRute"/>
                     </HBox>
                 </VBox>
             </StackPane>

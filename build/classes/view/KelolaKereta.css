@@ -225,16 +225,6 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-/* Badge jenis kereta */
-.badge-jenis {
-    -fx-background-color: #E8F0FF;
-    -fx-background-radius: 20;
-    -fx-padding: 4 12 4 12;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2979FF;
-}
-
 /* Aksi tabel (edit/hapus) */
 .action-icon-edit {
     -fx-icon-size: 15;

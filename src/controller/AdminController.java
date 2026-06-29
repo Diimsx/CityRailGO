@@ -5,6 +5,7 @@ import dao.KeretaDAO;
 import dao.KursiDAO;
 import dao.PembayaranDAO;
 import dao.PromoDAO;
+import dao.RuteDAO;
 import dao.TiketDAO;
 import model.Jadwal;
 import model.JenisKelas;
@@ -12,6 +13,7 @@ import model.Kereta;
 import model.Kursi;
 import model.Pembayaran;
 import model.Promo;
+import model.Rute;
 import model.Tiket;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 public class AdminController {
 
     private KeretaDAO keretaDAO;
+    private RuteDAO ruteDAO;
     private JadwalDAO jadwalDAO;
     private PembayaranDAO pembayaranDAO;
     private TiketDAO tiketDAO;
@@ -27,6 +30,7 @@ public class AdminController {
 
     public AdminController() {
         this.keretaDAO = new KeretaDAO();
+        this.ruteDAO = new RuteDAO();
         this.jadwalDAO = new JadwalDAO();
         this.pembayaranDAO = new PembayaranDAO();
         this.tiketDAO = new TiketDAO();
@@ -44,6 +48,18 @@ public class AdminController {
 
     public boolean hapusKereta(int id) {
         return keretaDAO.delete(id);
+    }
+
+    public boolean tambahRute(Rute rute) {
+        return ruteDAO.save(rute);
+    }
+
+    public boolean editRute(Rute rute) {
+        return ruteDAO.update(rute);
+    }
+
+    public boolean hapusRute(int id) {
+        return ruteDAO.delete(id);
     }
 
     public boolean tambahJadwal(Jadwal jadwal) {

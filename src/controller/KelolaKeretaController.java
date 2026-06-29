@@ -9,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -35,7 +34,6 @@ public class KelolaKeretaController implements Initializable {
     @FXML private TableColumn<Kereta, Integer> colNo;
     @FXML private TableColumn<Kereta, String> colNama;
     @FXML private TableColumn<Kereta, String> colNomorKereta;
-    @FXML private TableColumn<Kereta, String> colJenis;
     @FXML private TableColumn<Kereta, Integer> colKapasitas;
     @FXML private TableColumn<Kereta, Void> colAksi;
 
@@ -43,7 +41,6 @@ public class KelolaKeretaController implements Initializable {
     @FXML private Label lblModalTitle;
     @FXML private TextField tfNama;
     @FXML private TextField tfNomorKereta;
-    @FXML private ComboBox<String> cbJenis;
     @FXML private TextField tfKapasitas;
     @FXML private Label lblModalError;
     @FXML private Button btnSimpan;
@@ -59,7 +56,6 @@ public class KelolaKeretaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         lblAdminName.setText("Halo, " + SessionManager.getInstance().getCurrentUser().getNamaLengkap());
-        cbJenis.setItems(FXCollections.observableArrayList("Eksekutif", "Bisnis", "Ekonomi", "Campuran"));
 
         setupTabel();
         muatDataKereta();
@@ -75,22 +71,6 @@ public class KelolaKeretaController implements Initializable {
 
         colNomorKereta.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(data.getValue().getNomorKereta()));
-
-        colJenis.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getJenis()));
-        colJenis.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(String jenis, boolean kosong) {
-                super.updateItem(jenis, kosong);
-                if (kosong || jenis == null) {
-                    setGraphic(null);
-                } else {
-                    Label badge = new Label(jenis);
-                    badge.getStyleClass().add("badge-jenis");
-                    setGraphic(badge);
-                }
-            }
-        });
 
         colKapasitas.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getKapasitasTotal()));
@@ -150,7 +130,6 @@ public class KelolaKeretaController implements Initializable {
         lblModalTitle.setText("Edit Kereta");
         tfNama.setText(kereta.getNama());
         tfNomorKereta.setText(kereta.getNomorKereta());
-        cbJenis.setValue(kereta.getJenis());
         tfKapasitas.setText(String.valueOf(kereta.getKapasitasTotal()));
         sembunyikanError();
         tampilkanModal();
@@ -180,10 +159,9 @@ public class KelolaKeretaController implements Initializable {
     private void handleSimpanKereta() {
         String nama = tfNama.getText().trim();
         String nomorKereta = tfNomorKereta.getText().trim();
-        String jenis = cbJenis.getValue();
         String teksKapasitas = tfKapasitas.getText().trim();
 
-        if (nama.isEmpty() || nomorKereta.isEmpty() || jenis == null || teksKapasitas.isEmpty()) {
+        if (nama.isEmpty() || nomorKereta.isEmpty() || teksKapasitas.isEmpty()) {
             tampilkanError("Semua field wajib diisi.");
             return;
         }
@@ -202,14 +180,15 @@ public class KelolaKeretaController implements Initializable {
 
         boolean berhasil;
         if (keretaDiedit == null) {
-            Kereta keretaBaru = new Kereta(nama, nomorKereta, jenis, kapasitas);
+            Kereta keretaBaru = new Kereta(nama, nomorKereta, kapasitas);
             berhasil = adminController.tambahKereta(keretaBaru);
             if (berhasil) {
                 daftarKereta.add(keretaBaru);
             }
         } else {
             keretaDiedit.setNama(nama);
-            keretaDiedit.setJenis(jenis);
+            keretaDiedit.setNomorKereta(nomorKereta);
+            keretaDiedit.setKapasitasTotal(kapasitas);
             berhasil = adminController.editKereta(keretaDiedit);
             if (berhasil) {
                 tblKereta.refresh();
@@ -242,7 +221,6 @@ public class KelolaKeretaController implements Initializable {
     private void kosongkanForm() {
         tfNama.clear();
         tfNomorKereta.clear();
-        cbJenis.setValue(null);
         tfKapasitas.clear();
         sembunyikanError();
     }
@@ -275,6 +253,11 @@ public class KelolaKeretaController implements Initializable {
     @FXML
     private void handleNavKereta() {
         // sudah berada di halaman Kelola Kereta
+    }
+
+    @FXML
+    private void handleNavRute() {
+        SceneManager.switchScene("KelolaRute.fxml");
     }
 
     @FXML

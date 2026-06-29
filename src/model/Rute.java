@@ -50,4 +50,8 @@ public class Rute {
     public void setJarakKm(double jarakKm) {
         this.jarakKm = jarakKm;
     }
+
+    public void setEstimasiMenit(int estimasiMenit) {
+        this.estimasiMenit = estimasiMenit;
+    }
 }

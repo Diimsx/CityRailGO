@@ -30,6 +30,10 @@
                     <FontIcon iconLiteral="fas-train" styleClass="nav-icon" />
                     <Label styleClass="nav-label" text="Kelola Kereta" />
                 </HBox>
+                <HBox alignment="CENTER_LEFT" onMouseClicked="#handleNavRute" spacing="14" styleClass="nav-item">
+                    <FontIcon iconLiteral="fas-route" styleClass="nav-icon" />
+                    <Label styleClass="nav-label" text="Kelola Rute" />
+                </HBox>
                 <HBox alignment="CENTER_LEFT" onMouseClicked="#handleNavJadwal" spacing="14" styleClass="nav-item">
                     <FontIcon iconLiteral="fas-calendar-alt" styleClass="nav-icon" />
                     <Label styleClass="nav-label" text="Kelola Jadwal" />

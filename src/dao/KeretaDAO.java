@@ -47,14 +47,13 @@ public class KeretaDAO {
     }
 
     public boolean save(Kereta kereta) {
-        String sql = "INSERT INTO kereta (nama, nomor_kereta, jenis, kapasitas_total) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO kereta (nama, nomor_kereta, kapasitas_total) VALUES (?, ?, ?)";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, kereta.getNama());
             ps.setString(2, kereta.getNomorKereta());
-            ps.setString(3, kereta.getJenis());
-            ps.setInt(4, kereta.getKapasitasTotal());
+            ps.setInt(3, kereta.getKapasitasTotal());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -71,15 +70,14 @@ public class KeretaDAO {
     }
 
     public boolean update(Kereta kereta) {
-        String sql = "UPDATE kereta SET nama=?, nomor_kereta=?, jenis=?, kapasitas_total=? WHERE id=?";
+        String sql = "UPDATE kereta SET nama=?, nomor_kereta=?, kapasitas_total=? WHERE id=?";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, kereta.getNama());
             ps.setString(2, kereta.getNomorKereta());
-            ps.setString(3, kereta.getJenis());
-            ps.setInt(4, kereta.getKapasitasTotal());
-            ps.setInt(5, kereta.getId());
+            ps.setInt(3, kereta.getKapasitasTotal());
+            ps.setInt(4, kereta.getId());
             int rows = ps.executeUpdate();
             return rows > 0;
 
@@ -108,7 +106,6 @@ public class KeretaDAO {
         Kereta kereta = new Kereta(
                 rs.getString("nama"),
                 rs.getString("nomor_kereta"),
-                rs.getString("jenis"),
                 rs.getInt("kapasitas_total")
         );
         kereta.setId(rs.getInt("id"));

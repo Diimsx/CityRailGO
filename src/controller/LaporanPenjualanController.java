@@ -268,6 +268,11 @@ public class LaporanPenjualanController implements Initializable {
     }
 
     @FXML
+    private void handleNavRute() {
+        SceneManager.switchScene("KelolaRute.fxml");
+    }
+
+    @FXML
     private void handleNavJadwal() {
         SceneManager.switchScene("KelolaJadwal.fxml");
     }

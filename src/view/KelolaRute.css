@@ -1,5 +1,5 @@
 /* =========================================================
-   KelolaKereta.css
+   KelolaRute.css
    Tema: modern minimalis, konsisten dengan HomeAdmin.css
    Navbar : #0A192F
    Background utama : #F0F4F8
@@ -194,32 +194,32 @@
     -fx-text-fill: #0A192F;
 }
 
-.kereta-table {
+.rute-table {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
-.kereta-table .column-header-background {
+.rute-table .column-header-background {
     -fx-background-color: #F0F4F8;
     -fx-background-radius: 8 8 0 0;
 }
 
-.kereta-table .column-header-background .label {
+.rute-table .column-header-background .label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: #6E84A8;
 }
 
-.kereta-table .table-row-cell {
+.rute-table .table-row-cell {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #EEF1F6 transparent;
 }
 
-.kereta-table .table-row-cell:odd {
+.rute-table .table-row-cell:odd {
     -fx-background-color: #FAFBFD;
 }
 
-.kereta-table .table-cell {
+.rute-table .table-cell {
     -fx-font-size: 12px;
     -fx-text-fill: #0A192F;
     -fx-alignment: CENTER_LEFT;

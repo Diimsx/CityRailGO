@@ -5,13 +5,11 @@ public class Kereta {
     private int id;
     private String nama;
     private String nomorKereta;
-    private String jenis;
     private int kapasitasTotal;
 
-    public Kereta(String nama, String nomorKereta, String jenis, int kapasitasTotal) {
+    public Kereta(String nama, String nomorKereta, int kapasitasTotal) {
         this.nama = nama;
         this.nomorKereta = nomorKereta;
-        this.jenis = jenis;
         this.kapasitasTotal = kapasitasTotal;
     }
 
@@ -27,23 +25,23 @@ public class Kereta {
         return nomorKereta;
     }
 
-    public String getJenis() {
-        return jenis;
-    }
-
     public int getKapasitasTotal() {
         return kapasitasTotal;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public void setNama(String nama) {
         this.nama = nama;
     }
 
-    public void setJenis(String jenis) {
-        this.jenis = jenis;
+    public void setNomorKereta(String nomorKereta) {
+        this.nomorKereta = nomorKereta;
+    }
+
+    public void setKapasitasTotal(int kapasitasTotal) {
+        this.kapasitasTotal = kapasitasTotal;
     }
 }
