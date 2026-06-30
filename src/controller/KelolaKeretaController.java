@@ -9,6 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -22,6 +24,8 @@ import util.SceneManager;
 import util.SessionManager;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -34,14 +38,24 @@ public class KelolaKeretaController implements Initializable {
     @FXML private TableColumn<Kereta, Integer> colNo;
     @FXML private TableColumn<Kereta, String> colNama;
     @FXML private TableColumn<Kereta, String> colNomorKereta;
+    @FXML private TableColumn<Kereta, Integer> colJumlahGerbong;
     @FXML private TableColumn<Kereta, Integer> colKapasitas;
+    @FXML private TableColumn<Kereta, String> colKelas;
+    @FXML private TableColumn<Kereta, String> colStatus;
     @FXML private TableColumn<Kereta, Void> colAksi;
 
     @FXML private StackPane modalOverlay;
     @FXML private Label lblModalTitle;
     @FXML private TextField tfNama;
     @FXML private TextField tfNomorKereta;
+    @FXML private TextField tfJumlahGerbong;
     @FXML private TextField tfKapasitas;
+    @FXML private CheckBox chkEksekutif;
+    @FXML private CheckBox chkBisnis;
+    @FXML private CheckBox chkEkonomi;
+    @FXML private CheckBox chkEkonomiPremium;
+    @FXML private CheckBox chkLuxury;
+    @FXML private ComboBox<String> cbStatus;
     @FXML private Label lblModalError;
     @FXML private Button btnSimpan;
 
@@ -57,6 +71,7 @@ public class KelolaKeretaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         lblAdminName.setText("Halo, " + SessionManager.getInstance().getCurrentUser().getNamaLengkap());
 
+        cbStatus.setItems(FXCollections.observableArrayList(Kereta.STATUS_AKTIF, Kereta.STATUS_NON_AKTIF));
         setupTabel();
         muatDataKereta();
         setupPencarian();
@@ -72,8 +87,32 @@ public class KelolaKeretaController implements Initializable {
         colNomorKereta.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(data.getValue().getNomorKereta()));
 
+        colJumlahGerbong.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getJumlahGerbong()));
+
         colKapasitas.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getKapasitasTotal()));
+
+        colKelas.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getKelasTersedia()));
+
+        colStatus.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getStatus()));
+        colStatus.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String status, boolean kosong) {
+                super.updateItem(status, kosong);
+                if (kosong || status == null) {
+                    setGraphic(null);
+                    return;
+                }
+                Label badge = new Label(status);
+                badge.getStyleClass().add("badge-status");
+                badge.getStyleClass().add(Kereta.STATUS_AKTIF.equalsIgnoreCase(status)
+                        ? "badge-aktif" : "badge-nonaktif");
+                setGraphic(badge);
+            }
+        });
 
         colAksi.setCellFactory(col -> new TableCell<>() {
             private final FontIcon iconEdit = new FontIcon("fas-edit");
@@ -110,6 +149,8 @@ public class KelolaKeretaController implements Initializable {
                     kueri.isEmpty()
                             || kereta.getNama().toLowerCase().contains(kueri)
                             || kereta.getNomorKereta().toLowerCase().contains(kueri)
+                            || teksAman(kereta.getKelasTersedia()).toLowerCase().contains(kueri)
+                            || teksAman(kereta.getStatus()).toLowerCase().contains(kueri)
             );
         });
     }
@@ -130,7 +171,10 @@ public class KelolaKeretaController implements Initializable {
         lblModalTitle.setText("Edit Kereta");
         tfNama.setText(kereta.getNama());
         tfNomorKereta.setText(kereta.getNomorKereta());
+        tfJumlahGerbong.setText(String.valueOf(kereta.getJumlahGerbong()));
         tfKapasitas.setText(String.valueOf(kereta.getKapasitasTotal()));
+        setKelasDipilih(kereta.getKelasTersedia());
+        cbStatus.setValue(kereta.getStatus());
         sembunyikanError();
         tampilkanModal();
     }
@@ -142,15 +186,24 @@ public class KelolaKeretaController implements Initializable {
         Alert konfirmasi = new Alert(Alert.AlertType.CONFIRMATION);
         konfirmasi.setTitle("Hapus Kereta");
         konfirmasi.setHeaderText(null);
-        konfirmasi.setContentText("Apakah Anda yakin ingin menghapus \"" + kereta.getNama() + "\"?");
+        konfirmasi.setContentText("Apakah Anda yakin ingin menghapus " + kereta.getNomorKereta()
+                + " - " + kereta.getNama() + "?");
 
         Optional<ButtonType> hasil = konfirmasi.showAndWait();
         if (hasil.isPresent() && hasil.get() == ButtonType.OK) {
+            String jadwalAktif = keretaDAO.getJadwalAktifPertama(kereta.getId());
+            if (jadwalAktif != null) {
+                tampilkanAlertError("Kereta " + kereta.getNomorKereta() + " masih terjadwal pada "
+                        + jadwalAktif + ". Silakan hapus/ubah jadwal tersebut terlebih dahulu, "
+                        + "atau ubah status kereta ke NON-AKTIF.");
+                return;
+            }
+
             boolean berhasil = adminController.hapusKereta(kereta.getId());
             if (berhasil) {
                 daftarKereta.remove(kereta);
             } else {
-                tampilkanAlertError("Gagal menghapus kereta. Pastikan kereta tidak terpakai di jadwal aktif.");
+                tampilkanAlertError("Gagal menghapus kereta. Data ini masih dirujuk oleh jadwal atau riwayat transaksi.");
             }
         }
     }
@@ -159,10 +212,26 @@ public class KelolaKeretaController implements Initializable {
     private void handleSimpanKereta() {
         String nama = tfNama.getText().trim();
         String nomorKereta = tfNomorKereta.getText().trim();
+        String teksJumlahGerbong = tfJumlahGerbong.getText().trim();
         String teksKapasitas = tfKapasitas.getText().trim();
+        String kelasTersedia = kumpulkanKelasDipilih();
+        String status = cbStatus.getValue();
 
-        if (nama.isEmpty() || nomorKereta.isEmpty() || teksKapasitas.isEmpty()) {
+        if (nama.isEmpty() || nomorKereta.isEmpty() || teksJumlahGerbong.isEmpty()
+                || teksKapasitas.isEmpty() || status == null) {
             tampilkanError("Semua field wajib diisi.");
+            return;
+        }
+
+        int jumlahGerbong;
+        try {
+            jumlahGerbong = Integer.parseInt(teksJumlahGerbong);
+            if (jumlahGerbong <= 0) {
+                tampilkanError("Jumlah gerbong harus berupa angka positif.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            tampilkanError("Jumlah gerbong harus berupa angka.");
             return;
         }
 
@@ -178,20 +247,44 @@ public class KelolaKeretaController implements Initializable {
             return;
         }
 
+        if (kelasTersedia.isEmpty()) {
+            tampilkanError("Pilih minimal satu kelas yang didukung kereta.");
+            return;
+        }
+
+        Kereta keretaDenganNomorSama = keretaDAO.findByNomorKereta(nomorKereta);
+        boolean nomorDipakaiKeretaLain = keretaDenganNomorSama != null
+                && (keretaDiedit == null || keretaDenganNomorSama.getId() != keretaDiedit.getId());
+        if (nomorDipakaiKeretaLain) {
+            tampilkanError("Nomor KA \"" + nomorKereta + "\" sudah digunakan oleh "
+                    + keretaDenganNomorSama.getNama() + ".");
+            return;
+        }
+
+        if (keretaDiedit != null
+                && Kereta.STATUS_NON_AKTIF.equals(status)
+                && !Kereta.STATUS_NON_AKTIF.equalsIgnoreCase(keretaDiedit.getStatus())) {
+            String jadwalDenganPenumpang = keretaDAO.getJadwalDenganTiketAktifPertama(keretaDiedit.getId());
+            if (jadwalDenganPenumpang != null) {
+                tampilkanError("Kereta ini memiliki jadwal aktif pada " + jadwalDenganPenumpang
+                        + ". Batalkan/pindahkan tiket aktif terlebih dahulu sebelum mengubah status ke NON-AKTIF.");
+                return;
+            }
+        }
+
+        Kereta dataKereta = new Kereta(nama, nomorKereta, jumlahGerbong, kapasitas, kelasTersedia, status);
         boolean berhasil;
         if (keretaDiedit == null) {
-            Kereta keretaBaru = new Kereta(nama, nomorKereta, kapasitas);
-            berhasil = adminController.tambahKereta(keretaBaru);
+            berhasil = adminController.tambahKereta(dataKereta);
             if (berhasil) {
-                daftarKereta.add(keretaBaru);
+                daftarKereta.add(dataKereta);
             }
         } else {
-            keretaDiedit.setNama(nama);
-            keretaDiedit.setNomorKereta(nomorKereta);
-            keretaDiedit.setKapasitasTotal(kapasitas);
-            berhasil = adminController.editKereta(keretaDiedit);
+            dataKereta.setId(keretaDiedit.getId());
+            berhasil = adminController.editKereta(dataKereta);
             if (berhasil) {
-                tblKereta.refresh();
+                int indeks = daftarKereta.indexOf(keretaDiedit);
+                daftarKereta.set(indeks, dataKereta);
             }
         }
 
@@ -221,8 +314,64 @@ public class KelolaKeretaController implements Initializable {
     private void kosongkanForm() {
         tfNama.clear();
         tfNomorKereta.clear();
+        tfJumlahGerbong.clear();
         tfKapasitas.clear();
+        chkEksekutif.setSelected(false);
+        chkBisnis.setSelected(false);
+        chkEkonomi.setSelected(false);
+        chkEkonomiPremium.setSelected(false);
+        chkLuxury.setSelected(false);
+        cbStatus.setValue(Kereta.STATUS_AKTIF);
         sembunyikanError();
+    }
+
+    private String kumpulkanKelasDipilih() {
+        List<String> kelas = new ArrayList<>();
+        if (chkEksekutif.isSelected()) {
+            kelas.add("Eksekutif");
+        }
+        if (chkBisnis.isSelected()) {
+            kelas.add("Bisnis");
+        }
+        if (chkEkonomi.isSelected()) {
+            kelas.add("Ekonomi");
+        }
+        if (chkEkonomiPremium.isSelected()) {
+            kelas.add("Ekonomi Premium");
+        }
+        if (chkLuxury.isSelected()) {
+            kelas.add("Luxury");
+        }
+        return String.join(", ", kelas);
+    }
+
+    private void setKelasDipilih(String kelasTersedia) {
+        chkEksekutif.setSelected(false);
+        chkBisnis.setSelected(false);
+        chkEkonomi.setSelected(false);
+        chkEkonomiPremium.setSelected(false);
+        chkLuxury.setSelected(false);
+
+        if (kelasTersedia == null || kelasTersedia.isBlank()) {
+            return;
+        }
+
+        for (String item : kelasTersedia.split(",")) {
+            String kelas = item.trim().toLowerCase();
+            switch (kelas) {
+                case "eksekutif" -> chkEksekutif.setSelected(true);
+                case "bisnis" -> chkBisnis.setSelected(true);
+                case "ekonomi" -> chkEkonomi.setSelected(true);
+                case "ekonomi premium" -> chkEkonomiPremium.setSelected(true);
+                case "luxury" -> chkLuxury.setSelected(true);
+                default -> {
+                }
+            }
+        }
+    }
+
+    private String teksAman(String teks) {
+        return teks == null ? "" : teks;
     }
 
     private void tampilkanError(String pesan) {

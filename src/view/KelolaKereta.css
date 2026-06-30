@@ -292,6 +292,50 @@
     -fx-background-color: #E8F0FF;
 }
 
+.checkbox-box {
+    -fx-background-color: #F0F4F8;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+}
+
+.form-check {
+    -fx-font-size: 12px;
+    -fx-text-fill: #0A192F;
+}
+
+.form-check .box {
+    -fx-background-color: white;
+    -fx-border-color: #C9D5E8;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.form-check:selected .mark {
+    -fx-background-color: white;
+}
+
+.form-check:selected .box {
+    -fx-background-color: #2979FF;
+    -fx-border-color: #2979FF;
+}
+
+.badge-status {
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 999;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.badge-aktif {
+    -fx-background-color: #E5F7EE;
+    -fx-text-fill: #167A42;
+}
+
+.badge-nonaktif {
+    -fx-background-color: #FCE8E8;
+    -fx-text-fill: #B83434;
+}
+
 .modal-error {
     -fx-font-size: 12px;
     -fx-text-fill: #E05C5C;

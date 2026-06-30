@@ -97,12 +97,13 @@ public class KelolaJadwalController implements Initializable {
     }
 
     private void setupComboSumberData() {
-        cbKereta.setItems(FXCollections.observableArrayList(keretaDAO.findAll()));
+        cbKereta.setItems(FXCollections.observableArrayList(keretaDAO.findAktif()));
         cbRute.setItems(FXCollections.observableArrayList(ruteDAO.findAll()));
         cbJenisKelas.setItems(FXCollections.observableArrayList(jenisKelasDAO.findAll()));
         cbStatus.setItems(FXCollections.observableArrayList("TERSEDIA", "PENUH", "DIBATALKAN"));
 
-        setupComboDisplay(cbKereta, k -> k.getNama() + " - " + k.getNomorKereta() + " (" + k.getKapasitasTotal() + " kursi)");
+        setupComboDisplay(cbKereta, k -> k.getNama() + " - " + k.getNomorKereta()
+                + " (" + k.getKapasitasTotal() + " kursi, " + k.getKelasTersedia() + ")");
         setupComboDisplay(cbRute, r -> r.getStasiunAsal() + " \u2192 " + r.getStasiunTujuan()
                 + " (" + String.format("%.0f", r.getJarakKm()) + " km)");
         setupComboDisplay(cbJenisKelas, jk -> jk.getNamaKelas() + " (" + TiketHelper.formatHarga(jk.getHargaPerKm()) + "/km)");
