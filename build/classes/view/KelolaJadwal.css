@@ -337,3 +337,89 @@
     -fx-font-size: 12px;
     -fx-text-fill: #6E84A8;
 }
+
+/* ===== Panel Preview Harga Live ===== */
+.harga-panel {
+    -fx-background-color: #F7F9FC;
+    -fx-background-radius: 10;
+    -fx-border-color: #D8E2F0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 12 14 12 14;
+}
+
+.harga-label-muted {
+    -fx-font-size: 12px;
+    -fx-text-fill: #8AA0C4;
+}
+
+.harga-value-muted {
+    -fx-font-size: 12px;
+    -fx-text-fill: #8AA0C4;
+    -fx-font-weight: bold;
+    -fx-strikethrough: false;
+}
+
+.harga-separator {
+    -fx-background-color: #D8E2F0;
+    -fx-pref-height: 1;
+    -fx-max-height: 1;
+}
+
+.harga-label-final {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+.harga-value-final {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2979FF;
+}
+
+/* Baris satu aturan pricing (emoji + nama + persentase) */
+.aturan-row {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 6;
+}
+
+.aturan-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #5A7099;
+}
+
+/* Surcharge: warna oranye */
+.aturan-surcharge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E07A30;
+}
+
+/* Diskon: warna hijau */
+.aturan-diskon {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #167A42;
+}
+
+/* Harga standar (tanpa adjustment) */
+.harga-standar-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #8AA0C4;
+    -fx-font-style: italic;
+}
+
+/* Badge harga di kolom tabel */
+.harga-cell {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+/* Kolom harga yang ada dynamic pricing */
+.harga-cell-adjusted {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2979FF;
+}

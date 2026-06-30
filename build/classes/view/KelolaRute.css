@@ -296,3 +296,121 @@
     -fx-font-size: 12px;
     -fx-text-fill: #E05C5C;
 }
+
+/* ===== Modal Rute: scrollable card ===== */
+.modal-card-tall {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.25), 24, 0, 0, 10);
+    -fx-pref-width: 560;
+    -fx-max-width: 560;
+}
+
+.modal-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.modal-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.modal-scroll .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+/* ===== Section pemberhentian ===== */
+.stops-section-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6E84A8;
+}
+
+.stops-container {
+    -fx-background-color: #F7F9FC;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12 10 12;
+    -fx-spacing: 8;
+}
+
+/* Satu baris stop (ComboBox + tombol hapus) */
+.transit-row {
+    -fx-spacing: 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Badge nomor urutan pemberhentian */
+.stop-index {
+    -fx-background-color: #E8F0FF;
+    -fx-background-radius: 999;
+    -fx-text-fill: #2979FF;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 8 3 8;
+    -fx-min-width: 28;
+    -fx-alignment: CENTER;
+}
+
+/* ComboBox di baris stop */
+.stop-combo {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #D8E2F0;
+    -fx-border-radius: 8;
+    -fx-font-size: 12px;
+}
+
+.stop-combo:focused {
+    -fx-border-color: #2979FF;
+}
+
+/* Tombol + Tambah Pemberhentian */
+.btn-add-stop {
+    -fx-background-color: #E5F7EE;
+    -fx-background-radius: 8;
+    -fx-padding: 8 14 8 14;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #167A42;
+}
+
+.btn-add-stop:hover {
+    -fx-background-color: #C9EFDA;
+}
+
+.btn-add-stop-icon {
+    -fx-icon-size: 12;
+    -fx-icon-color: #167A42;
+}
+
+/* Tombol × hapus baris stop */
+.btn-remove-stop {
+    -fx-background-color: #FCE8E8;
+    -fx-background-radius: 6;
+    -fx-padding: 5 8 5 8;
+    -fx-cursor: hand;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #B83434;
+    -fx-min-width: 28;
+}
+
+.btn-remove-stop:hover {
+    -fx-background-color: #F5C0C0;
+}
+
+/* ===== Preview urutan di tabel ===== */
+.rute-table .table-cell {
+    -fx-font-size: 12px;
+    -fx-text-fill: #0A192F;
+    -fx-alignment: CENTER_LEFT;
+    -fx-wrap-text: true;
+}
+
+.form-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9AAAC4;
+    -fx-font-style: italic;
+}

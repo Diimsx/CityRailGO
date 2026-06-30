@@ -8,9 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -53,8 +55,6 @@ public class KelolaKeretaController implements Initializable {
     @FXML private CheckBox chkEksekutif;
     @FXML private CheckBox chkBisnis;
     @FXML private CheckBox chkEkonomi;
-    @FXML private CheckBox chkEkonomiPremium;
-    @FXML private CheckBox chkLuxury;
     @FXML private ComboBox<String> cbStatus;
     @FXML private Label lblModalError;
     @FXML private Button btnSimpan;
@@ -159,6 +159,7 @@ public class KelolaKeretaController implements Initializable {
     private void handleTambahKereta() {
         keretaDiedit = null;
         lblModalTitle.setText("Tambah Kereta");
+        btnSimpan.setText("Simpan");
         kosongkanForm();
         tampilkanModal();
     }
@@ -169,6 +170,7 @@ public class KelolaKeretaController implements Initializable {
         }
         keretaDiedit = kereta;
         lblModalTitle.setText("Edit Kereta");
+        btnSimpan.setText("Perbarui");
         tfNama.setText(kereta.getNama());
         tfNomorKereta.setText(kereta.getNomorKereta());
         tfJumlahGerbong.setText(String.valueOf(kereta.getJumlahGerbong()));
@@ -183,28 +185,60 @@ public class KelolaKeretaController implements Initializable {
         if (kereta == null) {
             return;
         }
-        Alert konfirmasi = new Alert(Alert.AlertType.CONFIRMATION);
-        konfirmasi.setTitle("Hapus Kereta");
-        konfirmasi.setHeaderText(null);
-        konfirmasi.setContentText("Apakah Anda yakin ingin menghapus " + kereta.getNomorKereta()
-                + " - " + kereta.getNama() + "?");
+
+        // --- Dialog konfirmasi hapus ---
+        ButtonType btnYa = new ButtonType("Ya, Hapus", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnTidak = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
+        Dialog<ButtonType> konfirmasi = new Dialog<>();
+        konfirmasi.setTitle("Konfirmasi Hapus");
+        konfirmasi.setHeaderText("Hapus " + kereta.getNomorKereta() + " — " + kereta.getNama() + "?");
+        konfirmasi.setContentText("Data kereta ini akan dihapus secara permanen dari sistem.");
+        konfirmasi.getDialogPane().getButtonTypes().addAll(btnYa, btnTidak);
 
         Optional<ButtonType> hasil = konfirmasi.showAndWait();
-        if (hasil.isPresent() && hasil.get() == ButtonType.OK) {
-            String jadwalAktif = keretaDAO.getJadwalAktifPertama(kereta.getId());
-            if (jadwalAktif != null) {
-                tampilkanAlertError("Kereta " + kereta.getNomorKereta() + " masih terjadwal pada "
-                        + jadwalAktif + ". Silakan hapus/ubah jadwal tersebut terlebih dahulu, "
-                        + "atau ubah status kereta ke NON-AKTIF.");
-                return;
-            }
+        if (hasil.isEmpty() || hasil.get() != btnYa) {
+            return;
+        }
 
-            boolean berhasil = adminController.hapusKereta(kereta.getId());
-            if (berhasil) {
-                daftarKereta.remove(kereta);
-            } else {
-                tampilkanAlertError("Gagal menghapus kereta. Data ini masih dirujuk oleh jadwal atau riwayat transaksi.");
-            }
+        // --- Cek apakah kereta masih ada jadwal aktif ---
+        String jadwalAktif = keretaDAO.getJadwalAktifPertama(kereta.getId());
+        if (jadwalAktif != null) {
+            tampilkanDialogBlokir(
+                kereta.getNomorKereta(),
+                "Kereta " + kereta.getNomorKereta() + " — " + kereta.getNama()
+                    + " masih terjadwal pada:\n" + jadwalAktif
+                    + "\n\nSilakan hapus/ubah jadwal tersebut terlebih dahulu,"
+                    + " atau ubah status kereta ke NON-AKTIF."
+            );
+            return;
+        }
+
+        boolean berhasil = adminController.hapusKereta(kereta.getId());
+        if (berhasil) {
+            daftarKereta.remove(kereta);
+        } else {
+            tampilkanAlertError("Gagal menghapus kereta. Data ini masih dirujuk oleh jadwal atau riwayat transaksi.");
+        }
+    }
+
+    /**
+     * Menampilkan dialog error premium saat penghapusan diblokir karena masih ada jadwal aktif.
+     * Menyertakan tombol "Lihat Jadwal Terkait" sebagai shortcut ke halaman Kelola Jadwal.
+     */
+    private void tampilkanDialogBlokir(String nomorKereta, String pesanDetail) {
+        ButtonType btnLihatJadwal = new ButtonType("Lihat Jadwal Terkait →", ButtonBar.ButtonData.OTHER);
+        ButtonType btnTutup = new ButtonType("Tutup", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Penghapusan Diblokir");
+        dialog.setHeaderText("⚠  Kereta " + nomorKereta + " tidak dapat dihapus");
+        dialog.setContentText(pesanDetail);
+        dialog.getDialogPane().getButtonTypes().addAll(btnLihatJadwal, btnTutup);
+        dialog.getDialogPane().setPrefWidth(480);
+
+        Optional<ButtonType> pilihan = dialog.showAndWait();
+        if (pilihan.isPresent() && pilihan.get() == btnLihatJadwal) {
+            SceneManager.switchScene("KelolaJadwal.fxml");
         }
     }
 
@@ -309,6 +343,7 @@ public class KelolaKeretaController implements Initializable {
         modalOverlay.setVisible(false);
         modalOverlay.setManaged(false);
         keretaDiedit = null;
+        btnSimpan.setText("Simpan");
     }
 
     private void kosongkanForm() {
@@ -319,8 +354,6 @@ public class KelolaKeretaController implements Initializable {
         chkEksekutif.setSelected(false);
         chkBisnis.setSelected(false);
         chkEkonomi.setSelected(false);
-        chkEkonomiPremium.setSelected(false);
-        chkLuxury.setSelected(false);
         cbStatus.setValue(Kereta.STATUS_AKTIF);
         sembunyikanError();
     }
@@ -336,12 +369,6 @@ public class KelolaKeretaController implements Initializable {
         if (chkEkonomi.isSelected()) {
             kelas.add("Ekonomi");
         }
-        if (chkEkonomiPremium.isSelected()) {
-            kelas.add("Ekonomi Premium");
-        }
-        if (chkLuxury.isSelected()) {
-            kelas.add("Luxury");
-        }
         return String.join(", ", kelas);
     }
 
@@ -349,8 +376,6 @@ public class KelolaKeretaController implements Initializable {
         chkEksekutif.setSelected(false);
         chkBisnis.setSelected(false);
         chkEkonomi.setSelected(false);
-        chkEkonomiPremium.setSelected(false);
-        chkLuxury.setSelected(false);
 
         if (kelasTersedia == null || kelasTersedia.isBlank()) {
             return;
@@ -362,8 +387,6 @@ public class KelolaKeretaController implements Initializable {
                 case "eksekutif" -> chkEksekutif.setSelected(true);
                 case "bisnis" -> chkBisnis.setSelected(true);
                 case "ekonomi" -> chkEkonomi.setSelected(true);
-                case "ekonomi premium" -> chkEkonomiPremium.setSelected(true);
-                case "luxury" -> chkLuxury.setSelected(true);
                 default -> {
                 }
             }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/cityrailgo?useSSL=false&serverTimezone=Asia/Jakarta&allowPublicKeyRetrieval=true";
+    private static final String URL = "jdbc:mysql://localhost:3306/cityrailgo";
     private static final String USER = "root";
     private static final String PASS = "";
 

@@ -110,14 +110,15 @@
                     <Label text="Daftar Jadwal" styleClass="card-title"/>
                     <TableView fx:id="tblJadwal" styleClass="jadwal-table" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="colNo" text="No" prefWidth="44"/>
-                            <TableColumn fx:id="colKereta" text="Kereta" prefWidth="190"/>
-                            <TableColumn fx:id="colRute" text="Rute" prefWidth="190"/>
-                            <TableColumn fx:id="colJenisKelas" text="Kelas" prefWidth="110"/>
-                            <TableColumn fx:id="colBerangkat" text="Berangkat" prefWidth="150"/>
-                            <TableColumn fx:id="colTiba" text="Tiba" prefWidth="150"/>
-                            <TableColumn fx:id="colStatus" text="Status" prefWidth="110"/>
-                            <TableColumn fx:id="colAksi" text="Aksi" prefWidth="100"/>
+                            <TableColumn fx:id="colNo"        text="No"        prefWidth="44"/>
+                            <TableColumn fx:id="colKereta"    text="Kereta"    prefWidth="160"/>
+                            <TableColumn fx:id="colRute"      text="Rute"      prefWidth="160"/>
+                            <TableColumn fx:id="colJenisKelas" text="Kelas"    prefWidth="100"/>
+                            <TableColumn fx:id="colBerangkat" text="Berangkat" prefWidth="135"/>
+                            <TableColumn fx:id="colTiba"      text="Tiba"      prefWidth="135"/>
+                            <TableColumn fx:id="colHarga"     text="Harga"     prefWidth="130"/>
+                            <TableColumn fx:id="colStatus"    text="Status"    prefWidth="100"/>
+                            <TableColumn fx:id="colAksi"      text="Aksi"      prefWidth="80"/>
                         </columns>
                     </TableView>
                 </VBox>
@@ -167,6 +168,26 @@
                         <FontIcon iconLiteral="fas-clock" styleClass="estimasi-icon"/>
                         <Label fx:id="lblEstimasiTiba" text="Estimasi tiba: —" styleClass="estimasi-label"/>
                     </HBox>
+
+                    <!-- ===== PANEL PREVIEW HARGA LIVE ===== -->
+                    <VBox fx:id="vboxHarga" styleClass="harga-panel" spacing="8" visible="false" managed="false">
+                        <!-- Baris harga dasar -->
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Harga Dasar" styleClass="harga-label-muted"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblHargaDasar" text="Rp 0" styleClass="harga-value-muted"/>
+                        </HBox>
+                        <!-- Baris aturan aktif (dynamic pricing rules) -->
+                        <VBox fx:id="vboxAturan" spacing="4"/>
+                        <!-- Separator tipis -->
+                        <Region styleClass="harga-separator"/>
+                        <!-- Baris harga final -->
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Harga Final" styleClass="harga-label-final"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblHargaFinal" text="Rp 0" styleClass="harga-value-final"/>
+                        </HBox>
+                    </VBox>
 
                     <VBox spacing="6">
                         <Label text="Status" styleClass="form-label"/>

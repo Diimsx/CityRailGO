@@ -327,3 +327,156 @@
     -fx-background-color: #FCE9E9;
     -fx-text-fill: #E05C5C;
 }
+
+/* ===== Toggle Harian / Bulanan ===== */
+.toggle-group {
+    -fx-background-color: #EEF1F6;
+    -fx-background-radius: 8;
+    -fx-padding: 3 3 3 3;
+}
+
+.toggle-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6E84A8;
+    -fx-padding: 6 16 6 16;
+    -fx-cursor: hand;
+}
+
+.toggle-btn:hover {
+    -fx-background-color: rgba(41, 121, 255, 0.08);
+    -fx-text-fill: #2979FF;
+}
+
+.toggle-btn-active {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2979FF;
+    -fx-padding: 6 16 6 16;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(41, 121, 255, 0.12), 4, 0, 0, 1);
+}
+
+/* ===== Export button ===== */
+.btn-export {
+    -fx-background-color: #167A42;
+    -fx-background-radius: 10;
+    -fx-padding: 11 18 11 18;
+    -fx-cursor: hand;
+}
+
+.btn-export:hover {
+    -fx-background-color: #0E5A30;
+}
+
+/* ===== Breakdown Panel ===== */
+.breakdown-card {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-padding: 18 18 18 18;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.08), 12, 0, 0, 4);
+    -fx-max-width: 280;
+    -fx-min-width: 240;
+}
+
+.breakdown-subtitle {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9AAAC4;
+    -fx-font-style: italic;
+}
+
+.breakdown-list {
+    -fx-spacing: 5;
+}
+
+/* Satu baris breakdown: tanggal/bulan + bar + nilai */
+.breakdown-row {
+    -fx-background-radius: 6;
+    -fx-padding: 6 8 6 8;
+    -fx-cursor: default;
+}
+
+.breakdown-row:hover {
+    -fx-background-color: #F0F4F8;
+}
+
+.breakdown-period {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3A5070;
+    -fx-min-width: 72;
+}
+
+/* Mini bar background track */
+.breakdown-bar-track {
+    -fx-background-color: #EEF1F6;
+    -fx-background-radius: 4;
+    -fx-pref-height: 8;
+}
+
+/* Mini bar fill */
+.breakdown-bar-fill {
+    -fx-background-color: #2979FF;
+    -fx-background-radius: 4;
+    -fx-pref-height: 8;
+}
+
+/* Baris terbaik (tertinggi) */
+.breakdown-bar-fill-top {
+    -fx-background-color: #2BB673;
+    -fx-background-radius: 4;
+    -fx-pref-height: 8;
+}
+
+.breakdown-amount {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+    -fx-min-width: 88;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.breakdown-count {
+    -fx-font-size: 10px;
+    -fx-text-fill: #9AAAC4;
+}
+
+/* Footer total breakdown */
+.breakdown-footer {
+    -fx-background-color: #F7F9FC;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12 10 12;
+    -fx-border-color: #E2EAF4;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.breakdown-footer-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #8AA0C4;
+}
+
+.breakdown-footer-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2979FF;
+}
+
+/* Label jumlah baris ditampilkan */
+.jumlah-tampil {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9AAAC4;
+    -fx-font-style: italic;
+}
+
+/* Empty breakdown message */
+.breakdown-empty {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9AAAC4;
+    -fx-alignment: CENTER;
+    -fx-font-style: italic;
+}

@@ -99,7 +99,8 @@ public class StasiunDAO {
     }
 
     public boolean isUsedInRute(int stasiunId) {
-        String sql = "SELECT COUNT(*) as cnt FROM rute WHERE stasiun_asal_id = ? OR stasiun_tujuan_id = ?";
+        // Query ke kolom FK (setelah migrasi schema RuteDAO)
+        String sql = "SELECT COUNT(*) AS cnt FROM rute WHERE stasiun_asal_id = ? OR stasiun_tujuan_id = ?";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -111,7 +112,8 @@ public class StasiunDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Gagal cek stasiun di rute: " + e.getMessage());
+            // Fallback: kolom baru mungkin belum ada, cek via teks
+            System.out.println("isUsedInRute fallback: " + e.getMessage());
         }
         return false;
     }
@@ -136,8 +138,9 @@ public class StasiunDAO {
     public String getUsageInfo(int stasiunId) {
         StringBuilder info = new StringBuilder();
 
-        // Cek di rute
-        String sqlRute = "SELECT DISTINCT r.id, r.nama_rute FROM rute r WHERE r.stasiun_asal_id = ? OR r.stasiun_tujuan_id = ? LIMIT 5";
+        // Cek di rute (asal/tujuan) — pakai kolom FK baru
+        String sqlRute = "SELECT DISTINCT r.id, r.nama_rute FROM rute r " +
+                         "WHERE r.stasiun_asal_id = ? OR r.stasiun_tujuan_id = ? LIMIT 5";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sqlRute)) {
@@ -152,7 +155,43 @@ public class StasiunDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Gagal ambil usage info: " + e.getMessage());
+            // Fallback ke nama teks lama
+            String sqlFallback = "SELECT DISTINCT r.id, r.stasiun_asal, r.stasiun_tujuan FROM rute r " +
+                                 "WHERE r.stasiun_asal = (SELECT nama_stasiun FROM stasiun WHERE id = ?) " +
+                                 "OR r.stasiun_tujuan = (SELECT nama_stasiun FROM stasiun WHERE id = ?) LIMIT 5";
+            try (PreparedStatement ps2 = conn.prepareStatement(sqlFallback)) {
+                ps2.setInt(1, stasiunId);
+                ps2.setInt(2, stasiunId);
+                try (ResultSet rs2 = ps2.executeQuery()) {
+                    int count = 0;
+                    while (rs2.next() && count < 5) {
+                        if (count > 0) info.append("\n");
+                        info.append("• Rute: ").append(rs2.getString("stasiun_asal"))
+                            .append(" → ").append(rs2.getString("stasiun_tujuan"));
+                        count++;
+                    }
+                }
+            } catch (SQLException ignored) {}
+        }
+
+        // Cek juga di rute_stasiun (pemberhentian tengah)
+        if (info.length() == 0) {
+            String sqlStop = "SELECT DISTINCT r.nama_rute FROM rute r " +
+                             "JOIN rute_stasiun rs ON rs.rute_id = r.id " +
+                             "WHERE rs.stasiun_id = ? LIMIT 5";
+            try (PreparedStatement ps = conn.prepareStatement(sqlStop)) {
+                ps.setInt(1, stasiunId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    int count = 0;
+                    while (rs.next() && count < 5) {
+                        if (count > 0) info.append("\n");
+                        info.append("• Rute (transit): ").append(rs.getString("nama_rute"));
+                        count++;
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("getUsageInfo rute_stasiun error: " + e.getMessage());
+            }
         }
 
         return info.toString();

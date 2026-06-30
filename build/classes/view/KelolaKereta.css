@@ -340,3 +340,9 @@
     -fx-font-size: 12px;
     -fx-text-fill: #E05C5C;
 }
+
+.form-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9AAAC4;
+    -fx-font-style: italic;
+}

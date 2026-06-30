@@ -167,11 +167,8 @@
                                 <CheckBox fx:id="chkBisnis" text="Bisnis" styleClass="form-check"/>
                                 <CheckBox fx:id="chkEkonomi" text="Ekonomi" styleClass="form-check"/>
                             </HBox>
-                            <HBox spacing="16">
-                                <CheckBox fx:id="chkEkonomiPremium" text="Ekonomi Premium" styleClass="form-check"/>
-                                <CheckBox fx:id="chkLuxury" text="Luxury" styleClass="form-check"/>
-                            </HBox>
                         </VBox>
+                        <Label text="Kelas yang dicentang akan tersedia sebagai opsi saat membuat jadwal baru." styleClass="form-hint" wrapText="true"/>
                     </VBox>
 
                     <VBox spacing="6">
