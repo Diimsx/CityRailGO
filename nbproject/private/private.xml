@@ -42,6 +42,13 @@
             <file>file:/D:/Project/CityRailGO/src/view/Pembayaran.fxml</file>
             <file>file:/D:/Project/CityRailGO/src/view/Pembayaran.css</file>
             <file>file:/D:/Project/CityRailGO/src/controller/LoginController.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/KelolaPromo.css</file>
+            <file>file:/D:/Project/CityRailGO/src/model/Stasiun.java</file>
+            <file>file:/D:/Project/CityRailGO/src/dao/StasiunDAO.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/KelolaStasiun.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/KelolaStasiun.fxml</file>
+            <file>file:/D:/Project/CityRailGO/src/controller/KelolaStasiunController.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/Login.css</file>
         </group>
     </open-files>
 </project-private>

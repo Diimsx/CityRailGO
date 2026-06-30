@@ -1,0 +1,342 @@
+/* =========================================================
+   KelolaKereta.css
+   Tema: modern minimalis, konsisten dengan HomeAdmin.css
+   Navbar : #0A192F
+   Background utama : #F0F4F8
+========================================================= */
+
+.root-bg {
+    -fx-background-color: #F0F4F8;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* ===== Sidebar (sama seperti HomeAdmin) ===== */
+.sidebar {
+    -fx-background-color: #0A192F;
+}
+
+.brand-box {
+    -fx-padding: 30 0 26 0;
+}
+
+.brand-icon {
+    -fx-icon-color: #4D8AFF;
+}
+
+.brand-text {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.brand-subtext {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6E84A8;
+}
+
+.nav-list {
+    -fx-padding: 10 0 0 0;
+}
+
+.nav-item {
+    -fx-padding: 13 24 13 24;
+    -fx-cursor: hand;
+}
+
+.nav-item:hover {
+    -fx-background-color: #112240;
+}
+
+.nav-item-active {
+    -fx-padding: 13 24 13 24;
+    -fx-cursor: hand;
+    -fx-background-color: #1B3A6B;
+}
+
+.nav-icon {
+    -fx-icon-size: 16;
+    -fx-icon-color: #8AA0C4;
+}
+
+.nav-icon-active {
+    -fx-icon-size: 16;
+    -fx-icon-color: #4D8AFF;
+}
+
+.nav-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #C2CEE0;
+}
+
+.nav-label-active {
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.logout-item {
+    -fx-padding: 18 24 26 24;
+    -fx-cursor: hand;
+    -fx-border-color: #1B2B47 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.logout-icon {
+    -fx-icon-size: 16;
+    -fx-icon-color: #E05C5C;
+}
+
+.logout-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #E05C5C;
+}
+
+/* ===== Konten utama ===== */
+.content-area {
+    -fx-padding: 30 36 30 36;
+    -fx-spacing: 22;
+}
+
+.topbar {
+    -fx-padding: 0 0 4 0;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+.page-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6E84A8;
+}
+
+.admin-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+/* ===== Toolbar (search + tambah) ===== */
+.toolbar {
+    -fx-padding: 0 0 0 0;
+}
+
+.search-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-pref-width: 340;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.06), 8, 0, 0, 2);
+}
+
+.search-icon {
+    -fx-icon-size: 14;
+    -fx-icon-color: #6E84A8;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0A192F;
+    -fx-prompt-text-fill: #9AAAC4;
+    -fx-padding: 0;
+}
+
+.btn-primary {
+    -fx-background-color: #2979FF;
+    -fx-background-radius: 10;
+    -fx-padding: 11 20 11 20;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1E63D6;
+}
+
+.btn-icon {
+    -fx-icon-size: 13;
+    -fx-icon-color: white;
+}
+
+.btn-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.btn-secondary {
+    -fx-background-color: #EEF1F6;
+    -fx-background-radius: 10;
+    -fx-padding: 11 20 11 20;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6E84A8;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #E2E7EF;
+}
+
+/* ===== Tabel kereta ===== */
+.table-card {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-padding: 22;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.08), 12, 0, 0, 4);
+}
+
+.card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+.kereta-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.kereta-table .column-header-background {
+    -fx-background-color: #F0F4F8;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.kereta-table .column-header-background .label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6E84A8;
+}
+
+.kereta-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #EEF1F6 transparent;
+}
+
+.kereta-table .table-row-cell:odd {
+    -fx-background-color: #FAFBFD;
+}
+
+.kereta-table .table-cell {
+    -fx-font-size: 12px;
+    -fx-text-fill: #0A192F;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Aksi tabel (edit/hapus) */
+.action-icon-edit {
+    -fx-icon-size: 15;
+    -fx-icon-color: #2979FF;
+    -fx-cursor: hand;
+}
+
+.action-icon-edit:hover {
+    -fx-icon-color: #1E63D6;
+}
+
+.action-icon-delete {
+    -fx-icon-size: 15;
+    -fx-icon-color: #E05C5C;
+    -fx-cursor: hand;
+}
+
+.action-icon-delete:hover {
+    -fx-icon-color: #C23F3F;
+}
+
+/* ===== Modal Tambah/Edit ===== */
+.modal-backdrop {
+    -fx-background-color: rgba(10, 25, 47, 0.45);
+}
+
+.modal-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.25), 24, 0, 0, 10);
+}
+
+.modal-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+.modal-close-icon {
+    -fx-icon-size: 16;
+    -fx-icon-color: #6E84A8;
+    -fx-cursor: hand;
+}
+
+.modal-close-icon:hover {
+    -fx-icon-color: #0A192F;
+}
+
+.form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6E84A8;
+}
+
+.form-field {
+    -fx-background-color: #F0F4F8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12 10 12;
+    -fx-font-size: 13px;
+    -fx-text-fill: #0A192F;
+    -fx-prompt-text-fill: #9AAAC4;
+}
+
+.form-field:focused {
+    -fx-background-color: #E8F0FF;
+}
+
+.checkbox-box {
+    -fx-background-color: #F0F4F8;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+}
+
+.form-check {
+    -fx-font-size: 12px;
+    -fx-text-fill: #0A192F;
+}
+
+.form-check .box {
+    -fx-background-color: white;
+    -fx-border-color: #C9D5E8;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.form-check:selected .mark {
+    -fx-background-color: white;
+}
+
+.form-check:selected .box {
+    -fx-background-color: #2979FF;
+    -fx-border-color: #2979FF;
+}
+
+.badge-status {
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 999;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.badge-aktif {
+    -fx-background-color: #E5F7EE;
+    -fx-text-fill: #167A42;
+}
+
+.badge-nonaktif {
+    -fx-background-color: #FCE8E8;
+    -fx-text-fill: #B83434;
+}
+
+.modal-error {
+    -fx-font-size: 12px;
+    -fx-text-fill: #E05C5C;
+}
