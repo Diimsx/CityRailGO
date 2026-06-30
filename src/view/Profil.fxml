@@ -1,14 +1,246 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.ProfilController"
+            prefWidth="1280" prefHeight="720"
+            stylesheets="@Profil.css"
+            styleClass="root-bg">
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfilController">
-    <stylesheets>
-        <URL value="@Profil.css"/>
-    </stylesheets>
-</AnchorPane>
+    <!-- Sidebar -->
+    <left>
+        <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
+            <VBox alignment="CENTER" spacing="4" styleClass="brand-box">
+                <FontIcon iconLiteral="fas-train" iconSize="26" styleClass="brand-icon"/>
+                <Label text="CityRailGO" styleClass="brand-text"/>
+                <Label text="Portal Penumpang" styleClass="brand-subtext"/>
+            </VBox>
+            <VBox styleClass="nav-list">
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavBeranda">
+                    <FontIcon iconLiteral="fas-home" styleClass="nav-icon"/>
+                    <Label text="Beranda" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavTiketSaya">
+                    <FontIcon iconLiteral="fas-ticket-alt" styleClass="nav-icon"/>
+                    <Label text="Tiket Saya" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active">
+                    <FontIcon iconLiteral="fas-user-circle" styleClass="nav-icon-active"/>
+                    <Label text="Profil" styleClass="nav-label-active"/>
+                </HBox>
+            </VBox>
+            <Region VBox.vgrow="ALWAYS"/>
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="logout-item" onMouseClicked="#handleLogout">
+                <FontIcon iconLiteral="fas-sign-out-alt" styleClass="logout-icon"/>
+                <Label text="Logout" styleClass="logout-label"/>
+            </HBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox>
+            <!-- Topbar -->
+            <HBox alignment="CENTER_LEFT" styleClass="topbar">
+                <VBox>
+                    <Label text="Profil Saya" styleClass="page-title"/>
+                    <Label text="Kelola informasi akun dan data diri Anda" styleClass="page-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER" spacing="10" styleClass="user-badge">
+                    <FontIcon fx:id="topbarIcon" iconLiteral="fas-user-circle" styleClass="nav-icon"/>
+                    <ImageView fx:id="topbarAvatar" visible="false" managed="false"/>
+                    <Label fx:id="lblNamaTopbar" text="Penumpang" styleClass="user-name"/>
+                </HBox>
+            </HBox>
+
+            <ScrollPane styleClass="content-scroll" VBox.vgrow="ALWAYS"
+                        fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                <VBox spacing="24">
+                    <padding><Insets top="28" right="28" bottom="28" left="28"/></padding>
+
+                    <!-- ===== Avatar Banner ===== -->
+                    <VBox styleClass="avatar-card" spacing="20">
+                        <HBox spacing="28" alignment="CENTER_LEFT">
+
+                            <!-- Avatar lingkaran -->
+                            <StackPane styleClass="avatar-circle">
+                                <FontIcon fx:id="avatarIcon" iconLiteral="fas-user" styleClass="avatar-icon"/>
+                                <ImageView fx:id="mainAvatar" visible="false" managed="false"/>
+                            </StackPane>
+
+                            <!-- Info nama -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label fx:id="lblNamaLengkap" text="—" styleClass="avatar-name"/>
+                                <Label fx:id="lblUsername" text="@username" styleClass="avatar-username"/>
+                                <HBox spacing="8">
+                                    <Label text="Penumpang" styleClass="avatar-role"/>
+                                </HBox>
+                                <Button styleClass="btn-ubah-foto" onAction="#handleUbahFoto">
+                                    <graphic>
+                                        <HBox alignment="CENTER" spacing="8">
+                                            <FontIcon iconLiteral="fas-camera" styleClass="btn-foto-icon"/>
+                                            <Label text="Ubah Foto Profil"
+                                                   style="-fx-text-fill:white; -fx-font-size:12px; -fx-font-weight:bold;"/>
+                                        </HBox>
+                                    </graphic>
+                                </Button>
+                            </VBox>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <!-- Stats -->
+                            <HBox spacing="32" alignment="CENTER_RIGHT">
+                                <VBox alignment="CENTER" spacing="4">
+                                    <Label fx:id="lblStatTiket" text="0" styleClass="stat-value"/>
+                                    <Label text="Total Tiket" styleClass="stat-label"/>
+                                </VBox>
+                                <Region styleClass="stat-divider"/>
+                                <VBox alignment="CENTER" spacing="4">
+                                    <Label fx:id="lblStatAktif" text="0" styleClass="stat-value"/>
+                                    <Label text="Tiket Aktif" styleClass="stat-label"/>
+                                </VBox>
+                            </HBox>
+                        </HBox>
+
+                        <!-- Foto path (jika sudah dipilih) -->
+                        <Label fx:id="lblFotoPath" text="" styleClass="avatar-username"
+                               visible="false" managed="false"/>
+                    </VBox>
+
+                    <!-- ===== Data Diri + Password (2 kolom) ===== -->
+                    <HBox spacing="20" alignment="TOP_LEFT">
+
+                        <!-- KIRI: Data Diri -->
+                        <VBox styleClass="data-card" spacing="18" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <FontIcon iconLiteral="fas-id-card" styleClass="card-icon"/>
+                                <Label text="Data Diri" styleClass="card-title"/>
+                            </HBox>
+                            <Region styleClass="divider-h"/>
+
+                            <!-- Username (readonly) -->
+                            <VBox spacing="5">
+                                <Label text="Username" styleClass="form-label"/>
+                                <TextField fx:id="tfUsername" styleClass="form-field-readonly" editable="false"/>
+                                <Label text="Username tidak dapat diubah" styleClass="hint-label"/>
+                            </VBox>
+
+                            <!-- Nama Lengkap -->
+                            <VBox spacing="5">
+                                <Label text="Nama Lengkap" styleClass="form-label"/>
+                                <TextField fx:id="tfNamaLengkap" promptText="Nama lengkap sesuai KTP" styleClass="form-field"/>
+                            </VBox>
+
+                            <!-- Email -->
+                            <VBox spacing="5">
+                                <Label text="Email" styleClass="form-label"/>
+                                <TextField fx:id="tfEmail" promptText="Alamat email aktif" styleClass="form-field"/>
+                            </VBox>
+
+                            <!-- NIK -->
+                            <VBox spacing="5">
+                                <Label text="NIK / Nomor Identitas" styleClass="form-label"/>
+                                <TextField fx:id="tfNik" promptText="16 digit NIK" styleClass="form-field"/>
+                            </VBox>
+
+                            <!-- No Telepon -->
+                            <VBox spacing="5">
+                                <Label text="Nomor Telepon" styleClass="form-label"/>
+                                <TextField fx:id="tfTelp" promptText="Nomor HP aktif" styleClass="form-field"/>
+                            </VBox>
+
+                            <!-- Jenis Kelamin -->
+                            <VBox spacing="5">
+                                <Label text="Jenis Kelamin" styleClass="form-label"/>
+                                <javafx.scene.control.ComboBox fx:id="cbJenisKelamin"
+                                                               styleClass="form-field" maxWidth="Infinity"/>
+                            </VBox>
+
+                            <!-- Status message -->
+                            <Label fx:id="lblStatusData" text="" wrapText="true" managed="false" visible="false"/>
+
+                            <!-- Tombol simpan -->
+                            <HBox alignment="CENTER_RIGHT">
+                                <Button styleClass="btn-simpan" onAction="#handleSimpanData">
+                                    <graphic>
+                                        <HBox alignment="CENTER" spacing="8">
+                                            <FontIcon iconLiteral="fas-save" styleClass="btn-icon"/>
+                                            <Label text="Simpan Perubahan"
+                                                   style="-fx-text-fill:white; -fx-font-size:13px; -fx-font-weight:bold;"/>
+                                        </HBox>
+                                    </graphic>
+                                </Button>
+                            </HBox>
+                        </VBox>
+
+                        <!-- KANAN: Ganti Password -->
+                        <VBox spacing="18" prefWidth="360" minWidth="320">
+                            <VBox styleClass="pw-card" spacing="18">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <FontIcon iconLiteral="fas-lock" styleClass="card-icon"/>
+                                    <Label text="Ganti Password" styleClass="card-title"/>
+                                </HBox>
+                                <Region styleClass="divider-h"/>
+
+                                <VBox spacing="5">
+                                    <Label text="Password Lama" styleClass="form-label"/>
+                                    <PasswordField fx:id="pfPasswordLama" promptText="Masukkan password saat ini" styleClass="form-field"/>
+                                </VBox>
+                                <VBox spacing="5">
+                                    <Label text="Password Baru" styleClass="form-label"/>
+                                    <PasswordField fx:id="pfPasswordBaru" promptText="Minimal 6 karakter" styleClass="form-field"/>
+                                </VBox>
+                                <VBox spacing="5">
+                                    <Label text="Konfirmasi Password Baru" styleClass="form-label"/>
+                                    <PasswordField fx:id="pfPasswordKonfirmasi" promptText="Ulangi password baru" styleClass="form-field"/>
+                                </VBox>
+
+                                <Label fx:id="lblStatusPassword" text="" wrapText="true" managed="false" visible="false"/>
+
+                                <Button styleClass="btn-simpan-pw" maxWidth="Infinity" onAction="#handleGantiPassword">
+                                    <graphic>
+                                        <HBox alignment="CENTER" spacing="8">
+                                            <FontIcon iconLiteral="fas-key" styleClass="btn-icon"/>
+                                            <Label text="Ganti Password"
+                                                   style="-fx-text-fill:white; -fx-font-size:13px; -fx-font-weight:bold;"/>
+                                        </HBox>
+                                    </graphic>
+                                </Button>
+                            </VBox>
+
+                            <!-- Info Akun Card -->
+                            <VBox styleClass="pw-card" spacing="14">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <FontIcon iconLiteral="fas-info-circle" styleClass="card-icon"/>
+                                    <Label text="Informasi Akun" styleClass="card-title"/>
+                                </HBox>
+                                <Region styleClass="divider-h"/>
+                                <HBox><Label text="Tipe Akun" styleClass="form-label" prefWidth="130"/>
+                                    <Label text="Penumpang" style="-fx-font-size:13px; -fx-font-weight:bold; -fx-text-fill:#0A192F;"/></HBox>
+                                <HBox><Label text="Status" styleClass="form-label" prefWidth="130"/>
+                                    <Label text="✓ Aktif" style="-fx-font-size:13px; -fx-font-weight:bold; -fx-text-fill:#2BB673;"/></HBox>
+                                <HBox><Label fx:id="lblInfoNik" text="NIK" styleClass="form-label" prefWidth="130"/>
+                                    <Label fx:id="lblNikInfo" text="—" style="-fx-font-size:13px; -fx-text-fill:#0A192F;"/></HBox>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

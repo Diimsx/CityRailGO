@@ -1,7 +1,65 @@
-/*
- * Empty Stylesheet file.
- */
+/* PilihKursi.css */
+.root-bg { -fx-background-color: #F0F4F8; -fx-font-family: "Inter","Segoe UI",sans-serif; }
+.sidebar { -fx-background-color: #0A192F; -fx-min-width: 240; -fx-max-width: 240; }
+.brand-box { -fx-padding: 30 0 26 0; }
+.brand-icon { -fx-icon-size: 26; -fx-icon-color: #4D8AFF; }
+.brand-text { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white; }
+.brand-subtext { -fx-font-size: 11px; -fx-text-fill: #6E84A8; }
+.nav-list { -fx-padding: 10 0 0 0; }
+.nav-item { -fx-padding: 13 24 13 24; -fx-cursor: hand; }
+.nav-item:hover { -fx-background-color: #112240; }
+.nav-item-active { -fx-padding: 13 24 13 24; -fx-cursor: hand; -fx-background-color: #1B3A6B; }
+.nav-icon { -fx-icon-size: 16; -fx-icon-color: #8AA0C4; }
+.nav-icon-active { -fx-icon-size: 16; -fx-icon-color: #4D8AFF; }
+.nav-label { -fx-font-size: 13px; -fx-text-fill: #C2CEE0; }
+.nav-label-active { -fx-font-size: 13px; -fx-text-fill: white; -fx-font-weight: bold; }
+.logout-item { -fx-padding: 18 24 26 24; -fx-cursor: hand; -fx-border-color: #1B2B47 transparent transparent transparent; -fx-border-width: 1; }
+.logout-item:hover { -fx-background-color: #1B0A0A; }
+.logout-icon { -fx-icon-size: 15; -fx-icon-color: #FF6B6B; }
+.logout-label { -fx-font-size: 13px; -fx-text-fill: #FF6B6B; }
+.topbar { -fx-background-color: white; -fx-padding: 18 28 18 28; -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.07), 8, 0, 0, 3); }
+.page-title { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0A192F; }
+.page-subtitle { -fx-font-size: 12px; -fx-text-fill: #6E84A8; }
+.user-badge { -fx-background-color: #EEF3FF; -fx-background-radius: 20; -fx-padding: 6 14 6 14; }
+.user-name { -fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0A192F; }
+.content-scroll { -fx-background: #F0F4F8; -fx-background-color: #F0F4F8; -fx-border-color: transparent; }
+.content-scroll .viewport { -fx-background-color: #F0F4F8; }
 
-.mainFxmlClass {
+/* Jadwal summary card */
+.summary-card { -fx-background-color: linear-gradient(to right, #0A192F, #1B3A6B); -fx-background-radius: 16; -fx-padding: 20 24 20 24; }
+.summary-kereta { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white; }
+.summary-rute { -fx-font-size: 13px; -fx-text-fill: #8AA0C4; }
+.summary-waktu { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white; }
+.summary-stasiun { -fx-font-size: 11px; -fx-text-fill: #8AA0C4; }
+.summary-harga { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #4D8AFF; }
+.summary-harga-label { -fx-font-size: 11px; -fx-text-fill: #6E84A8; }
+.arrow-icon { -fx-icon-size: 20; -fx-icon-color: #4D8AFF; }
+.divider-v { -fx-background-color: #1B3A6B; -fx-min-width: 1; -fx-max-width: 1; }
 
-}
+/* Legenda */
+.legend-box { -fx-background-color: white; -fx-background-radius: 14; -fx-padding: 14 20 14 20; -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.07), 12, 0, 0, 3); }
+.legend-item-tersedia { -fx-background-color: #E6FAF2; -fx-background-radius: 6; -fx-border-color: #2BB673; -fx-border-radius: 6; -fx-border-width: 1; -fx-min-width: 24; -fx-max-width: 24; -fx-min-height: 24; -fx-max-height: 24; }
+.legend-item-terisi { -fx-background-color: #FFF0F0; -fx-background-radius: 6; -fx-border-color: #D64545; -fx-border-radius: 6; -fx-border-width: 1; -fx-min-width: 24; -fx-max-width: 24; -fx-min-height: 24; -fx-max-height: 24; }
+.legend-item-dipilih { -fx-background-color: #EEF3FF; -fx-background-radius: 6; -fx-border-color: #4D8AFF; -fx-border-radius: 6; -fx-border-width: 2; -fx-min-width: 24; -fx-max-width: 24; -fx-min-height: 24; -fx-max-height: 24; }
+.legend-label { -fx-font-size: 12px; -fx-text-fill: #6E84A8; }
+
+/* Seat map */
+.seat-map-card { -fx-background-color: white; -fx-background-radius: 16; -fx-padding: 24 28 24 28; -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.08), 16, 0, 0, 4); }
+.seat-map-title { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0A192F; }
+.seat-map-hint { -fx-font-size: 12px; -fx-text-fill: #9CACC4; }
+.aisle-label { -fx-font-size: 11px; -fx-text-fill: #C2CEE0; -fx-font-weight: bold; }
+
+/* Kursi buttons */
+.seat-tersedia { -fx-background-color: #E6FAF2; -fx-background-radius: 8; -fx-border-color: #2BB673; -fx-border-radius: 8; -fx-border-width: 1; -fx-min-width: 48; -fx-max-width: 48; -fx-min-height: 46; -fx-max-height: 46; -fx-cursor: hand; -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #2BB673; }
+.seat-tersedia:hover { -fx-background-color: #2BB673; -fx-text-fill: white; }
+.seat-terisi { -fx-background-color: #FFF0F0; -fx-background-radius: 8; -fx-border-color: #D64545; -fx-border-radius: 8; -fx-border-width: 1; -fx-min-width: 48; -fx-max-width: 48; -fx-min-height: 46; -fx-max-height: 46; -fx-font-size: 11px; -fx-text-fill: #D64545; }
+.seat-dipilih { -fx-background-color: #4D8AFF; -fx-background-radius: 8; -fx-border-color: #2F6AE0; -fx-border-radius: 8; -fx-border-width: 2; -fx-min-width: 48; -fx-max-width: 48; -fx-min-height: 46; -fx-max-height: 46; -fx-cursor: hand; -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: white; }
+.row-label { -fx-font-size: 11px; -fx-text-fill: #C2CEE0; -fx-min-width: 28; -fx-alignment: CENTER_RIGHT; }
+
+/* Footer bar */
+.footer-bar { -fx-background-color: white; -fx-padding: 16 28 16 28; -fx-border-color: #EDF1F7 transparent transparent transparent; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(10,25,47,0.06), 8, 0, 0, -3); }
+.selected-seat-info { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0A192F; }
+.selected-seat-hint { -fx-font-size: 12px; -fx-text-fill: #6E84A8; }
+.btn-lanjut { -fx-background-color: #4D8AFF; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 12 32 12 32; -fx-cursor: hand; -fx-border-color: transparent; }
+.btn-lanjut:hover { -fx-background-color: #2F6AE0; }
+.btn-lanjut-disabled { -fx-background-color: #DCE3EE; -fx-text-fill: #9CACC4; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 12 32 12 32; }

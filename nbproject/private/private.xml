@@ -3,52 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaKereta.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaKereta.css</file>
+            <file>file:/D:/Project/CityRailGO/src/util/DBConnection.java</file>
+            <file>file:/D:/Project/CityRailGO/src/util/DateTimeUtil.java</file>
+            <file>file:/D:/Project/CityRailGO/src/util/PricingEngine.java</file>
+            <file>file:/D:/Project/CityRailGO/src/dao/UserDAO.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/KelolaJadwal.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/KelolaJadwal.fxml</file>
             <file>file:/D:/Project/CityRailGO/src/controller/KelolaRuteController.java</file>
             <file>file:/D:/Project/CityRailGO/src/view/KelolaRute.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaRute.css</file>
-            <file>file:/D:/Project/CityRailGO/src/model/Rute.java</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/AdminController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/HomeAdmin.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/HomeAdminController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/KelolaKeretaController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaJadwal.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/KelolaJadwalController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaPromo.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/KelolaPromoController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/LaporanPenjualan.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/LaporanPenjualanController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/dao/KeretaDAO.java</file>
-            <file>file:/D:/Project/CityRailGO/src/model/Kereta.java</file>
-            <file>file:/D:/Project/CityRailGO/src/util/DBConnection.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/PilihJadwal.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/PilihJadwal.css</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/PilihJadwalController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/TiketSaya.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/TiketSaya.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/TiketSayaController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/ProfilController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/Profil.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/Profil.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/DetailJadwal.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/DetailJadwalController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/DetailJadwal.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/PilihKursi.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/PilihKursi.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/PilihKursiController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/PembayaranController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/Pembayaran.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/view/Pembayaran.css</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/LoginController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaPromo.css</file>
-            <file>file:/D:/Project/CityRailGO/src/model/Stasiun.java</file>
-            <file>file:/D:/Project/CityRailGO/src/dao/StasiunDAO.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaStasiun.css</file>
-            <file>file:/D:/Project/CityRailGO/src/view/KelolaStasiun.fxml</file>
-            <file>file:/D:/Project/CityRailGO/src/controller/KelolaStasiunController.java</file>
-            <file>file:/D:/Project/CityRailGO/src/view/Login.css</file>
+            <file>file:/D:/Project/CityRailGO/src/view/KelolaKereta.fxml</file>
+            <file>file:/D:/Project/CityRailGO/src/view/HomePenumpang.css</file>
+            <file>file:/D:/Project/CityRailGO/src/util/JarakEstimator.java</file>
+            <file>file:/D:/Project/CityRailGO/src/controller/HomePenumpangController.java</file>
+            <file>file:/D:/Project/CityRailGO/src/view/HomePenumpang.fxml</file>
         </group>
     </open-files>
 </project-private>

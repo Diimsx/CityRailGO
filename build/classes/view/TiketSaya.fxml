@@ -1,14 +1,159 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.TiketSayaController"
+            prefWidth="1280" prefHeight="720"
+            stylesheets="@TiketSaya.css"
+            styleClass="root-bg">
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TiketSayaController">
-    <stylesheets>
-        <URL value="@TiketSaya.css"/>
-    </stylesheets>
-</AnchorPane>
+    <!-- Sidebar -->
+    <left>
+        <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
+            <VBox alignment="CENTER" spacing="4" styleClass="brand-box">
+                <FontIcon iconLiteral="fas-train" iconSize="26" styleClass="brand-icon"/>
+                <Label text="CityRailGO" styleClass="brand-text"/>
+                <Label text="Portal Penumpang" styleClass="brand-subtext"/>
+            </VBox>
+            <VBox styleClass="nav-list">
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavBeranda">
+                    <FontIcon iconLiteral="fas-home" styleClass="nav-icon"/>
+                    <Label text="Beranda" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active">
+                    <FontIcon iconLiteral="fas-ticket-alt" styleClass="nav-icon-active"/>
+                    <Label text="Tiket Saya" styleClass="nav-label-active"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavProfil">
+                    <FontIcon iconLiteral="fas-user-circle" styleClass="nav-icon"/>
+                    <Label text="Profil" styleClass="nav-label"/>
+                </HBox>
+            </VBox>
+            <Region VBox.vgrow="ALWAYS"/>
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="logout-item" onMouseClicked="#handleLogout">
+                <FontIcon iconLiteral="fas-sign-out-alt" styleClass="logout-icon"/>
+                <Label text="Logout" styleClass="logout-label"/>
+            </HBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox styleClass="content-area">
+            <!-- Topbar -->
+            <HBox alignment="CENTER_LEFT" styleClass="topbar">
+                <VBox>
+                    <Label text="Tiket Saya" styleClass="page-title"/>
+                    <Label text="Riwayat pemesanan dan e-tiket Anda" styleClass="page-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER" spacing="10" styleClass="user-badge">
+                    <FontIcon fx:id="topbarIcon" iconLiteral="fas-user-circle" styleClass="nav-icon"/>
+                    <ImageView fx:id="topbarAvatar" visible="false" managed="false"/>
+                    <Label fx:id="lblNama" text="Penumpang" styleClass="user-name"/>
+                </HBox>
+            </HBox>
+
+            <VBox spacing="20" VBox.vgrow="ALWAYS">
+                <padding><Insets top="24" right="28" bottom="28" left="28"/></padding>
+
+                <!-- KPI Cards -->
+                <HBox spacing="16">
+                    <VBox styleClass="kpi-card" spacing="10" HBox.hgrow="ALWAYS">
+                        <HBox spacing="14" alignment="CENTER_LEFT">
+                            <StackPane styleClass="kpi-icon-box, kpi-icon-blue">
+                                <FontIcon iconLiteral="fas-ticket-alt" styleClass="kpi-icon, kpi-icon-clr-blue"/>
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label fx:id="lblKpiTotal" text="0" styleClass="kpi-value"/>
+                                <Label text="Total Tiket" styleClass="kpi-label"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                    <VBox styleClass="kpi-card" spacing="10" HBox.hgrow="ALWAYS">
+                        <HBox spacing="14" alignment="CENTER_LEFT">
+                            <StackPane styleClass="kpi-icon-box, kpi-icon-green">
+                                <FontIcon iconLiteral="fas-check-circle" styleClass="kpi-icon, kpi-icon-clr-green"/>
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label fx:id="lblKpiAktif" text="0" styleClass="kpi-value"/>
+                                <Label text="Tiket Aktif" styleClass="kpi-label"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                    <VBox styleClass="kpi-card" spacing="10" HBox.hgrow="ALWAYS">
+                        <HBox spacing="14" alignment="CENTER_LEFT">
+                            <StackPane styleClass="kpi-icon-box, kpi-icon-red">
+                                <FontIcon iconLiteral="fas-times-circle" styleClass="kpi-icon, kpi-icon-clr-red"/>
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label fx:id="lblKpiBatal" text="0" styleClass="kpi-value"/>
+                                <Label text="Dibatalkan" styleClass="kpi-label"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <!-- Table Card -->
+                <VBox styleClass="table-card" spacing="16" VBox.vgrow="ALWAYS">
+                    <!-- Header -->
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <FontIcon iconLiteral="fas-list" styleClass="card-title-icon"/>
+                        <Label text="Semua Tiket" styleClass="card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- Search field -->
+                        <StackPane>
+                            <FontIcon iconLiteral="fas-search" styleClass="filter-icon"/>
+                            <TextField fx:id="tfCari" promptText="Cari kode, rute, atau kereta..."
+                                       styleClass="filter-field" prefWidth="260"/>
+                        </StackPane>
+                        <Button styleClass="btn-cari" onAction="#handleNavBeranda">
+                            <graphic>
+                                <HBox alignment="CENTER" spacing="8">
+                                    <FontIcon iconLiteral="fas-plus" style="-fx-icon-size:13; -fx-icon-color:white;"/>
+                                    <Label text="Pesan Baru" style="-fx-text-fill:white; -fx-font-size:13px; -fx-font-weight:bold;"/>
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </HBox>
+
+                    <Region styleClass="divider-h"/>
+
+                    <!-- TableView -->
+                    <TableView fx:id="tblTiket" styleClass="tiket-table" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colKode"     text="Kode Tiket"  prefWidth="130"/>
+                            <TableColumn fx:id="colRute"     text="Rute"         prefWidth="220"/>
+                            <TableColumn fx:id="colKereta"   text="Kereta"       prefWidth="150"/>
+                            <TableColumn fx:id="colTanggal"  text="Tanggal"      prefWidth="160"/>
+                            <TableColumn fx:id="colKursi"    text="Kursi"        prefWidth="80"/>
+                            <TableColumn fx:id="colHarga"    text="Harga"        prefWidth="120"/>
+                            <TableColumn fx:id="colStatus"   text="Status"       prefWidth="100"/>
+                            <TableColumn fx:id="colAksi"     text="Aksi"         prefWidth="180"/>
+                        </columns>
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="16" style="-fx-padding: 50 0 50 0;">
+                                <FontIcon iconLiteral="fas-ticket-alt" styleClass="empty-icon"/>
+                                <Label text="Belum Ada Tiket" styleClass="empty-title"/>
+                                <Label text="Anda belum pernah memesan tiket. Klik 'Pesan Baru' untuk mulai!" styleClass="empty-subtitle" wrapText="true"/>
+                            </VBox>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

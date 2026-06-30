@@ -1,14 +1,217 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.PembayaranController"
+            prefWidth="1280" prefHeight="720"
+            stylesheets="@Pembayaran.css"
+            styleClass="root-bg">
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PembayaranController">
-    <stylesheets>
-        <URL value="@Pembayaran.css"/>
-    </stylesheets>
-</AnchorPane>
+    <top>
+        <VBox>
+            <!-- Topbar -->
+            <HBox alignment="CENTER_LEFT" styleClass="topbar">
+                <VBox>
+                    <Label text="Pembayaran" styleClass="page-title"/>
+                    <Label text="Isi data diri dan pilih metode pembayaran" styleClass="page-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                
+                <!-- User Badge -->
+                <HBox alignment="CENTER" spacing="10" styleClass="user-badge" style="-fx-padding: 0 20 0 0; -fx-background-color: transparent;">
+                    <FontIcon fx:id="topbarIcon" iconLiteral="fas-user-circle" styleClass="nav-icon"/>
+                    <ImageView fx:id="topbarAvatar" visible="false" managed="false"/>
+                    <Label fx:id="lblNama" text="Penumpang" styleClass="user-name"/>
+                </HBox>
+
+                <Button styleClass="btn-back" onAction="#handleKembali">
+                    <graphic>
+                        <HBox alignment="CENTER" spacing="8">
+                            <FontIcon iconLiteral="fas-arrow-left" styleClass="btn-back-icon"/>
+                            <Label text="Kembali" style="-fx-text-fill:#0A192F; -fx-font-size:13px;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <!-- Step Indicator -->
+            <HBox alignment="CENTER" spacing="8" styleClass="step-bar">
+                <StackPane styleClass="step-done">
+                    <FontIcon iconLiteral="fas-check" style="-fx-icon-size:12; -fx-icon-color:white;"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Cari Jadwal" styleClass="step-label"/></VBox>
+                <Region styleClass="step-line-done"/>
+                <StackPane styleClass="step-done">
+                    <FontIcon iconLiteral="fas-check" style="-fx-icon-size:12; -fx-icon-color:white;"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Pilih Kursi" styleClass="step-label"/></VBox>
+                <Region styleClass="step-line-done"/>
+                <StackPane styleClass="step-active">
+                    <Label text="3"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Pembayaran" styleClass="step-label-active"/></VBox>
+                <Region styleClass="step-line"/>
+                <StackPane styleClass="step-inactive">
+                    <Label text="4"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Selesai" styleClass="step-label"/></VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane styleClass="content-scroll"
+                    fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+            <HBox spacing="24">
+                <padding><Insets top="28" right="28" bottom="28" left="28"/></padding>
+
+                <!-- ===== KIRI: Ringkasan Pemesanan ===== -->
+                <VBox spacing="16" prefWidth="420" minWidth="360">
+
+                    <!-- Ringkasan Jadwal -->
+                    <VBox styleClass="summary-card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-receipt" styleClass="card-icon"/>
+                            <Label text="Ringkasan Pemesanan" styleClass="card-title"/>
+                        </HBox>
+                        <Region styleClass="divider-h"/>
+
+                        <!-- Detail rows -->
+                        <HBox><Label text="Kereta" styleClass="detail-label" prefWidth="140"/>
+                            <Label fx:id="lblSumKereta" text="—" styleClass="detail-value"/></HBox>
+                        <HBox><Label text="Kelas" styleClass="detail-label" prefWidth="140"/>
+                            <Label fx:id="lblSumKelas" text="—" styleClass="detail-value"/></HBox>
+                        <HBox><Label text="Rute" styleClass="detail-label" prefWidth="140"/>
+                            <Label fx:id="lblSumRute" text="—" styleClass="detail-value" wrapText="true"/></HBox>
+                        <HBox><Label text="Tanggal" styleClass="detail-label" prefWidth="140"/>
+                            <Label fx:id="lblSumTanggal" text="—" styleClass="detail-value"/></HBox>
+                        <HBox><Label text="Waktu" styleClass="detail-label" prefWidth="140"/>
+                            <Label fx:id="lblSumWaktu" text="—" styleClass="detail-value"/></HBox>
+                        <HBox><Label text="Nomor Kursi" styleClass="detail-label" prefWidth="140"/>
+                            <Label fx:id="lblSumKursi" text="—" styleClass="detail-value"/></HBox>
+
+                        <Region styleClass="divider-h"/>
+
+                        <!-- Breakdown Harga -->
+                        <VBox spacing="8" styleClass="harga-row">
+                            <HBox>
+                                <Label text="Harga Tiket" styleClass="detail-label" prefWidth="160"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="lblSumHargaBase" text="—" styleClass="detail-value"/>
+                            </HBox>
+                            <HBox>
+                                <Label text="Biaya Admin" styleClass="detail-label" prefWidth="160"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Rp 0" styleClass="detail-value"/>
+                            </HBox>
+                            <Region styleClass="divider-h"/>
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Total Pembayaran" styleClass="harga-total-label" prefWidth="160"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="lblSumTotal" text="—" styleClass="harga-total-value"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ===== KANAN: Form Data Diri + Metode Bayar ===== -->
+                <VBox spacing="16" HBox.hgrow="ALWAYS">
+
+                    <!-- Data Diri -->
+                    <VBox styleClass="form-card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-user" styleClass="card-icon"/>
+                            <Label text="Data Penumpang" styleClass="card-title"/>
+                        </HBox>
+                        <Region styleClass="divider-h"/>
+
+                        <VBox spacing="6">
+                            <Label text="Nama Lengkap" styleClass="form-label"/>
+                            <TextField fx:id="tfNama" promptText="Masukkan nama lengkap sesuai KTP" styleClass="form-field"/>
+                        </VBox>
+                        <VBox spacing="6">
+                            <Label text="NIK / Nomor Paspor" styleClass="form-label"/>
+                            <TextField fx:id="tfNik" promptText="16 digit NIK atau nomor paspor" styleClass="form-field"/>
+                            <Label text="Sesuaikan dengan identitas resmi yang berlaku" styleClass="form-hint"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Metode Pembayaran -->
+                    <VBox styleClass="form-card" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-credit-card" styleClass="card-icon"/>
+                            <Label text="Metode Pembayaran" styleClass="card-title"/>
+                        </HBox>
+                        <Region styleClass="divider-h"/>
+
+                        <HBox spacing="12">
+                            <Button fx:id="btnTransfer" styleClass="btn-metode" onAction="#handlePilihMetode"
+                                    userData="Transfer Bank" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <graphic>
+                                    <VBox alignment="CENTER" spacing="6">
+                                        <FontIcon iconLiteral="fas-university" styleClass="metode-icon"
+                                                  style="-fx-icon-color:#4D8AFF;"/>
+                                        <Label text="Transfer Bank" style="-fx-font-size:12px; -fx-font-weight:bold;"/>
+                                    </VBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="btnQris" styleClass="btn-metode" onAction="#handlePilihMetode"
+                                    userData="QRIS" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <graphic>
+                                    <VBox alignment="CENTER" spacing="6">
+                                        <FontIcon iconLiteral="fas-qrcode" styleClass="metode-icon"
+                                                  style="-fx-icon-color:#4D8AFF;"/>
+                                        <Label text="QRIS" style="-fx-font-size:12px; -fx-font-weight:bold;"/>
+                                    </VBox>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="btnTunai" styleClass="btn-metode" onAction="#handlePilihMetode"
+                                    userData="Tunai" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <graphic>
+                                    <VBox alignment="CENTER" spacing="6">
+                                        <FontIcon iconLiteral="fas-money-bill-wave" styleClass="metode-icon"
+                                                  style="-fx-icon-color:#4D8AFF;"/>
+                                        <Label text="Tunai" style="-fx-font-size:12px; -fx-font-weight:bold;"/>
+                                    </VBox>
+                                </graphic>
+                            </Button>
+                        </HBox>
+
+                        <Label fx:id="lblMetodeDipilih" text="Pilih metode pembayaran di atas"
+                               styleClass="form-hint" wrapText="true"/>
+                    </VBox>
+
+                    <!-- Error label -->
+                    <Label fx:id="lblError" text="" styleClass="error-label"
+                           visible="false" managed="false" wrapText="true"/>
+
+                    <!-- Tombol Konfirmasi -->
+                    <Button styleClass="btn-konfirmasi" maxWidth="Infinity"
+                            onAction="#handleKonfirmasiPembayaran">
+                        <graphic>
+                            <HBox alignment="CENTER" spacing="12">
+                                <FontIcon iconLiteral="fas-check-circle" styleClass="btn-konfirmasi-icon"/>
+                                <Label text="Konfirmasi &amp; Bayar"
+                                       style="-fx-text-fill:white; -fx-font-size:15px; -fx-font-weight:bold;"/>
+                            </HBox>
+                        </graphic>
+                    </Button>
+
+                </VBox>
+            </HBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

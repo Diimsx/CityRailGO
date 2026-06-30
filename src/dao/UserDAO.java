@@ -164,6 +164,56 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Update data diri penumpang: nama, email, telp, nik, jenis kelamin.
+     * NIK dan telp disampaikan terpisah karena tidak ada setter di model.
+     */
+    public boolean update(Penumpang p, String nik, String telp) {
+        Connection conn = DBConnection.getInstance();
+        try {
+            conn.setAutoCommit(false);
+            // Update tabel users
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE users SET email=?, nama_lengkap=?, no_telepon=? WHERE id=?")) {
+                ps.setString(1, p.getEmail());
+                ps.setString(2, p.getNamaLengkap());
+                ps.setString(3, telp);
+                ps.setInt(4, p.getId());
+                ps.executeUpdate();
+            }
+            // Update tabel penumpang
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE penumpang SET nik=?, jenis_kelamin=? WHERE id=?")) {
+                ps.setString(1, nik);
+                ps.setString(2, p.getJenisKelamin());
+                ps.setInt(3, p.getId());
+                ps.executeUpdate();
+            }
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            rollback(conn);
+            System.out.println("UserDAO.update(Penumpang): " + e.getMessage());
+            return false;
+        } finally {
+            resetAutoCommit(conn);
+        }
+    }
+
+    /** Ganti password user. */
+    public boolean updatePassword(model.User user, String passwordBaru) {
+        Connection conn = DBConnection.getInstance();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "UPDATE users SET password=? WHERE id=?")) {
+            ps.setString(1, passwordBaru);
+            ps.setInt(2, user.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("UserDAO.updatePassword: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean delete(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
         Connection conn = DBConnection.getInstance();
