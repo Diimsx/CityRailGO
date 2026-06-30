@@ -403,12 +403,17 @@ public class KelolaKeretaController implements Initializable {
     private void handleNavKereta() {
         // sudah berada di halaman Kelola Kereta
     }
-
+    
     @FXML
     private void handleNavRute() {
         SceneManager.switchScene("KelolaRute.fxml");
     }
 
+    @FXML
+    private void handleNavStasiun() {
+        SceneManager.switchScene("KelolaStasiun.fxml");
+    }
+    
     @FXML
     private void handleNavJadwal() {
         SceneManager.switchScene("KelolaJadwal.fxml");

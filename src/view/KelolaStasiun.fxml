@@ -14,12 +14,11 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.KelolaRuteController"
+            fx:controller="controller.KelolaStasiunController"
             prefWidth="1280" prefHeight="720"
-            stylesheets="@KelolaRute.css"
+            stylesheets="@KelolaStasiun.css"
             styleClass="root-bg">
 
-    <!-- ===================== SIDEBAR ===================== -->
     <left>
         <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
 
@@ -38,9 +37,13 @@
                     <FontIcon iconLiteral="fas-train" styleClass="nav-icon"/>
                     <Label text="Kelola Kereta" styleClass="nav-label"/>
                 </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active" onMouseClicked="#handleNavRute">
-                    <FontIcon iconLiteral="fas-route" styleClass="nav-icon-active"/>
-                    <Label text="Kelola Rute" styleClass="nav-label-active"/>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavRute">
+                    <FontIcon iconLiteral="fas-route" styleClass="nav-icon"/>
+                    <Label text="Kelola Rute" styleClass="nav-label"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active" onMouseClicked="#handleNavStasiun">
+                    <FontIcon iconLiteral="fas-map-marker-alt" styleClass="nav-icon-active"/>
+                    <Label text="Kelola Stasiun" styleClass="nav-label-active"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavJadwal">
                     <FontIcon iconLiteral="fas-calendar-alt" styleClass="nav-icon"/>
@@ -75,8 +78,8 @@
                 <!-- Topbar -->
                 <HBox alignment="CENTER_LEFT" styleClass="topbar">
                     <VBox>
-                        <Label text="Kelola Rute" styleClass="page-title"/>
-                        <Label text="Manajemen data rute perjalanan CityRailGO" styleClass="page-subtitle"/>
+                        <Label text="Kelola Stasiun" styleClass="page-title"/>
+                        <Label text="Manajemen master data stasiun/pemberhentian" styleClass="page-subtitle"/>
                     </VBox>
                     <Region HBox.hgrow="ALWAYS"/>
                     <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
@@ -86,29 +89,28 @@
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="toolbar">
                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-box">
                         <FontIcon iconLiteral="fas-search" styleClass="search-icon"/>
-                        <TextField fx:id="tfSearch" promptText="Cari stasiun asal atau tujuan..." styleClass="search-field"/>
+                        <TextField fx:id="tfSearch" promptText="Cari kode atau nama stasiun..." styleClass="search-field"/>
                     </HBox>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnTambah" styleClass="btn-primary" onAction="#handleTambahRute">
+                    <Button fx:id="btnTambah" styleClass="btn-primary" onAction="#handleTambahStasiun">
                         <graphic>
                             <HBox alignment="CENTER" spacing="8">
                                 <FontIcon iconLiteral="fas-plus" styleClass="btn-icon"/>
-                                <Label text="Tambah Rute" styleClass="btn-label"/>
+                                <Label text="Tambah Stasiun" styleClass="btn-label"/>
                             </HBox>
                         </graphic>
                     </Button>
                 </HBox>
 
-                <!-- Tabel rute -->
+                <!-- Tabel stasiun -->
                 <VBox spacing="14" styleClass="table-card" VBox.vgrow="ALWAYS">
-                    <Label text="Daftar Rute" styleClass="card-title"/>
-                    <TableView fx:id="tblRute" styleClass="rute-table" VBox.vgrow="ALWAYS">
+                    <Label text="Daftar Stasiun" styleClass="card-title"/>
+                    <TableView fx:id="tblStasiun" styleClass="stasiun-table" VBox.vgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="colNo" text="No" prefWidth="50"/>
-                            <TableColumn fx:id="colStasiunAsal" text="Stasiun Asal" prefWidth="260"/>
-                            <TableColumn fx:id="colStasiunTujuan" text="Stasiun Tujuan" prefWidth="260"/>
-                            <TableColumn fx:id="colJarak" text="Jarak" prefWidth="160"/>
-                            <TableColumn fx:id="colEstimasi" text="Estimasi" prefWidth="170"/>
+                            <TableColumn fx:id="colKode" text="Kode" prefWidth="80"/>
+                            <TableColumn fx:id="colNama" text="Nama Stasiun" prefWidth="300"/>
+                            <TableColumn fx:id="colKota" text="Kota" prefWidth="220"/>
                             <TableColumn fx:id="colAksi" text="Aksi" prefWidth="120"/>
                         </columns>
                     </TableView>
@@ -118,42 +120,37 @@
 
             <!-- ===================== MODAL TAMBAH/EDIT ===================== -->
             <StackPane fx:id="modalOverlay" styleClass="modal-backdrop" alignment="CENTER" visible="false" managed="false">
-                <VBox styleClass="modal-card" maxWidth="420" maxHeight="560" spacing="20">
+                <VBox styleClass="modal-card" maxWidth="420" maxHeight="480" spacing="20">
                     <padding>
                         <Insets top="26" right="28" bottom="26" left="28"/>
                     </padding>
 
                     <HBox alignment="CENTER_LEFT">
-                        <Label fx:id="lblModalTitle" text="Tambah Rute" styleClass="modal-title"/>
+                        <Label fx:id="lblModalTitle" text="Tambah Stasiun" styleClass="modal-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
                         <FontIcon iconLiteral="fas-times" styleClass="modal-close-icon" onMouseClicked="#handleTutupModal"/>
                     </HBox>
 
                     <VBox spacing="6">
-                        <Label text="Stasiun Asal" styleClass="form-label"/>
-                        <TextField fx:id="tfStasiunAsal" promptText="Contoh: Jakarta" styleClass="form-field"/>
+                        <Label text="Kode Stasiun" styleClass="form-label"/>
+                        <TextField fx:id="tfKode" promptText="Contoh: YK, GMR, SUB" styleClass="form-field"/>
                     </VBox>
 
                     <VBox spacing="6">
-                        <Label text="Stasiun Tujuan" styleClass="form-label"/>
-                        <TextField fx:id="tfStasiunTujuan" promptText="Contoh: Surabaya" styleClass="form-field"/>
+                        <Label text="Nama Stasiun" styleClass="form-label"/>
+                        <TextField fx:id="tfNama" promptText="Contoh: Yogyakarta, Gambir" styleClass="form-field"/>
                     </VBox>
 
                     <VBox spacing="6">
-                        <Label text="Jarak (km)" styleClass="form-label"/>
-                        <TextField fx:id="tfJarakKm" promptText="Contoh: 725" styleClass="form-field"/>
-                    </VBox>
-
-                    <VBox spacing="6">
-                        <Label text="Estimasi Waktu (menit)" styleClass="form-label"/>
-                        <TextField fx:id="tfEstimasiMenit" promptText="Contoh: 480" styleClass="form-field"/>
+                        <Label text="Kota" styleClass="form-label"/>
+                        <TextField fx:id="tfKota" promptText="Contoh: Yogyakarta, Jakarta" styleClass="form-field"/>
                     </VBox>
 
                     <Label fx:id="lblModalError" styleClass="modal-error" wrapText="true" visible="false" managed="false"/>
 
                     <HBox spacing="12" alignment="CENTER_RIGHT">
                         <Button text="Batal" styleClass="btn-secondary" onAction="#handleTutupModal"/>
-                        <Button fx:id="btnSimpan" text="Simpan" styleClass="btn-primary" onAction="#handleSimpanRute"/>
+                        <Button fx:id="btnSimpan" text="Simpan" styleClass="btn-primary" onAction="#handleSimpanStasiun"/>
                     </HBox>
                 </VBox>
             </StackPane>

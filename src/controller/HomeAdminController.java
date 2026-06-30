@@ -110,6 +110,11 @@ public class HomeAdminController implements Initializable {
     }
 
     @FXML
+    private void handleNavStasiun() {
+        SceneManager.switchScene("KelolaStasiun.fxml");
+    }
+    
+    @FXML
     private void handleNavJadwal() {
         SceneManager.switchScene("KelolaJadwal.fxml");
     }

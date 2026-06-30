@@ -401,12 +401,17 @@ public class KelolaJadwalController implements Initializable {
     private void handleNavKereta() {
         SceneManager.switchScene("KelolaKereta.fxml");
     }
-
+    
     @FXML
     private void handleNavRute() {
         SceneManager.switchScene("KelolaRute.fxml");
     }
 
+    @FXML
+    private void handleNavStasiun() {
+        SceneManager.switchScene("KelolaStasiun.fxml");
+    }
+    
     @FXML
     private void handleNavJadwal() {
     }

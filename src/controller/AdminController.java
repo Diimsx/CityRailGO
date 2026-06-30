@@ -4,16 +4,20 @@ import dao.JadwalDAO;
 import dao.KeretaDAO;
 import dao.KursiDAO;
 import dao.PembayaranDAO;
+import dao.PerhentianDAO;
 import dao.PromoDAO;
 import dao.RuteDAO;
+import dao.StasiunDAO;
 import dao.TiketDAO;
 import model.Jadwal;
 import model.JenisKelas;
 import model.Kereta;
 import model.Kursi;
 import model.Pembayaran;
+import model.Perhentian;
 import model.Promo;
 import model.Rute;
+import model.Stasiun;
 import model.Tiket;
 
 import java.util.List;
@@ -22,6 +26,8 @@ public class AdminController {
 
     private KeretaDAO keretaDAO;
     private RuteDAO ruteDAO;
+    private StasiunDAO stasiunDAO;
+    private PerhentianDAO perhentianDAO;
     private JadwalDAO jadwalDAO;
     private PembayaranDAO pembayaranDAO;
     private TiketDAO tiketDAO;
@@ -31,6 +37,8 @@ public class AdminController {
     public AdminController() {
         this.keretaDAO = new KeretaDAO();
         this.ruteDAO = new RuteDAO();
+        this.stasiunDAO = new StasiunDAO();
+        this.perhentianDAO = new PerhentianDAO();
         this.jadwalDAO = new JadwalDAO();
         this.pembayaranDAO = new PembayaranDAO();
         this.tiketDAO = new TiketDAO();
@@ -50,6 +58,55 @@ public class AdminController {
         return keretaDAO.delete(id);
     }
 
+    // ===== Validation methods =====
+    public String validateTambahKereta(Kereta kereta) {
+        if (kereta.getNama().trim().isEmpty()) {
+            return "Nama kereta tidak boleh kosong.";
+        }
+        if (kereta.getNomorKereta().trim().isEmpty()) {
+            return "Nomor kereta tidak boleh kosong.";
+        }
+        if (kereta.getKapasitasTotal() <= 0) {
+            return "Kapasitas total harus lebih dari 0.";
+        }
+        if (keretaDAO.nomorKeretaExists(kereta.getNomorKereta())) {
+            return "Nomor kereta '" + kereta.getNomorKereta() + "' sudah terdaftar.";
+        }
+        if (kereta.getJenisKelasIds() == null || kereta.getJenisKelasIds().isEmpty()) {
+            return "Pilih minimal satu jenis kelas untuk kereta ini.";
+        }
+        return null;  // Valid
+    }
+
+    public String validateEditKereta(Kereta kereta) {
+        if (kereta.getNama().trim().isEmpty()) {
+            return "Nama kereta tidak boleh kosong.";
+        }
+        if (kereta.getNomorKereta().trim().isEmpty()) {
+            return "Nomor kereta tidak boleh kosong.";
+        }
+        if (kereta.getKapasitasTotal() <= 0) {
+            return "Kapasitas total harus lebih dari 0.";
+        }
+        if (keretaDAO.nomorKeretaExistsExcept(kereta.getNomorKereta(), kereta.getId())) {
+            return "Nomor kereta '" + kereta.getNomorKereta() + "' sudah digunakan kereta lain.";
+        }
+        if (kereta.getJenisKelasIds() == null || kereta.getJenisKelasIds().isEmpty()) {
+            return "Pilih minimal satu jenis kelas untuk kereta ini.";
+        }
+        return null;  // Valid
+    }
+
+    public String validateHapusKereta(int keretaId) {
+        if (keretaDAO.hasActiveSchedules(keretaId)) {
+            String scheduleInfo = keretaDAO.getActiveSchedulesInfo(keretaId);
+            return "Kereta ini masih memiliki jadwal aktif:\n\n" + scheduleInfo +
+                    "\n\nSilakan ubah status kereta menjadi 'NON-AKTIF' terlebih dahulu,\n" +
+                    "atau hapus/tunda jadwal-jadwal di atas.";
+        }
+        return null;  // Can delete
+    }
+
     public boolean tambahRute(Rute rute) {
         return ruteDAO.save(rute);
     }
@@ -60,6 +117,18 @@ public class AdminController {
 
     public boolean hapusRute(int id) {
         return ruteDAO.delete(id);
+    }
+
+    public List<Perhentian> getPerhentianByRute(int ruteId) {
+        return perhentianDAO.findByRuteId(ruteId);
+    }
+
+    public boolean tambahPerhentian(Perhentian perhentian) {
+        return perhentianDAO.save(perhentian);
+    }
+
+    public boolean hapusPerhentian(int id) {
+        return perhentianDAO.delete(id);
     }
 
     public boolean tambahJadwal(Jadwal jadwal) {
