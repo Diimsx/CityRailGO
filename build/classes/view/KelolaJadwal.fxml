@@ -85,7 +85,7 @@
                         <Label text="Manajemen jadwal keberangkatan CityRailGO" styleClass="page-subtitle"/>
                     </VBox>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
+                    <Label fx:id="lblAdminName" text="Halo, Admin"/>
                 </HBox>
 
                 <!-- Toolbar: search + tambah -->

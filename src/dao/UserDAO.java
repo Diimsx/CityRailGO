@@ -68,9 +68,16 @@ public class UserDAO {
             try (PreparedStatement ps = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, user.getUsername());
                 ps.setString(2, user.getPassword());
-                ps.setString(3, user.getEmail());
-                ps.setString(4, user.getNamaLengkap());
-                ps.setString(5, user.getNoTelepon());
+                // Admin tidak memerlukan email / nama_lengkap / no_telepon
+                if (user instanceof Admin) {
+                    ps.setNull(3, Types.VARCHAR);
+                    ps.setNull(4, Types.VARCHAR);
+                    ps.setNull(5, Types.VARCHAR);
+                } else {
+                    ps.setString(3, user.getEmail());
+                    ps.setString(4, user.getNamaLengkap());
+                    ps.setString(5, user.getNoTelepon());
+                }
                 ps.executeUpdate();
 
                 try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -196,8 +203,12 @@ public class UserDAO {
         User user;
 
         if (rs.getString("level_akses") != null) {
-            String levelAkses = rs.getString("level_akses");
-            user = new Admin(username, password, email, namaLengkap, noTelepon, levelAkses);
+            // Admin: hanya butuh username + password + level_akses
+            user = new Admin(
+                username,
+                password,
+                rs.getString("level_akses")
+            );
 
         } else if (rs.getString("nik") != null) {
             String nik = rs.getString("nik");
