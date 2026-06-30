@@ -414,3 +414,58 @@
     -fx-text-fill: #9AAAC4;
     -fx-font-style: italic;
 }
+/* ===== Auto-Calc Panel (Jarak & Estimasi otomatis) ===== */
+.auto-calc-panel {
+    -fx-background-color: #F0F7FF;
+    -fx-background-radius: 10;
+    -fx-border-color: #C8DEFF;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 12 14 12 14;
+}
+
+.auto-calc-icon {
+    -fx-icon-size: 14;
+    -fx-icon-color: #2979FF;
+}
+
+.auto-calc-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A192F;
+}
+
+.auto-calc-badge {
+    -fx-background-color: #2979FF;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+}
+
+.auto-calc-field {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #C8DEFF;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 8 12 8 12;
+}
+
+.auto-calc-field-icon {
+    -fx-icon-size: 13;
+    -fx-icon-color: #6E84A8;
+}
+
+.auto-calc-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2979FF;
+}
+
+.auto-calc-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9AAAC4;
+    -fx-font-style: italic;
+}

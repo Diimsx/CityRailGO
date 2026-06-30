@@ -162,17 +162,33 @@
                                 </VBox>
                             </HBox>
 
-                            <!-- Jarak & Estimasi -->
-                            <HBox spacing="12">
-                                <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Jarak Total (km)" styleClass="form-label"/>
-                                    <TextField fx:id="tfJarakKm" promptText="Contoh: 725" styleClass="form-field"/>
-                                </VBox>
-                                <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Estimasi Waktu (menit)" styleClass="form-label"/>
-                                    <TextField fx:id="tfEstimasiMenit" promptText="Contoh: 480" styleClass="form-field"/>
-                                </VBox>
-                            </HBox>
+                            <!-- Jarak & Estimasi - AUTO-GENERATE -->
+                            <VBox spacing="8" styleClass="auto-calc-panel">
+                                <HBox alignment="CENTER_LEFT" spacing="8">
+                                    <FontIcon iconLiteral="fas-calculator" styleClass="auto-calc-icon"/>
+                                    <Label text="Jarak &amp; Estimasi Waktu" styleClass="auto-calc-title"/>
+                                    <Label text="(otomatis)" styleClass="auto-calc-badge"/>
+                                </HBox>
+                                <HBox spacing="12">
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label text="Jarak Total" styleClass="form-label"/>
+                                        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="auto-calc-field">
+                                            <FontIcon iconLiteral="fas-road" styleClass="auto-calc-field-icon"/>
+                                            <Label fx:id="lblJarakKm" text="-- km" styleClass="auto-calc-value"/>
+                                        </HBox>
+                                        <TextField fx:id="tfJarakKm" visible="false" managed="false"/>
+                                    </VBox>
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label text="Estimasi Waktu" styleClass="form-label"/>
+                                        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="auto-calc-field">
+                                            <FontIcon iconLiteral="fas-clock" styleClass="auto-calc-field-icon"/>
+                                            <Label fx:id="lblEstimasiMenit" text="-- jam" styleClass="auto-calc-value"/>
+                                        </HBox>
+                                        <TextField fx:id="tfEstimasiMenit" visible="false" managed="false"/>
+                                    </VBox>
+                                </HBox>
+                                <Label fx:id="lblAutoCalcHint" text="Pilih stasiun asal dan tujuan untuk menghitung otomatis." styleClass="auto-calc-hint" wrapText="true"/>
+                            </VBox>
 
                             <!-- Section Stasiun Pemberhentian -->
                             <VBox spacing="10">

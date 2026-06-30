@@ -30,6 +30,7 @@ public class SceneManager {
             primaryStage.centerOnScreen();
         } catch (IOException e) {
             System.out.println("Gagal memuat scene " + fxmlPath + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -45,6 +46,7 @@ public class SceneManager {
             return loader.getController();
         } catch (IOException e) {
             System.out.println("Gagal memuat scene " + fxmlPath + ": " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }

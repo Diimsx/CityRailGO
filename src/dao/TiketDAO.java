@@ -27,7 +27,7 @@ public class TiketDAO {
             "u.id AS penumpang_id, u.username, u.password, u.email, u.nama_lengkap, u.no_telepon, " +
             "p.nik, p.tgl_lahir AS penumpang_tgl_lahir, p.jenis_kelamin AS penumpang_jenis_kelamin, " +
             "j.id AS jadwal_id, j.waktu_berangkat, j.waktu_tiba, j.status AS jadwal_status, " +
-            "k.id AS kereta_id, k.nama AS kereta_nama, k.nomor_kereta, k.jenis AS kereta_jenis, k.kapasitas_total, " +
+            "k.id AS kereta_id, k.nama AS kereta_nama, k.nomor_kereta, k.kapasitas_total, " +
             "r.id AS rute_id, r.stasiun_asal, r.stasiun_tujuan, r.jarak_km, r.estimasi_menit, " +
             "jk.id AS jenis_kelas_id, jk.nama_kelas, jk.harga_per_km, jk.fasilitas, " +
             "ku.id AS kursi_id, ku.nomor_kursi, ku.status AS kursi_status " +

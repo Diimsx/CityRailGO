@@ -27,6 +27,7 @@ import javafx.scene.layout.VBox;
 import model.Rute;
 import model.Stasiun;
 import org.kordamp.ikonli.javafx.FontIcon;
+import util.JarakEstimator;
 import util.SceneManager;
 import util.SessionManager;
 
@@ -57,8 +58,13 @@ public class KelolaRuteController implements Initializable {
     @FXML private TextField   tfNamaRute;
     @FXML private ComboBox<Stasiun> cbStasiunAsal;
     @FXML private ComboBox<Stasiun> cbStasiunTujuan;
+    // Hidden fields (diisi otomatis)
     @FXML private TextField   tfJarakKm;
     @FXML private TextField   tfEstimasiMenit;
+    // Label auto-calc display
+    @FXML private Label       lblJarakKm;
+    @FXML private Label       lblEstimasiMenit;
+    @FXML private Label       lblAutoCalcHint;
     @FXML private VBox        vboxStops;
     @FXML private Label       lblModalError;
     @FXML private Button      btnSimpan;
@@ -79,11 +85,15 @@ public class KelolaRuteController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        lblAdminName.setText("Halo, " + SessionManager.getInstance().getCurrentUser().getNamaLengkap());
+        lblAdminName.setText("Halo, " + SessionManager.getInstance().getCurrentUser().getUsername());
 
         daftarStasiun = FXCollections.observableArrayList(stasiunDAO.findAll());
         setupComboStasiun(cbStasiunAsal);
         setupComboStasiun(cbStasiunTujuan);
+
+        // Auto-kalkulasi saat stasiun asal/tujuan berubah
+        cbStasiunAsal.valueProperty().addListener((obs, o, n)   -> perbaruiAutoCalc());
+        cbStasiunTujuan.valueProperty().addListener((obs, o, n) -> perbaruiAutoCalc());
 
         setupTabel();
         muatDataRute();
@@ -203,16 +213,17 @@ public class KelolaRuteController implements Initializable {
         btnSimpan.setText("Perbarui");
 
         tfNamaRute.setText(rute.getNamaRute());
-        cbStasiunAsal.setValue(cariStasiunById(rute.getStasiunAsalObj()));
-        cbStasiunTujuan.setValue(cariStasiunById(rute.getStasiunTujuanObj()));
-        tfJarakKm.setText(String.valueOf(rute.getJarakKm()));
-        tfEstimasiMenit.setText(String.valueOf(rute.getEstimasiMenit()));
 
-        // Load existing stops ke form
+        // Load stops dulu sebelum set ComboBox
+        // agar listener auto-calc sudah punya stops saat dipicu
         vboxStops.getChildren().clear();
         for (Stasiun stop : rute.getStasiunPemberhentian()) {
             tambahBarisStop(stop);
         }
+
+        // Set ComboBox â€” memicu perbaruiAutoCalc() via listener
+        cbStasiunAsal.setValue(cariStasiunById(rute.getStasiunAsalObj()));
+        cbStasiunTujuan.setValue(cariStasiunById(rute.getStasiunTujuanObj()));
 
         sembunyikanError();
         tampilkanModal();
@@ -245,8 +256,7 @@ public class KelolaRuteController implements Initializable {
         String namaRute      = tfNamaRute.getText().trim();
         Stasiun stasiunAsal  = cbStasiunAsal.getValue();
         Stasiun stasiunTujuan = cbStasiunTujuan.getValue();
-        String teksJarak     = tfJarakKm.getText().trim();
-        String teksEstimasi  = tfEstimasiMenit.getText().trim();
+        // Tidak lagi baca teksJarak/teksEstimasi langsung — sudah di hidden field
 
         // --- Validasi field wajib ---
         if (namaRute.isEmpty()) {
@@ -266,20 +276,19 @@ public class KelolaRuteController implements Initializable {
             return;
         }
 
+        // Jarak dan estimasi diisi otomatis — ambil dari hidden TextField
         double jarakKm;
-        try {
-            jarakKm = Double.parseDouble(teksJarak);
-            if (jarakKm <= 0) { tampilkanError("Jarak harus berupa angka positif."); return; }
-        } catch (NumberFormatException e) {
-            tampilkanError("Jarak harus berupa angka."); return;
-        }
-
         int estimasiMenit;
         try {
-            estimasiMenit = Integer.parseInt(teksEstimasi);
-            if (estimasiMenit <= 0) { tampilkanError("Estimasi waktu harus berupa angka positif."); return; }
+            jarakKm = Double.parseDouble(tfJarakKm.getText().trim());
+            estimasiMenit = Integer.parseInt(tfEstimasiMenit.getText().trim());
         } catch (NumberFormatException e) {
-            tampilkanError("Estimasi waktu harus berupa angka (dalam menit)."); return;
+            tampilkanError("Jarak/estimasi belum terhitung. Pastikan stasiun asal dan tujuan sudah dipilih.");
+            return;
+        }
+        if (jarakKm <= 0 || estimasiMenit <= 0) {
+            tampilkanError("Jarak/estimasi tidak valid. Pastikan stasiun asal dan tujuan sudah dipilih.");
+            return;
         }
 
         // --- Kumpulkan stops dari vboxStops ---
@@ -358,8 +367,12 @@ public class KelolaRuteController implements Initializable {
 
         btnHapus.setOnAction(e -> {
             vboxStops.getChildren().remove(baris);
-            renumberStops(); // update badge urutan setelah hapus
+            renumberStops();
+            perbaruiAutoCalc(); // recalc setelah stop dihapus
         });
+
+        // Auto-calc saat pilihan stop berubah
+        cbStop.valueProperty().addListener((obs, o, n) -> perbaruiAutoCalc());
 
         vboxStops.getChildren().add(baris);
     }
@@ -442,7 +455,71 @@ public class KelolaRuteController implements Initializable {
         tfJarakKm.clear();
         tfEstimasiMenit.clear();
         vboxStops.getChildren().clear();
+        resetAutoCalcDisplay();
         sembunyikanError();
+    }
+
+    // =========================================================
+    // AUTO-KALKULASI JARAK & ESTIMASI
+    // =========================================================
+
+    /**
+     * Dipanggil setiap kali stasiun asal, tujuan, atau transit berubah.
+     * Menghitung ulang jarak total dan estimasi waktu via JarakEstimator
+     * lalu mengisi lblJarakKm, lblEstimasiMenit, dan hidden tfJarakKm/tfEstimasiMenit.
+     */
+    @SuppressWarnings("unchecked")
+    private void perbaruiAutoCalc() {
+        Stasiun asal   = cbStasiunAsal.getValue();
+        Stasiun tujuan = cbStasiunTujuan.getValue();
+
+        if (asal == null || tujuan == null) {
+            resetAutoCalcDisplay();
+            return;
+        }
+
+        // Kumpulkan stops yang sudah dipilih (abaikan yang null)
+        List<Stasiun> stops = new java.util.ArrayList<>();
+        for (var node : vboxStops.getChildren()) {
+            if (node instanceof HBox row && row.getChildren().size() > 1
+                    && row.getChildren().get(1) instanceof ComboBox<?> cb) {
+                Stasiun s = (Stasiun) cb.getValue();
+                if (s != null) stops.add(s);
+            }
+        }
+
+        JarakEstimator.Hasil hasil = JarakEstimator.hitung(asal, stops, tujuan);
+        if (hasil == null) {
+            resetAutoCalcDisplay();
+            return;
+        }
+
+        // Update display labels
+        lblJarakKm.setText(hasil.formatJarak());
+        lblEstimasiMenit.setText(hasil.formatEstimasi());
+
+        // Isi hidden field untuk dipakai saat simpan
+        tfJarakKm.setText(String.valueOf(hasil.jarakKm()));
+        tfEstimasiMenit.setText(String.valueOf(hasil.estimasiMenit()));
+
+        // Hint: apakah ada pasangan yang data jaraknya tidak diketahui
+        boolean semuaAda = JarakEstimator.adaData(asal, tujuan);
+        if (semuaAda) {
+            lblAutoCalcHint.setText("Dihitung dari tabel jarak antar-stasiun resmi KAI.");
+            lblAutoCalcHint.setStyle("-fx-text-fill: #2BB673;");
+        } else {
+            lblAutoCalcHint.setText("⚠ Beberapa segmen menggunakan estimasi (data jarak belum tersedia).");
+            lblAutoCalcHint.setStyle("-fx-text-fill: #FF9F40;");
+        }
+    }
+
+    private void resetAutoCalcDisplay() {
+        lblJarakKm.setText("— km");
+        lblEstimasiMenit.setText("— jam");
+        tfJarakKm.clear();
+        tfEstimasiMenit.clear();
+        lblAutoCalcHint.setText("Pilih stasiun asal dan tujuan untuk menghitung otomatis.");
+        lblAutoCalcHint.setStyle("");
     }
 
     // =========================================================

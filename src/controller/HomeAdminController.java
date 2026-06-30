@@ -46,7 +46,7 @@ public class HomeAdminController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        lblAdminName.setText("Halo, " + SessionManager.getInstance().getCurrentUser().getNamaLengkap());
+        lblAdminName.setText("Halo, " + SessionManager.getInstance().getCurrentUser().getUsername());
         setupTabelTiket();
         muatStatistik();
     }
