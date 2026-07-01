@@ -68,7 +68,6 @@ public class UserDAO {
             try (PreparedStatement ps = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, user.getUsername());
                 ps.setString(2, user.getPassword());
-                // Admin tidak memerlukan email / nama_lengkap / no_telepon
                 if (user instanceof Admin) {
                     ps.setNull(3, Types.VARCHAR);
                     ps.setNull(4, Types.VARCHAR);
@@ -164,15 +163,10 @@ public class UserDAO {
         }
     }
 
-    /**
-     * Update data diri penumpang: nama, email, telp, nik, jenis kelamin.
-     * NIK dan telp disampaikan terpisah karena tidak ada setter di model.
-     */
     public boolean update(Penumpang p, String nik, String telp) {
         Connection conn = DBConnection.getInstance();
         try {
             conn.setAutoCommit(false);
-            // Update tabel users
             try (PreparedStatement ps = conn.prepareStatement(
                     "UPDATE users SET email=?, nama_lengkap=?, no_telepon=? WHERE id=?")) {
                 ps.setString(1, p.getEmail());
@@ -181,7 +175,6 @@ public class UserDAO {
                 ps.setInt(4, p.getId());
                 ps.executeUpdate();
             }
-            // Update tabel penumpang
             try (PreparedStatement ps = conn.prepareStatement(
                     "UPDATE penumpang SET nik=?, jenis_kelamin=? WHERE id=?")) {
                 ps.setString(1, nik);
@@ -253,7 +246,6 @@ public class UserDAO {
         User user;
 
         if (rs.getString("level_akses") != null) {
-            // Admin: hanya butuh username + password + level_akses
             user = new Admin(
                 username,
                 password,

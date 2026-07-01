@@ -21,7 +21,6 @@
             stylesheets="@KelolaKereta.css"
             styleClass="root-bg">
 
-    <!-- ===================== SIDEBAR ===================== -->
     <left>
         <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
 
@@ -72,13 +71,11 @@
         </VBox>
     </left>
 
-    <!-- ===================== KONTEN UTAMA ===================== -->
     <center>
         <StackPane>
 
             <VBox styleClass="content-area">
 
-                <!-- Topbar -->
                 <HBox alignment="CENTER_LEFT" styleClass="topbar">
                     <VBox>
                         <Label text="Kelola Kereta" styleClass="page-title"/>
@@ -88,7 +85,6 @@
                     <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
                 </HBox>
 
-                <!-- Toolbar: search + tambah -->
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="toolbar">
                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-box">
                         <FontIcon iconLiteral="fas-search" styleClass="search-icon"/>
@@ -105,7 +101,6 @@
                     </Button>
                 </HBox>
 
-                <!-- Tabel kereta -->
                 <VBox spacing="14" styleClass="table-card" VBox.vgrow="ALWAYS">
                     <Label text="Daftar Kereta" styleClass="card-title"/>
                     <TableView fx:id="tblKereta" styleClass="kereta-table" VBox.vgrow="ALWAYS">
@@ -124,7 +119,6 @@
 
             </VBox>
 
-            <!-- ===================== MODAL TAMBAH/EDIT ===================== -->
             <StackPane fx:id="modalOverlay" styleClass="modal-backdrop" alignment="CENTER" visible="false" managed="false">
                 <VBox styleClass="modal-card" maxWidth="520" maxHeight="650" spacing="16">
                     <padding>
@@ -147,17 +141,25 @@
                         <TextField fx:id="tfNama" promptText="Contoh: Mutiara Selatan" styleClass="form-field"/>
                     </VBox>
 
-                    <HBox spacing="12">
+                    <HBox spacing="10">
                         <VBox spacing="6" HBox.hgrow="ALWAYS">
-                            <Label text="Jumlah Gerbong" styleClass="form-label"/>
-                            <TextField fx:id="tfJumlahGerbong" promptText="Contoh: 8" styleClass="form-field"/>
+                            <Label text="Gerbong Eksekutif (50 kursi)" styleClass="form-label"/>
+                            <TextField fx:id="tfGerbongEksekutif" promptText="0" styleClass="form-field"/>
                         </VBox>
-
                         <VBox spacing="6" HBox.hgrow="ALWAYS">
-                            <Label text="Kapasitas Total" styleClass="form-label"/>
-                            <TextField fx:id="tfKapasitas" promptText="Contoh: 400" styleClass="form-field"/>
+                            <Label text="Gerbong Bisnis (60 kursi)" styleClass="form-label"/>
+                            <TextField fx:id="tfGerbongBisnis" promptText="0" styleClass="form-field"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Gerbong Ekonomi (80 kursi)" styleClass="form-label"/>
+                            <TextField fx:id="tfGerbongEkonomi" promptText="0" styleClass="form-field"/>
                         </VBox>
                     </HBox>
+
+                    <VBox spacing="6">
+                        <Label text="Kalkulasi Kapasitas &amp; Gerbong" styleClass="form-label"/>
+                        <TextField fx:id="tfKalkulasi" styleClass="form-field" style="-fx-background-color:#E2E8F0; -fx-text-fill:#6E84A8;" editable="false" text="0 Kursi (Total Gerbong: 0)"/>
+                    </VBox>
 
                     <VBox spacing="6">
                         <Label text="Kelas yang Didukung" styleClass="form-label"/>

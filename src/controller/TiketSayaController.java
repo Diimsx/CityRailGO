@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -88,7 +89,7 @@ public class TiketSayaController implements Initializable {
         colTanggal.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getJadwal().getWaktuBerangkat().format(FMT)));
         colKursi.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().getKursi().getNomorKursi()));
+                c.getValue().getKursi() != null ? c.getValue().getKursi().getNomorKursi() : "(Dipangku)"));
         colHarga.setCellValueFactory(c -> new SimpleStringProperty(
                 IDR.format((long) c.getValue().getHargaTotal()).replace("Rp", "Rp ").replace(",00", "")));
 
@@ -166,17 +167,11 @@ public class TiketSayaController implements Initializable {
         });
     }
 
-    /**
-     * Cetak E-Tiket menggunakan JavaFX PrinterJob.
-     * Membangun node VBox yang berisi informasi tiket lengkap lalu mengirimnya ke printer.
-     */
     private void cetakETiket(Tiket tiket) {
-        // Buat konten e-tiket
         VBox konten = new VBox(16);
         konten.setStyle("-fx-background-color: white; -fx-padding: 40; -fx-font-family: 'Inter', 'Segoe UI';");
         konten.setPrefWidth(600);
 
-        // Header
         HBox header = new HBox(16);
         header.setAlignment(Pos.CENTER_LEFT);
         Label ikon = new Label("🚆");
@@ -189,28 +184,32 @@ public class TiketSayaController implements Initializable {
         brandBox.getChildren().addAll(brandName, brandSub);
         header.getChildren().addAll(ikon, brandBox);
 
-        // Garis
         javafx.scene.control.Separator sep1 = new javafx.scene.control.Separator();
 
-        // Kode tiket besar
         Label kodeTiket = new Label(tiket.getKodeTiket());
         kodeTiket.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #4D8AFF; -fx-alignment: CENTER;");
         kodeTiket.setMaxWidth(Double.MAX_VALUE);
         kodeTiket.setAlignment(Pos.CENTER);
 
-        // Grid detail
+        VBox barcodeBox = buatBarcode(tiket.getKodeTiket());
+
         GridPane grid = new GridPane();
         grid.setHgap(20); grid.setVgap(10);
         grid.setStyle("-fx-background-color: #F7F9FC; -fx-background-radius: 10; -fx-padding: 16;");
 
+        String namaP = tiket.getNamaPenumpang() == null ? tiket.getPenumpang().getNamaLengkap() : tiket.getNamaPenumpang();
+        String nikP  = tiket.getNikPenumpang() == null ? tiket.getPenumpang().getNik() : tiket.getNikPenumpang();
+
         String[][] data = {
-            {"Penumpang", tiket.getPenumpang().getUsername()},
+            {"Nama Penumpang", namaP},
+            {"NIK / Paspor", nikP},
+            {"Usia", (tiket.getUsiaPenumpang() > 0 ? tiket.getUsiaPenumpang() + " Tahun" : "—")},
             {"Kereta", tiket.getJadwal().getKereta().getNama() + " (" + tiket.getJadwal().getKereta().getNomorKereta() + ")"},
             {"Kelas", tiket.getJadwal().getJenisKelas().getNamaKelas()},
             {"Rute", tiket.getJadwal().getRute().getStasiunAsal() + " → " + tiket.getJadwal().getRute().getStasiunTujuan()},
             {"Berangkat", tiket.getJadwal().getWaktuBerangkat().format(FMT)},
             {"Tiba", tiket.getJadwal().getWaktuTiba().format(FMT)},
-            {"Kursi", tiket.getKursi().getNomorKursi()},
+            {"Kursi", tiket.getKursi() != null ? tiket.getKursi().getNomorKursi() : "(Dipangku)"},
             {"Harga", IDR.format((long) tiket.getHargaTotal()).replace("Rp", "Rp ").replace(",00", "")},
             {"Status", tiket.getStatus()},
         };
@@ -230,23 +229,95 @@ public class TiketSayaController implements Initializable {
         footer.setStyle("-fx-font-size: 11px; -fx-text-fill: #9CACC4; -fx-wrap-text: true;");
         footer.setWrapText(true);
 
-        konten.getChildren().addAll(header, sep1, kodeTiket, grid, sep2, footer);
+        konten.getChildren().addAll(header, sep1, kodeTiket, barcodeBox, grid, sep2, footer);
 
-        // Tampilkan dialog preview + print
-        PrinterJob job = PrinterJob.createPrinterJob();
-        if (job != null) {
-            boolean ok = job.showPrintDialog(SceneManager.getPrimaryStage());
-            if (ok) {
-                // Buat scene sementara untuk render
-                Scene tempScene = new Scene(konten, 600, 800);
-                konten.applyCss();
-                konten.layout();
-                boolean printed = job.printPage(konten);
-                if (printed) job.endJob();
+        Alert pilih = new Alert(Alert.AlertType.CONFIRMATION);
+        pilih.setTitle("Pilih Aksi E-Tiket");
+        pilih.setHeaderText("E-Tiket " + tiket.getKodeTiket());
+        pilih.setContentText("Apakah Anda ingin mencetak langsung atau mengunduh sebagai gambar PNG?");
+
+        ButtonType btnUnduh = new ButtonType("Unduh (PNG)");
+        ButtonType btnCetak = new ButtonType("Cetak (Printer)");
+        ButtonType btnBatal = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        pilih.getButtonTypes().setAll(btnUnduh, btnCetak, btnBatal);
+
+        Optional<ButtonType> res = pilih.showAndWait();
+        if (res.isEmpty() || res.get() == btnBatal) return;
+
+        Scene tempScene = new Scene(konten, 600, 800);
+        konten.applyCss();
+        konten.layout();
+
+        if (res.get() == btnCetak) {
+            PrinterJob job = PrinterJob.createPrinterJob();
+            if (job != null) {
+                boolean ok = job.showPrintDialog(SceneManager.getPrimaryStage());
+                if (ok) {
+                    boolean printed = job.printPage(konten);
+                    if (printed) job.endJob();
+                }
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Tidak ada printer yang terdeteksi.").showAndWait();
             }
-        } else {
-            new Alert(Alert.AlertType.WARNING, "Tidak ada printer yang terdeteksi.").showAndWait();
+        } else if (res.get() == btnUnduh) {
+            javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
+            fc.setTitle("Simpan E-Tiket");
+            fc.setInitialFileName("ETiket_" + tiket.getKodeTiket() + ".png");
+            fc.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("PNG Image", "*.png"));
+            java.io.File file = fc.showSaveDialog(SceneManager.getPrimaryStage());
+            if (file != null) {
+                try {
+                    javafx.scene.image.WritableImage snap = konten.snapshot(null, null);
+                    java.awt.image.BufferedImage buf = javafx.embed.swing.SwingFXUtils.fromFXImage(snap, null);
+                    javax.imageio.ImageIO.write(buf, "png", file);
+                    
+                    Alert sukses = new Alert(Alert.AlertType.INFORMATION);
+                    sukses.setTitle("Unduhan Sukses");
+                    sukses.setHeaderText(null);
+                    sukses.setContentText("E-Tiket berhasil diunduh dan disimpan ke:\n" + file.getAbsolutePath());
+                    sukses.showAndWait();
+                } catch (Exception ex) {
+                    Alert gagal = new Alert(Alert.AlertType.ERROR);
+                    gagal.setTitle("Unduhan Gagal");
+                    gagal.setHeaderText(null);
+                    gagal.setContentText("Gagal menyimpan E-Tiket: " + ex.getMessage());
+                    gagal.showAndWait();
+                }
+            }
         }
+    }
+
+    private VBox buatBarcode(String kode) {
+        VBox container = new VBox(4);
+        container.setAlignment(Pos.CENTER);
+        container.setStyle("-fx-background-color: white; -fx-padding: 8;");
+
+        HBox barcode = new HBox(0);
+        barcode.setAlignment(Pos.CENTER);
+
+        int seed = kode.hashCode();
+        java.util.Random rand = new java.util.Random(seed);
+
+        for (int i = 0; i < 60; i++) {
+            Region line = new Region();
+            int width = rand.nextBoolean() ? (rand.nextBoolean() ? 1 : 2) : 3;
+            line.setMinWidth(width);
+            line.setMaxWidth(width);
+            line.setPrefHeight(40);
+            if (i % 2 == 0) {
+                line.setStyle("-fx-background-color: black;");
+            } else {
+                line.setStyle("-fx-background-color: white;");
+            }
+            barcode.getChildren().add(line);
+        }
+
+        Label lblKode = new Label(kode);
+        lblKode.setStyle("-fx-font-family: 'Courier New'; -fx-font-size: 11px; -fx-text-fill: black; -fx-font-weight: bold;");
+
+        container.getChildren().addAll(barcode, lblKode);
+        return container;
     }
 
     private void batalkanTiket(Tiket tiket) {
@@ -258,15 +329,20 @@ public class TiketSayaController implements Initializable {
         if (hasil.isPresent() && hasil.get() == ButtonType.OK) {
             tiket.setStatus("DIBATALKAN");
             tiketDAO.update(tiket);
+
+            model.Kursi k = tiket.getKursi();
+            if (k != null) {
+                k.setStatus("TERSEDIA");
+                new dao.KursiDAO().update(k);
+            }
+
             tblTiket.refresh();
-            // Update KPI
             if (SessionManager.getInstance().getCurrentUser() instanceof Penumpang p) {
                 muatData(p);
             }
         }
     }
 
-    // ===== Nav =====
     @FXML private void handleNavBeranda()  { SceneManager.switchScene("HomePenumpang.fxml"); }
     @FXML private void handleNavProfil()   { SceneManager.switchScene("Profil.fxml"); }
 

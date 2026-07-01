@@ -17,7 +17,6 @@
 
 <HBox prefHeight="720" prefWidth="1280" styleClass="auth-root" stylesheets="@register.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
 
-    <!-- ===================== PANEL KIRI - BRANDING ===================== -->
     <VBox alignment="CENTER" prefHeight="720" prefWidth="420" styleClass="brand-panel">
         <VBox alignment="CENTER" spacing="18">
 
@@ -38,7 +37,6 @@
         </VBox>
     </VBox>
 
-    <!-- ===================== PANEL KANAN - FORM REGISTER ===================== -->
     <VBox alignment="CENTER" prefHeight="720" prefWidth="860" styleClass="form-panel">
 
         <VBox maxWidth="680" spacing="18" styleClass="auth-card">

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.DataPenumpangController"
+            prefWidth="1280" prefHeight="720"
+            stylesheets="@DataPenumpang.css"
+            styleClass="root-bg">
+
+    <top>
+        <VBox>
+            <HBox alignment="CENTER_LEFT" styleClass="header-bar">
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="btn-kembali" onMouseClicked="#handleKembali">
+                    <FontIcon iconLiteral="fas-arrow-left" styleClass="kembali-icon"/>
+                    <Label text="Kembali" styleClass="kembali-label"/>
+                </HBox>
+                <Region style="-fx-background-color:#1B2B47; -fx-min-width:1; -fx-max-width:1; -fx-min-height:28; -fx-max-height:28; -fx-margin:0 4 0 4;"/>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="brand-box-h">
+                    <FontIcon iconLiteral="fas-train" iconSize="22" styleClass="brand-icon"/>
+                    <VBox spacing="0">
+                        <Label text="CityRailGO" styleClass="brand-text-h"/>
+                        <Label text="Portal Penumpang" styleClass="brand-subtext"/>
+                    </VBox>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER" spacing="10" styleClass="timer-box" fx:id="timerBox">
+                    <FontIcon iconLiteral="fas-clock" styleClass="timer-icon"/>
+                    <VBox alignment="CENTER_LEFT" spacing="0">
+                        <Label text="Sisa waktu pemesanan" styleClass="timer-label"/>
+                        <Label fx:id="lblTimer" text="15:00" styleClass="timer-value"/>
+                    </VBox>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10" styleClass="user-badge-h">
+                    <FontIcon fx:id="topbarIcon" iconLiteral="fas-user-circle" styleClass="nav-icon-h"/>
+                    <ImageView fx:id="topbarAvatar" visible="false" managed="false"/>
+                    <Label fx:id="lblNama" text="Penumpang" styleClass="user-name-h"/>
+                </HBox>
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="8" styleClass="step-bar">
+                <StackPane styleClass="step-done">
+                    <FontIcon iconLiteral="fas-check" style="-fx-icon-size:12; -fx-icon-color:white;"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Pilih Jadwal" styleClass="step-label"/></VBox>
+                <Region styleClass="step-line-done"/>
+                <StackPane styleClass="step-active">
+                    <Label text="2" styleClass="step-number"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Data Penumpang" styleClass="step-label-active"/></VBox>
+                <Region styleClass="step-line"/>
+                <StackPane styleClass="step-inactive">
+                    <Label text="3" styleClass="step-number-inactive"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Pilih Kursi" styleClass="step-label"/></VBox>
+                <Region styleClass="step-line"/>
+                <StackPane styleClass="step-inactive">
+                    <Label text="4" styleClass="step-number-inactive"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Pembayaran" styleClass="step-label"/></VBox>
+                <Region styleClass="step-line"/>
+                <StackPane styleClass="step-inactive">
+                    <Label text="5" styleClass="step-number-inactive"/>
+                </StackPane>
+                <VBox alignment="CENTER"><Label text="Selesai" styleClass="step-label"/></VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane styleClass="content-scroll"
+                    fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+            <VBox spacing="20">
+                <padding><Insets top="28" right="28" bottom="32" left="28"/></padding>
+
+                <VBox spacing="4">
+                    <Label text="Data Penumpang" styleClass="page-title"/>
+                    <Label text="Isi data diri setiap penumpang sesuai dengan identitas resmi" styleClass="page-subtitle"/>
+                </VBox>
+
+                <HBox styleClass="summary-journey-card" spacing="24" alignment="CENTER_LEFT">
+                    <VBox spacing="4">
+                        <Label fx:id="lblKereta" text="—" styleClass="summary-kereta"/>
+                        <Label fx:id="lblKelas" text="—" styleClass="summary-kelas"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <VBox spacing="2" alignment="CENTER">
+                        <Label fx:id="lblJamBerangkat" text="—" styleClass="summary-waktu"/>
+                        <Label fx:id="lblAsal" text="—" styleClass="summary-stasiun"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="4">
+                        <FontIcon iconLiteral="fas-arrow-right" styleClass="arrow-icon"/>
+                        <Label fx:id="lblDurasi" text="—" styleClass="summary-durasi"/>
+                    </VBox>
+                    <VBox spacing="2" alignment="CENTER">
+                        <Label fx:id="lblJamTiba" text="—" styleClass="summary-waktu"/>
+                        <Label fx:id="lblTujuan" text="—" styleClass="summary-stasiun"/>
+                    </VBox>
+                    <Region style="-fx-background-color:#1B3A6B; -fx-min-width:1; -fx-max-width:1; -fx-min-height:50;"/>
+                    <VBox spacing="2" alignment="CENTER_RIGHT">
+                        <Label fx:id="lblHarga" text="—" styleClass="summary-harga"/>
+                        <Label text="per penumpang" styleClass="summary-harga-label"/>
+                    </VBox>
+                </HBox>
+
+                <VBox fx:id="vboxForms" spacing="16"/>
+
+                <Label fx:id="lblError" text="" styleClass="error-label"
+                       visible="false" managed="false" wrapText="true"/>
+
+                <Button styleClass="btn-lanjut" maxWidth="Infinity"
+                        onAction="#handleLanjutPilihKursi">
+                    <graphic>
+                        <HBox alignment="CENTER" spacing="12">
+                            <Label text="Lanjut ke Pilih Kursi →"
+                                   style="-fx-text-fill:white; -fx-font-size:15px; -fx-font-weight:bold;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

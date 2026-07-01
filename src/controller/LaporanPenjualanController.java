@@ -31,7 +31,6 @@ import util.DateTimeUtil;
 import util.PricingEngine;
 import util.SceneManager;
 import util.SessionManager;
-import util.TiketHelper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -40,8 +39,6 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,16 +53,12 @@ public class LaporanPenjualanController implements Initializable {
     private static final DateTimeFormatter FMT_EXPORT = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
     private static final int MAX_BREAKDOWN_ROWS = 30;
 
-    // ===== Header =====
     @FXML private Label lblAdminName;
 
-    // ===== KPI Cards =====
     @FXML private Label lblTotalTransaksi;
     @FXML private Label lblTotalPendapatan;
     @FXML private Label lblTiketAktif;
     @FXML private Label lblTiketDibatalkan;
-
-    // ===== Filter toolbar =====
     @FXML private TextField        tfSearch;
     @FXML private DatePicker       dpDari;
     @FXML private DatePicker       dpSampai;
@@ -73,8 +66,6 @@ public class LaporanPenjualanController implements Initializable {
     @FXML private Button           btnExport;
     @FXML private Button           btnToggleHarian;
     @FXML private Button           btnToggleBulanan;
-
-    // ===== Tabel =====
     @FXML private TableView<Tiket>            tblLaporan;
     @FXML private TableColumn<Tiket, Integer> colNo;
     @FXML private TableColumn<Tiket, String>  colKodeTiket;
@@ -85,25 +76,16 @@ public class LaporanPenjualanController implements Initializable {
     @FXML private TableColumn<Tiket, String>  colHarga;
     @FXML private TableColumn<Tiket, String>  colStatus;
     @FXML private Label                       lblJumlahTampil;
-
-    // ===== Breakdown Panel =====
     @FXML private Label lblBreakdownTitle;
     @FXML private Label lblBreakdownSubtitle;
     @FXML private VBox  vboxBreakdown;
     @FXML private Label lblBreakdownTotal;
 
-    // ===== State =====
     private final AdminController adminController = new AdminController();
 
     private ObservableList<Tiket> daftarTiket;
     private FilteredList<Tiket>   daftarTiketTersaring;
-
-    /** true = grouping per hari, false = per bulan */
     private boolean modeHarian = true;
-
-    // =========================================================
-    // INITIALIZE
-    // =========================================================
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -116,10 +98,6 @@ public class LaporanPenjualanController implements Initializable {
         muatDataLaporan();
         setupFilter();
     }
-
-    // =========================================================
-    // TABEL SETUP
-    // =========================================================
 
     private void setupTabel() {
         colNo.setCellValueFactory(data ->
@@ -176,7 +154,6 @@ public class LaporanPenjualanController implements Initializable {
         daftarTiketTersaring = new FilteredList<>(daftarTiket, t -> true);
         tblLaporan.setItems(daftarTiketTersaring);
 
-        // Setiap perubahan filtered list → update KPI + Breakdown + label jumlah
         daftarTiketTersaring.addListener((ListChangeListener<Tiket>) change -> {
             perbaruiStatistik();
             perbaruiBreakdown();
@@ -186,10 +163,6 @@ public class LaporanPenjualanController implements Initializable {
         perbaruiBreakdown();
         perbaruiLabelJumlah();
     }
-
-    // =========================================================
-    // FILTER
-    // =========================================================
 
     private void setupFilter() {
         tfSearch.textProperty().addListener((obs, o, n)        -> terapkanFilter());
@@ -205,7 +178,6 @@ public class LaporanPenjualanController implements Initializable {
         String status   = cbStatusFilter.getValue();
 
         daftarTiketTersaring.setPredicate(t -> {
-            // --- Teks: kode tiket, nama penumpang, kereta, nomor kereta, rute ---
             boolean cocokTeks = kueri.isEmpty()
                 || t.getKodeTiket().toLowerCase().contains(kueri)
                 || t.getPenumpang().getNamaLengkap().toLowerCase().contains(kueri)
@@ -214,12 +186,10 @@ public class LaporanPenjualanController implements Initializable {
                 || t.getJadwal().getRute().getStasiunAsal().toLowerCase().contains(kueri)
                 || t.getJadwal().getRute().getStasiunTujuan().toLowerCase().contains(kueri);
 
-            // --- Rentang tanggal keberangkatan ---
             LocalDate tglBerangkat = t.getJadwal().getWaktuBerangkat().toLocalDate();
             boolean cocokDari   = dari   == null || !tglBerangkat.isBefore(dari);
             boolean cocokSampai = sampai == null || !tglBerangkat.isAfter(sampai);
 
-            // --- Status ---
             boolean cocokStatus = status == null || status.equals("Semua Status")
                 || t.getStatus().equalsIgnoreCase(status);
 
@@ -234,10 +204,6 @@ public class LaporanPenjualanController implements Initializable {
         dpSampai.setValue(null);
         cbStatusFilter.setValue("Semua Status");
     }
-
-    // =========================================================
-    // KPI STATISTIK
-    // =========================================================
 
     private void perbaruiStatistik() {
         List<Tiket> visible = daftarTiketTersaring;
@@ -262,10 +228,6 @@ public class LaporanPenjualanController implements Initializable {
         lblJumlahTampil.setText(n + " tiket ditampilkan");
     }
 
-    // =========================================================
-    // BREAKDOWN HARIAN / BULANAN
-    // =========================================================
-
     @FXML
     private void handleToggleHarian() {
         if (modeHarian) return;
@@ -284,14 +246,9 @@ public class LaporanPenjualanController implements Initializable {
         perbaruiBreakdown();
     }
 
-    /**
-     * Membangun ulang panel breakdown sesuai mode (harian/bulanan).
-     * Hanya tiket AKTIF yang dihitung sebagai pendapatan.
-     */
     private void perbaruiBreakdown() {
         vboxBreakdown.getChildren().clear();
 
-        // Group tiket AKTIF berdasarkan periode
         Map<String, Double> grouped = grupTiketByPeriode();
 
         if (grouped.isEmpty()) {
@@ -303,14 +260,11 @@ public class LaporanPenjualanController implements Initializable {
             return;
         }
 
-        // Hitung total & max untuk proporsi bar
         double total = grouped.values().stream().mapToDouble(Double::doubleValue).sum();
         double max   = grouped.values().stream().mapToDouble(Double::doubleValue).max().orElse(1);
 
-        // Hitung jumlah tiket per periode (semua status)
         Map<String, Long> countMap = grupCountByPeriode();
 
-        // Render baris — max MAX_BREAKDOWN_ROWS terakhir
         int skip = Math.max(0, grouped.size() - MAX_BREAKDOWN_ROWS);
         int[] idx = {0};
         grouped.entrySet().stream().skip(skip).forEach(entry -> {
@@ -331,29 +285,23 @@ public class LaporanPenjualanController implements Initializable {
 
     private VBox buildBreakdownRow(String periode, double pendapatan, long count,
                                    double maxPendapatan, boolean isTop) {
-        // Label periode (tanggal/bulan)
         Label lblPeriode = new Label(periode);
         lblPeriode.getStyleClass().add("breakdown-period");
 
-        // Label jumlah tiket
         Label lblCount = new Label(count + " tiket");
         lblCount.getStyleClass().add("breakdown-count");
 
-        // Label nilai pendapatan
         Label lblAmt = new Label(PricingEngine.formatRupiah(pendapatan));
         lblAmt.getStyleClass().add("breakdown-amount");
 
-        // Mini bar proportional
         double barRatio = maxPendapatan > 0 ? pendapatan / maxPendapatan : 0;
         double barMaxWidth = 140.0;
 
-        // Track (background)
         Region track = new Region();
         track.getStyleClass().add("breakdown-bar-track");
         track.setMinHeight(8); track.setMaxHeight(8);
         track.setPrefWidth(barMaxWidth);
 
-        // Fill (foreground) — di-stack di dalam StackPane sederhana
         Region fill = new Region();
         fill.getStyleClass().add(isTop ? "breakdown-bar-fill-top" : "breakdown-bar-fill");
         fill.setMinHeight(8); fill.setMaxHeight(8);
@@ -363,11 +311,9 @@ public class LaporanPenjualanController implements Initializable {
         StackPane.setAlignment(fill, javafx.geometry.Pos.CENTER_LEFT);
         HBox.setHgrow(barPane, Priority.ALWAYS);
 
-        // Row atas: periode + jumlah tiket
         HBox rowTop = new HBox(6, lblPeriode, lblCount);
         rowTop.setAlignment(Pos.CENTER_LEFT);
 
-        // Row bawah: bar + nilai
         HBox rowBar = new HBox(8, barPane, lblAmt);
         rowBar.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(barPane, Priority.ALWAYS);
@@ -403,16 +349,11 @@ public class LaporanPenjualanController implements Initializable {
             ));
     }
 
-    // =========================================================
-    // EXPORT CSV
-    // =========================================================
-
     @FXML
     private void handleExportCsv() {
         FileChooser fc = new FileChooser();
         fc.setTitle("Simpan Laporan Penjualan");
 
-        // Nama file default mengandung timestamp
         String namaFile = "laporan_penjualan_"
             + java.time.LocalDateTime.now().format(FMT_EXPORT) + ".csv";
         fc.setInitialFileName(namaFile);
@@ -422,10 +363,8 @@ public class LaporanPenjualanController implements Initializable {
         if (file == null) return;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(file, java.nio.charset.StandardCharsets.UTF_8))) {
-            // BOM untuk Excel agar karakter Indonesia terbaca
             writer.print('\uFEFF');
 
-            // Header
             writer.println("No,Kode Tiket,Penumpang,Kereta,Nomor Kereta,Rute,Berangkat,Harga,Status");
 
             int no = 1;
@@ -433,7 +372,6 @@ public class LaporanPenjualanController implements Initializable {
                 writer.println(barisCsv(no++, t));
             }
 
-            // Summary footer
             writer.println();
             writer.println("RINGKASAN");
             writer.println("Total Transaksi," + daftarTiketTersaring.size());
@@ -471,10 +409,6 @@ public class LaporanPenjualanController implements Initializable {
         return "\"" + (s == null ? "" : s.replace("\"", "\"\"")) + "\"";
     }
 
-    // =========================================================
-    // ALERT HELPERS
-    // =========================================================
-
     private void tampilkanAlertInfo(String pesan) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setTitle("Berhasil");
@@ -490,10 +424,6 @@ public class LaporanPenjualanController implements Initializable {
         a.setContentText(pesan);
         a.showAndWait();
     }
-
-    // =========================================================
-    // NAVIGASI
-    // =========================================================
 
     @FXML private void handleNavDashboard() { SceneManager.switchScene("HomeAdmin.fxml"); }
     @FXML private void handleNavKereta()    { SceneManager.switchScene("KelolaKereta.fxml"); }

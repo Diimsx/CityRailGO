@@ -23,12 +23,10 @@ import java.util.ResourceBundle;
 
 public class ProfilController implements Initializable {
 
-    // Topbar
     @FXML private Label lblNamaTopbar;
     @FXML private FontIcon topbarIcon;
     @FXML private ImageView topbarAvatar;
 
-    // Avatar banner
     @FXML private FontIcon avatarIcon;
     @FXML private ImageView mainAvatar;
     @FXML private Label lblNamaLengkap;
@@ -37,7 +35,6 @@ public class ProfilController implements Initializable {
     @FXML private Label lblStatAktif;
     @FXML private Label lblFotoPath;
 
-    // Data diri
     @FXML private TextField tfUsername;
     @FXML private TextField tfNamaLengkap;
     @FXML private TextField tfEmail;
@@ -46,13 +43,11 @@ public class ProfilController implements Initializable {
     @FXML private ComboBox<String> cbJenisKelamin;
     @FXML private Label lblStatusData;
 
-    // Password
     @FXML private PasswordField pfPasswordLama;
     @FXML private PasswordField pfPasswordBaru;
     @FXML private PasswordField pfPasswordKonfirmasi;
     @FXML private Label lblStatusPassword;
 
-    // Info
     @FXML private Label lblNikInfo;
 
     private final UserDAO  userDAO  = new UserDAO();
@@ -65,13 +60,11 @@ public class ProfilController implements Initializable {
         lblNamaTopbar.setText(user.getUsername());
 
         if (!(user instanceof Penumpang p)) {
-            // Jika bukan penumpang, kembali ke beranda
             SceneManager.switchScene("HomePenumpang.fxml");
             return;
         }
         penumpang = p;
 
-        // Setup combo jenis kelamin
         cbJenisKelamin.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
 
         muatDataProfil();
@@ -79,12 +72,10 @@ public class ProfilController implements Initializable {
     }
 
     private void muatDataProfil() {
-        // Avatar info
         String nama = penumpang.getNamaLengkap();
         lblNamaLengkap.setText(nama != null && !nama.isEmpty() ? nama : penumpang.getUsername());
         lblUsername.setText("@" + penumpang.getUsername());
 
-        // Form
         tfUsername.setText(penumpang.getUsername());
         tfNamaLengkap.setText(nama != null ? nama : "");
         tfEmail.setText(penumpang.getEmail() != null ? penumpang.getEmail() : "");
@@ -94,11 +85,9 @@ public class ProfilController implements Initializable {
         String jk = penumpang.getJenisKelamin();
         if (jk != null && !jk.isEmpty()) cbJenisKelamin.setValue(jk);
 
-        // Info card
         lblNikInfo.setText(penumpang.getNik() != null && !penumpang.getNik().isEmpty()
                 ? penumpang.getNik() : "Belum diisi");
                 
-        // Muat foto profil
         AvatarManager.loadAvatar(penumpang.getUsername(), topbarAvatar, topbarIcon, 24);
         AvatarManager.loadAvatar(penumpang.getUsername(), mainAvatar, avatarIcon, 120);
     }
@@ -112,7 +101,6 @@ public class ProfilController implements Initializable {
         lblStatAktif.setText(String.valueOf(aktif));
     }
 
-    // ===== Ubah Foto Profil =====
     @FXML
     private void handleUbahFoto() {
         FileChooser fc = new FileChooser();
@@ -122,12 +110,10 @@ public class ProfilController implements Initializable {
         );
         File file = fc.showOpenDialog(SceneManager.getPrimaryStage());
         if (file != null) {
-            // Tampilkan path file yang dipilih di label
             lblFotoPath.setText("Foto: " + file.getName());
             lblFotoPath.setVisible(true);
             lblFotoPath.setManaged(true);
 
-            // Di aplikasi desktop JavaFX, foto bisa disimpan ke folder lokal atau DB (BLOB)
             AvatarManager.saveAvatar(penumpang.getUsername(), file);
             AvatarManager.loadAvatar(penumpang.getUsername(), topbarAvatar, topbarIcon, 24);
             AvatarManager.loadAvatar(penumpang.getUsername(), mainAvatar, avatarIcon, 120);
@@ -136,7 +122,6 @@ public class ProfilController implements Initializable {
         }
     }
 
-    // ===== Simpan Data Diri =====
     @FXML
     private void handleSimpanData() {
         String nama  = tfNamaLengkap.getText().trim();
@@ -145,7 +130,6 @@ public class ProfilController implements Initializable {
         String telp  = tfTelp.getText().trim();
         String jk    = cbJenisKelamin.getValue();
 
-        // Validasi dasar
         if (nama.isEmpty()) {
             tampilkanStatusData("Nama lengkap tidak boleh kosong.", false);
             return;
@@ -159,16 +143,13 @@ public class ProfilController implements Initializable {
             return;
         }
 
-        // Update model
         penumpang.setNamaLengkap(nama);
         penumpang.setEmail(email);
         if (jk != null) penumpang.setJenisKelamin(jk);
 
-        // Simpan ke DB via UserDAO
         boolean berhasil = userDAO.update(penumpang, nik, telp);
         if (berhasil) {
             tampilkanStatusData("✓ Data diri berhasil disimpan.", true);
-            // Refresh banner
             lblNamaLengkap.setText(nama);
             lblNikInfo.setText(nik.isEmpty() ? "Belum diisi" : nik);
         } else {
@@ -176,7 +157,6 @@ public class ProfilController implements Initializable {
         }
     }
 
-    // ===== Ganti Password =====
     @FXML
     private void handleGantiPassword() {
         String lama  = pfPasswordLama.getText();
@@ -212,7 +192,6 @@ public class ProfilController implements Initializable {
         }
     }
 
-    // ===== Helpers =====
     private void tampilkanStatusData(String pesan, boolean sukses) {
         lblStatusData.setText(pesan);
         lblStatusData.getStyleClass().removeAll("success-label", "error-label");
@@ -229,7 +208,6 @@ public class ProfilController implements Initializable {
         lblStatusPassword.setManaged(true);
     }
 
-    // ===== Nav =====
     @FXML private void handleNavBeranda()   { SceneManager.switchScene("HomePenumpang.fxml"); }
     @FXML private void handleNavTiketSaya() { SceneManager.switchScene("TiketSaya.fxml"); }
 

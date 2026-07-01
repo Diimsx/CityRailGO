@@ -73,9 +73,13 @@ public class HomeAdminController implements Initializable {
     private void muatStatistik() {
         List<Tiket> semuaTiket = tiketDAO.findAll();
 
-        lblTotalTiket.setText(String.valueOf(semuaTiket.size()));
+        long totalTiketAktif = semuaTiket.stream()
+                .filter(t -> "AKTIF".equalsIgnoreCase(t.getStatus()))
+                .count();
+        lblTotalTiket.setText(String.valueOf(totalTiketAktif));
 
         double totalPendapatan = semuaTiket.stream()
+                .filter(t -> "AKTIF".equalsIgnoreCase(t.getStatus()))
                 .mapToDouble(Tiket::getHargaTotal)
                 .sum();
         lblTotalPendapatan.setText(formatRupiah(totalPendapatan));

@@ -42,7 +42,8 @@ public class HomePenumpangController implements Initializable {
     @FXML private ComboBox<Stasiun>   cbAsal;
     @FXML private ComboBox<Stasiun>   cbTujuan;
     @FXML private DatePicker          dpTanggal;
-    @FXML private Spinner<Integer>    spJumlah;
+    @FXML private Spinner<Integer>    spDewasa;
+    @FXML private Spinner<Integer>    spBayi;
     @FXML private Label               lblError;
     @FXML private VBox                vboxPromo;
     @FXML private Label               lblNoPromo;
@@ -56,7 +57,6 @@ public class HomePenumpangController implements Initializable {
     private final TiketDAO   tiketDAO   = new TiketDAO();
     private final PromoDAO   promoDAO   = new PromoDAO();
 
-    // Warna palette for promo cards (cycling)
     private static final String[] PROMO_STYLES   = {"blue","green","orange","red","purple"};
 
     @Override
@@ -65,7 +65,6 @@ public class HomePenumpangController implements Initializable {
         lblNama.setText(user.getUsername());
         AvatarManager.loadAvatar(user.getUsername(), topbarAvatar, topbarIcon, 24);
 
-        // Isi combo stasiun
         List<Stasiun> stasiuns = stasiunDAO.findAll();
         cbAsal.setItems(FXCollections.observableArrayList(stasiuns));
         cbTujuan.setItems(FXCollections.observableArrayList(stasiuns));
@@ -81,15 +80,15 @@ public class HomePenumpangController implements Initializable {
         cbAsal.setButtonCell(factory.call(null));
         cbTujuan.setButtonCell(factory.call(null));
 
-        spJumlah.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 8, 1));
-        spJumlah.setEditable(false);
+        spDewasa.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 8, 1));
+        spDewasa.setEditable(false);
+        spBayi.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 4, 0));
+        spBayi.setEditable(false);
         dpTanggal.setValue(LocalDate.now());
 
         muatStatistik();
         muatPromo();
     }
-
-    // ===== Data loaders =====
 
     private void muatStatistik() {
         lblStatJadwal.setText(String.valueOf(jadwalDAO.findAll().stream()
@@ -125,7 +124,6 @@ public class HomePenumpangController implements Initializable {
         VBox card = new VBox(8);
         card.getStyleClass().addAll("promo-item", "promo-item-" + warna);
 
-        // Baris 1: kode + badge diskon
         HBox baris1 = new HBox(8);
         baris1.setAlignment(Pos.CENTER_LEFT);
 
@@ -140,16 +138,13 @@ public class HomePenumpangController implements Initializable {
 
         baris1.getChildren().addAll(lblKode, spacer, badge);
 
-        // Baris 2: deskripsi
         Label lblDesc = new Label(promo.getDeskripsi());
         lblDesc.getStyleClass().add("promo-desc");
         lblDesc.setWrapText(true);
 
-        // Baris 3: tanggal berakhir
         Label lblExp = new Label("Berlaku s/d " + promo.getTanggalBerakhir().format(FMT_EXP));
         lblExp.getStyleClass().add("promo-exp");
 
-        // Tombol salin kode
         Button btnSalin = new Button("Salin Kode");
         btnSalin.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; " +
                 "-fx-text-fill: #4D8AFF; -fx-font-size: 11px; -fx-font-weight: bold; -fx-cursor: hand;");
@@ -167,8 +162,6 @@ public class HomePenumpangController implements Initializable {
         card.getChildren().addAll(baris1, lblDesc, lblExp, btnSalin);
         return card;
     }
-
-    // ===== Search =====
 
     @FXML
     private void handleSwapStasiun() {
@@ -194,17 +187,16 @@ public class HomePenumpangController implements Initializable {
         PenumpangSession.setStasiunAsal(asal.getNamaStasiun());
         PenumpangSession.setStasiunTujuan(tujuan.getNamaStasiun());
         PenumpangSession.setTanggalBerangkat(tgl);
-        PenumpangSession.setJumlahPenumpang(spJumlah.getValue());
+        PenumpangSession.setJumlahDewasa(spDewasa.getValue());
+        PenumpangSession.setJumlahBayi(spBayi.getValue());
 
         SceneManager.switchScene("PilihJadwal.fxml");
     }
 
-    // ===== Nav =====
-
-    @FXML private void handleNavBeranda()   { /* sudah di sini */ }
+    @FXML private void handleNavBeranda()   { }
     @FXML private void handleNavTiketSaya() { SceneManager.switchScene("TiketSaya.fxml"); }
     @FXML private void handleNavProfil()    { SceneManager.switchScene("Profil.fxml"); }
-
+    
     @FXML
     private void handleLogout() {
         Alert k = new Alert(Alert.AlertType.CONFIRMATION);
@@ -218,7 +210,6 @@ public class HomePenumpangController implements Initializable {
         }
     }
 
-    // ===== Helpers =====
     private void tampilkanError(String p) { lblError.setText(p); lblError.setVisible(true); lblError.setManaged(true); }
     private void sembunyikanError()       { lblError.setVisible(false); lblError.setManaged(false); }
 }

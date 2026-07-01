@@ -69,13 +69,11 @@
         </VBox>
     </left>
 
-    <!-- ===================== KONTEN UTAMA ===================== -->
     <center>
         <StackPane>
 
             <VBox styleClass="content-area">
 
-                <!-- Topbar -->
                 <HBox alignment="CENTER_LEFT" styleClass="topbar">
                     <VBox>
                         <Label text="Kelola Stasiun" styleClass="page-title"/>
@@ -85,7 +83,6 @@
                     <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
                 </HBox>
 
-                <!-- Toolbar: search + tambah -->
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="toolbar">
                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-box">
                         <FontIcon iconLiteral="fas-search" styleClass="search-icon"/>
@@ -102,7 +99,6 @@
                     </Button>
                 </HBox>
 
-                <!-- Tabel stasiun -->
                 <VBox spacing="14" styleClass="table-card" VBox.vgrow="ALWAYS">
                     <Label text="Daftar Stasiun" styleClass="card-title"/>
                     <TableView fx:id="tblStasiun" styleClass="stasiun-table" VBox.vgrow="ALWAYS">
@@ -118,7 +114,6 @@
 
             </VBox>
 
-            <!-- ===================== MODAL TAMBAH/EDIT ===================== -->
             <StackPane fx:id="modalOverlay" styleClass="modal-backdrop" alignment="CENTER" visible="false" managed="false">
                 <VBox styleClass="modal-card" maxWidth="420" maxHeight="480" spacing="20">
                     <padding>

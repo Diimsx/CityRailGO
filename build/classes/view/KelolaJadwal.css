@@ -1,16 +1,8 @@
-/* =========================================================
-   KelolaJadwal.css
-   Tema: modern minimalis, konsisten dengan KelolaKereta.css
-   Navbar : #0A192F
-   Background utama : #F0F4F8
-========================================================= */
-
 .root-bg {
     -fx-background-color: #F0F4F8;
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Sidebar (sama seperti screen admin lainnya) ===== */
 .sidebar {
     -fx-background-color: #0A192F;
 }
@@ -91,7 +83,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* ===== Konten utama ===== */
 .content-area {
     -fx-padding: 30 36 30 36;
     -fx-spacing: 22;
@@ -118,7 +109,6 @@
     -fx-text-fill: #0A192F;
 }
 
-/* ===== Toolbar (search + tambah) ===== */
 .search-box {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -176,7 +166,6 @@
     -fx-background-color: #E2E7EF;
 }
 
-/* ===== Tabel jadwal ===== */
 .table-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -221,7 +210,6 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-/* Badge status jadwal */
 .badge-status {
     -fx-background-radius: 20;
     -fx-padding: 4 12 4 12;
@@ -249,7 +237,6 @@
     -fx-text-fill: #6E84A8;
 }
 
-/* Aksi tabel (edit/hapus) */
 .action-icon-edit {
     -fx-icon-size: 15;
     -fx-icon-color: #2979FF;
@@ -270,7 +257,6 @@
     -fx-icon-color: #C23F3F;
 }
 
-/* ===== Modal Tambah/Edit ===== */
 .modal-backdrop {
     -fx-background-color: rgba(10, 25, 47, 0.45);
 }
@@ -321,7 +307,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* Estimasi tiba */
 .estimasi-box {
     -fx-background-color: #F0F4F8;
     -fx-background-radius: 8;
@@ -338,7 +323,6 @@
     -fx-text-fill: #6E84A8;
 }
 
-/* ===== Panel Preview Harga Live ===== */
 .harga-panel {
     -fx-background-color: #F7F9FC;
     -fx-background-radius: 10;
@@ -378,7 +362,6 @@
     -fx-text-fill: #2979FF;
 }
 
-/* Baris satu aturan pricing (emoji + nama + persentase) */
 .aturan-row {
     -fx-alignment: CENTER_LEFT;
     -fx-spacing: 6;
@@ -389,35 +372,30 @@
     -fx-text-fill: #5A7099;
 }
 
-/* Surcharge: warna oranye */
 .aturan-surcharge {
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-text-fill: #E07A30;
 }
 
-/* Diskon: warna hijau */
 .aturan-diskon {
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-text-fill: #167A42;
 }
 
-/* Harga standar (tanpa adjustment) */
 .harga-standar-label {
     -fx-font-size: 11px;
     -fx-text-fill: #8AA0C4;
     -fx-font-style: italic;
 }
 
-/* Badge harga di kolom tabel */
 .harga-cell {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: #0A192F;
 }
 
-/* Kolom harga yang ada dynamic pricing */
 .harga-cell-adjusted {
     -fx-font-size: 12px;
     -fx-font-weight: bold;

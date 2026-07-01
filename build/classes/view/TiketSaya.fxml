@@ -20,7 +20,6 @@
             stylesheets="@TiketSaya.css"
             styleClass="root-bg">
 
-    <!-- Sidebar -->
     <left>
         <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
             <VBox alignment="CENTER" spacing="4" styleClass="brand-box">
@@ -52,7 +51,6 @@
 
     <center>
         <VBox styleClass="content-area">
-            <!-- Topbar -->
             <HBox alignment="CENTER_LEFT" styleClass="topbar">
                 <VBox>
                     <Label text="Tiket Saya" styleClass="page-title"/>
@@ -69,7 +67,6 @@
             <VBox spacing="20" VBox.vgrow="ALWAYS">
                 <padding><Insets top="24" right="28" bottom="28" left="28"/></padding>
 
-                <!-- KPI Cards -->
                 <HBox spacing="16">
                     <VBox styleClass="kpi-card" spacing="10" HBox.hgrow="ALWAYS">
                         <HBox spacing="14" alignment="CENTER_LEFT">
@@ -106,14 +103,11 @@
                     </VBox>
                 </HBox>
 
-                <!-- Table Card -->
                 <VBox styleClass="table-card" spacing="16" VBox.vgrow="ALWAYS">
-                    <!-- Header -->
                     <HBox alignment="CENTER_LEFT" spacing="12">
                         <FontIcon iconLiteral="fas-list" styleClass="card-title-icon"/>
                         <Label text="Semua Tiket" styleClass="card-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <!-- Search field -->
                         <StackPane>
                             <FontIcon iconLiteral="fas-search" styleClass="filter-icon"/>
                             <TextField fx:id="tfCari" promptText="Cari kode, rute, atau kereta..."
@@ -131,7 +125,6 @@
 
                     <Region styleClass="divider-h"/>
 
-                    <!-- TableView -->
                     <TableView fx:id="tblTiket" styleClass="tiket-table" VBox.vgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="colKode"     text="Kode Tiket"  prefWidth="130"/>

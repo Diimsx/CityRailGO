@@ -17,53 +17,39 @@
             stylesheets="@PilihJadwal.css"
             styleClass="root-bg">
 
-    <!-- Sidebar -->
-    <left>
-        <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
-            <VBox alignment="CENTER" spacing="4" styleClass="brand-box">
-                <FontIcon iconLiteral="fas-train" iconSize="26" styleClass="brand-icon"/>
-                <Label text="CityRailGO" styleClass="brand-text"/>
-                <Label text="Portal Penumpang" styleClass="brand-subtext"/>
-            </VBox>
-            <VBox styleClass="nav-list">
-                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavBeranda">
-                    <FontIcon iconLiteral="fas-home" styleClass="nav-icon"/>
-                    <Label text="Beranda" styleClass="nav-label"/>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item-active">
-                    <FontIcon iconLiteral="fas-search" styleClass="nav-icon-active"/>
-                    <Label text="Cari Jadwal" styleClass="nav-label-active"/>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="14" styleClass="nav-item" onMouseClicked="#handleNavTiketSaya">
-                    <FontIcon iconLiteral="fas-ticket-alt" styleClass="nav-icon"/>
-                    <Label text="Tiket Saya" styleClass="nav-label"/>
-                </HBox>
-            </VBox>
-            <Region VBox.vgrow="ALWAYS"/>
-            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="logout-item" onMouseClicked="#handleLogout">
-                <FontIcon iconLiteral="fas-sign-out-alt" styleClass="logout-icon"/>
-                <Label text="Logout" styleClass="logout-label"/>
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="header-bar">
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="btn-kembali" onMouseClicked="#handleNavBeranda">
+                <FontIcon iconLiteral="fas-arrow-left" styleClass="kembali-icon"/>
+                <Label text="Kembali" styleClass="kembali-label"/>
             </HBox>
-        </VBox>
-    </left>
+            <Region styleClass="header-divider"/>
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="brand-box-h">
+                <FontIcon iconLiteral="fas-train" iconSize="22" styleClass="brand-icon"/>
+                <VBox spacing="0">
+                    <Label text="CityRailGO" styleClass="brand-text-h"/>
+                    <Label text="Portal Penumpang" styleClass="brand-subtext"/>
+                </VBox>
+            </HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox alignment="CENTER" spacing="10" styleClass="user-badge-h">
+                <FontIcon fx:id="topbarIcon" iconLiteral="fas-user-circle" styleClass="nav-icon-h"/>
+                <ImageView fx:id="topbarAvatar" visible="false" managed="false"/>
+                <Label fx:id="lblNama" text="Penumpang" styleClass="user-name-h"/>
+            </HBox>
+        </HBox>
+    </top>
 
     <center>
         <VBox>
-            <!-- Topbar -->
             <HBox alignment="CENTER_LEFT" styleClass="topbar">
                 <VBox>
                     <Label text="Pilih Jadwal" styleClass="page-title"/>
                     <Label text="Hasil pencarian jadwal kereta sesuai kriteria Anda" styleClass="page-subtitle"/>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
-                <HBox alignment="CENTER" spacing="10" styleClass="user-badge">
-                    <FontIcon fx:id="topbarIcon" iconLiteral="fas-user-circle" styleClass="nav-icon"/>
-                    <ImageView fx:id="topbarAvatar" visible="false" managed="false"/>
-                    <Label fx:id="lblNama" text="Penumpang" styleClass="user-name"/>
-                </HBox>
             </HBox>
 
-            <!-- Filter Info Bar -->
             <HBox alignment="CENTER_LEFT" spacing="20" styleClass="filter-bar">
                 <VBox spacing="2">
                     <Label text="RUTE" styleClass="filter-label"/>
@@ -80,32 +66,20 @@
                     <Label fx:id="lblJumlahPenumpang" text="1 Orang" styleClass="filter-value"/>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button styleClass="btn-back" onAction="#handleNavBeranda">
-                    <graphic>
-                        <HBox alignment="CENTER" spacing="8">
-                            <FontIcon iconLiteral="fas-arrow-left" styleClass="btn-back-icon"/>
-                            <Label text="Ubah Pencarian" style="-fx-text-fill:#0A192F; -fx-font-size:13px;"/>
-                        </HBox>
-                    </graphic>
-                </Button>
             </HBox>
 
-            <!-- Results -->
             <ScrollPane styleClass="content-scroll" VBox.vgrow="ALWAYS"
                         fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
                 <VBox spacing="16">
                     <padding><Insets top="24" right="28" bottom="28" left="28"/></padding>
 
-                    <!-- Header hasil -->
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <Label fx:id="lblJumlahHasil" text="Menampilkan jadwal..." styleClass="section-title"/>
                         <Label fx:id="lblCountHasil" text="" styleClass="section-count"/>
                     </HBox>
 
-                    <!-- Container cards jadwal (isi dinamis dari controller) -->
                     <VBox fx:id="vboxHasil" spacing="12"/>
 
-                    <!-- Empty state (tersembunyi) -->
                     <VBox fx:id="paneKosong" alignment="CENTER" spacing="16"
                           visible="false" managed="false" style="-fx-padding: 60 0 60 0;">
                         <FontIcon iconLiteral="fas-train" styleClass="empty-icon"/>

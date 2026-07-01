@@ -39,10 +39,6 @@ public class JadwalDAO {
         ensureSchema();
     }
 
-    // =========================================================
-    // SCHEMA MIGRATION
-    // =========================================================
-
     private void ensureSchema() {
         Connection conn = DBConnection.getInstance();
         if (conn == null) return;
@@ -57,10 +53,6 @@ public class JadwalDAO {
             System.out.println("JadwalDAO ensureSchema: " + e.getMessage());
         }
     }
-
-    // =========================================================
-    // FIND OPERATIONS
-    // =========================================================
 
     public Jadwal findById(int id) {
         String sql = SQL_SELECT_BASE + "WHERE j.id = ?";
@@ -109,25 +101,8 @@ public class JadwalDAO {
         return list;
     }
 
-    // =========================================================
-    // VALIDASI KONFLIK KERETA
-    // =========================================================
-
-    /**
-     * Cek apakah kereta sudah memiliki jadwal aktif yang tumpang-tindih waktu
-     * dengan jadwal yang akan dibuat/diupdate.
-     *
-     * Logika konflik: jadwal baru [berangkat, tiba] overlap dengan jadwal existing
-     * jika waktuBerangkatBaru < tibaSudahAda AND waktuTibaBaru > berangkatSudahAda
-     *
-     * @param keretaId       ID kereta
-     * @param waktuBerangkat waktu berangkat jadwal baru
-     * @param waktuTiba      waktu tiba jadwal baru
-     * @param kecualiJadwalId ID jadwal yang dikecualikan (untuk mode edit), 0 jika tambah baru
-     * @return String deskripsi konflik jika ada, null jika aman
-     */
     public String cekKonflikKereta(int keretaId, LocalDateTime waktuBerangkat,
-                                   LocalDateTime waktuTiba, int kecualiJadwalId) {
+                                   LocalDateTime waktuTiba, int ruteId, int kecualiJadwalId) {
         String sql =
             "SELECT j.id, j.waktu_berangkat, j.waktu_tiba, r.stasiun_asal, r.stasiun_tujuan " +
             "FROM jadwal j JOIN rute r ON j.rute_id = r.id " +
@@ -135,6 +110,7 @@ public class JadwalDAO {
             "AND j.status <> 'DIBATALKAN' " +
             "AND j.id <> ? " +
             "AND ? < j.waktu_tiba AND ? > j.waktu_berangkat " +
+            "AND NOT (j.waktu_berangkat = ? AND j.waktu_tiba = ? AND j.rute_id = ?) " +
             "LIMIT 1";
         Connection conn = DBConnection.getInstance();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -142,6 +118,9 @@ public class JadwalDAO {
             ps.setInt(2, kecualiJadwalId);
             ps.setTimestamp(3, Timestamp.valueOf(waktuBerangkat));
             ps.setTimestamp(4, Timestamp.valueOf(waktuTiba));
+            ps.setTimestamp(5, Timestamp.valueOf(waktuBerangkat));
+            ps.setTimestamp(6, Timestamp.valueOf(waktuTiba));
+            ps.setInt(7, ruteId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     LocalDateTime tgtBerangkat = rs.getTimestamp("waktu_berangkat").toLocalDateTime();
@@ -155,10 +134,6 @@ public class JadwalDAO {
         }
         return null;
     }
-
-    // =========================================================
-    // SAVE / UPDATE / DELETE
-    // =========================================================
 
     public boolean save(Jadwal jadwal) {
         String sql =
@@ -219,10 +194,6 @@ public class JadwalDAO {
         }
     }
 
-    // =========================================================
-    // BUILD FROM RESULT SET
-    // =========================================================
-
     private Jadwal buildJadwalFromResultSet(ResultSet rs) throws SQLException {
         Kereta kereta = new Kereta(
             rs.getString("kereta_nama"),
@@ -240,7 +211,6 @@ public class JadwalDAO {
             rs.getDouble("jarak_km"),
             rs.getInt("estimasi_menit")
         );
-        // Isi nama stasiun lewat backward-compat setter
         rute.setStasiunAsal(rs.getString("stasiun_asal"));
         rute.setStasiunTujuan(rs.getString("stasiun_tujuan"));
         rute.setId(rs.getInt("rute_id"));
@@ -260,19 +230,14 @@ public class JadwalDAO {
         jadwal.setId(rs.getInt("id"));
         jadwal.setStatus(rs.getString("status"));
 
-        // Load harga_final (kolom baru, fallback 0 jika belum ada)
         try {
             jadwal.setHargaFinal(rs.getDouble("harga_final"));
             jadwal.setInfoHarga(rs.getString("info_harga"));
-        } catch (SQLException ignored) { /* kolom belum ada di DB lama */ }
+        } catch (SQLException ignored) { }
 
         return jadwal;
     }
-
-    // =========================================================
-    // SCHEMA HELPERS
-    // =========================================================
-
+    
     private boolean columnExists(Connection conn, String column) throws SQLException {
         DatabaseMetaData meta = conn.getMetaData();
         try (ResultSet rs = meta.getColumns(conn.getCatalog(), null, "jadwal", column)) {

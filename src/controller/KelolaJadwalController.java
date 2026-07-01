@@ -48,6 +48,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
@@ -57,7 +58,6 @@ public class KelolaJadwalController implements Initializable {
     private static final DateTimeFormatter FORMAT_JAM  = DateTimeFormatter.ofPattern("HH:mm");
     private static final DateTimeFormatter FORMAT_TABEL = DateTimeFormatter.ofPattern("dd MMM HH:mm");
 
-    // ===== Table =====
     @FXML private Label               lblAdminName;
     @FXML private TextField           tfSearch;
     @FXML private TableView<Jadwal>   tblJadwal;
@@ -70,27 +70,22 @@ public class KelolaJadwalController implements Initializable {
     @FXML private TableColumn<Jadwal, String>  colHarga;
     @FXML private TableColumn<Jadwal, String>  colStatus;
     @FXML private TableColumn<Jadwal, Void>    colAksi;
-
-    // ===== Modal =====
     @FXML private StackPane          modalOverlay;
     @FXML private Label              lblModalTitle;
     @FXML private ComboBox<Kereta>   cbKereta;
     @FXML private ComboBox<Rute>     cbRute;
-    @FXML private ComboBox<JenisKelas> cbJenisKelas;
     @FXML private DatePicker         dpTanggal;
     @FXML private TextField          tfJamBerangkat;
     @FXML private Label              lblEstimasiTiba;
     @FXML private ComboBox<String>   cbStatus;
     @FXML private Label              lblModalError;
     @FXML private Button             btnSimpan;
-
-    // ===== Panel Harga Live =====
+    @FXML private VBox               vboxKelasCheckboxes;
     @FXML private VBox   vboxHarga;
     @FXML private Label  lblHargaDasar;
     @FXML private VBox   vboxAturan;
     @FXML private Label  lblHargaFinal;
-
-    // ===== DAO & State =====
+    
     private final JadwalDAO     jadwalDAO     = new JadwalDAO();
     private final KeretaDAO     keretaDAO     = new KeretaDAO();
     private final RuteDAO       ruteDAO       = new RuteDAO();
@@ -101,10 +96,7 @@ public class KelolaJadwalController implements Initializable {
     private FilteredList<Jadwal>   daftarJadwalTersaring;
 
     private Jadwal jadwalDiedit;
-
-    // =========================================================
-    // INITIALIZE
-    // =========================================================
+    private final List<javafx.scene.control.CheckBox> listCheckBoxes = new java.util.ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -119,16 +111,47 @@ public class KelolaJadwalController implements Initializable {
     private void setupComboSumberData() {
         cbKereta.setItems(FXCollections.observableArrayList(keretaDAO.findAktif()));
         cbRute.setItems(FXCollections.observableArrayList(ruteDAO.findAll()));
-        cbJenisKelas.setItems(FXCollections.observableArrayList(jenisKelasDAO.findAll()));
         cbStatus.setItems(FXCollections.observableArrayList("TERSEDIA", "PENUH", "DIBATALKAN"));
+
+        cbKereta.valueProperty().addListener((obs, o, n) -> perbaruiOpsiKelas(n));
 
         setupComboDisplay(cbKereta,
             k -> k.getNama() + " — " + k.getNomorKereta() + " (" + k.getKapasitasTotal() + " kursi)");
         setupComboDisplay(cbRute,
             r -> r.getStasiunAsal() + " \u2192 " + r.getStasiunTujuan()
                 + " (" + String.format("%.0f", r.getJarakKm()) + " km)");
-        setupComboDisplay(cbJenisKelas,
-            jk -> jk.getNamaKelas() + " (" + TiketHelper.formatHarga(jk.getHargaPerKm()) + "/km)");
+    }
+
+    private void perbaruiOpsiKelas(model.Kereta kereta) {
+        vboxKelasCheckboxes.getChildren().clear();
+        listCheckBoxes.clear();
+
+        if (kereta == null) return;
+
+        String kelasTersedia = kereta.getKelasTersedia();
+        if (kelasTersedia == null || kelasTersedia.isEmpty()) return;
+
+        List<model.JenisKelas> filtered = jenisKelasDAO.findAll().stream()
+            .filter(jk -> {
+                String namaKelas = jk.getNamaKelas().toLowerCase();
+                for (String k : kelasTersedia.split(",")) {
+                    if (namaKelas.contains(k.trim().toLowerCase())) {
+                        return true;
+                    }
+                }
+                return false;
+            })
+            .collect(java.util.stream.Collectors.toList());
+
+        for (model.JenisKelas jk : filtered) {
+            javafx.scene.control.CheckBox cb = new javafx.scene.control.CheckBox(
+                jk.getNamaKelas() + " (" + TiketHelper.formatHarga(jk.getHargaPerKm()) + "/km)"
+            );
+            cb.setUserData(jk);
+            cb.selectedProperty().addListener((obs, o, n) -> perbaruiPreview());
+            vboxKelasCheckboxes.getChildren().add(cb);
+            listCheckBoxes.add(cb);
+        }
     }
 
     private <T> void setupComboDisplay(ComboBox<T> cb, Function<T, String> fmt) {
@@ -146,28 +169,24 @@ public class KelolaJadwalController implements Initializable {
         });
     }
 
-    // =========================================================
-    // LISTENERS: Estimasi Tiba + Live Pricing Preview
-    // =========================================================
-
     private void setupListenerEstimasiDanHarga() {
-        // Setiap kali salah satu input berubah, update estimasi + harga
         cbRute.valueProperty().addListener((obs, o, n)         -> perbaruiPreview());
-        cbJenisKelas.valueProperty().addListener((obs, o, n)   -> perbaruiPreview());
         dpTanggal.valueProperty().addListener((obs, o, n)      -> perbaruiPreview());
         tfJamBerangkat.textProperty().addListener((obs, o, n)  -> perbaruiPreview());
     }
-
-    /**
-     * Dipanggil setiap kali input form berubah.
-     * Update: (1) label estimasi tiba, (2) panel preview harga live.
-     */
+    
     private void perbaruiPreview() {
         LocalDateTime waktuBerangkat = hitungWaktuBerangkat();
         Rute rute = cbRute.getValue();
-        JenisKelas kelas = cbJenisKelas.getValue();
 
-        // --- Update estimasi tiba ---
+        JenisKelas kelas = null;
+        for (var cb : listCheckBoxes) {
+            if (cb.isSelected()) {
+                kelas = (JenisKelas) cb.getUserData();
+                break;
+            }
+        }
+
         if (waktuBerangkat != null && rute != null) {
             LocalDateTime tiba = waktuBerangkat.plusMinutes(rute.getEstimasiMenit());
             lblEstimasiTiba.setText("Estimasi tiba: " + DateTimeUtil.formatWaktu(tiba));
@@ -175,7 +194,6 @@ public class KelolaJadwalController implements Initializable {
             lblEstimasiTiba.setText("Estimasi tiba: \u2014");
         }
 
-        // --- Update panel harga ---
         if (waktuBerangkat != null && rute != null && kelas != null) {
             HasilPerhitungan hasil = PricingEngine.hitung(
                 kelas.getHargaPerKm(), rute.getJarakKm(), waktuBerangkat
@@ -187,10 +205,7 @@ public class KelolaJadwalController implements Initializable {
     }
 
     private void tampilkanPanelHarga(HasilPerhitungan hasil) {
-        // Harga dasar
         lblHargaDasar.setText(PricingEngine.formatRupiah(hasil.hargaDasar));
-
-        // Baris aturan aktif
         vboxAturan.getChildren().clear();
         if (hasil.aturanAktif.isEmpty()) {
             Label lblStandar = new Label("Tidak ada penyesuaian harga");
@@ -217,9 +232,7 @@ public class KelolaJadwalController implements Initializable {
             }
         }
 
-        // Harga final
         lblHargaFinal.setText(PricingEngine.formatRupiah(hasil.hargaFinal));
-        // Warna biru jika ada adjustment, default jika tidak
         lblHargaFinal.getStyleClass().removeAll("harga-value-final-adjusted");
         if (hasil.adaAdjustment()) {
             lblHargaFinal.setStyle("-fx-text-fill: #2979FF;");
@@ -235,10 +248,6 @@ public class KelolaJadwalController implements Initializable {
         vboxHarga.setVisible(false);
         vboxHarga.setManaged(false);
     }
-
-    // =========================================================
-    // TABEL SETUP
-    // =========================================================
 
     private void setupTabel() {
         colNo.setCellValueFactory(data ->
@@ -262,7 +271,6 @@ public class KelolaJadwalController implements Initializable {
         colTiba.setCellValueFactory(data ->
             new SimpleStringProperty(data.getValue().getWaktuTiba().format(FORMAT_TABEL)));
 
-        // Kolom Harga — biru jika hargaFinal ada adjustment dari base
         colHarga.setCellFactory(col -> new TableCell<>() {
             @Override protected void updateItem(String item, boolean kosong) {
                 super.updateItem(item, kosong);
@@ -339,10 +347,6 @@ public class KelolaJadwalController implements Initializable {
         });
     }
 
-    // =========================================================
-    // CRUD HANDLERS
-    // =========================================================
-
     @FXML
     private void handleTambahJadwal() {
         jadwalDiedit = null;
@@ -360,14 +364,22 @@ public class KelolaJadwalController implements Initializable {
 
         cbKereta.setValue(cariById(cbKereta.getItems(), jadwal.getKereta().getId(), Kereta::getId));
         cbRute.setValue(cariById(cbRute.getItems(), jadwal.getRute().getId(), Rute::getId));
-        cbJenisKelas.setValue(cariById(cbJenisKelas.getItems(), jadwal.getJenisKelas().getId(), JenisKelas::getId));
+        
+        for (javafx.scene.control.CheckBox cb : listCheckBoxes) {
+            JenisKelas jk = (JenisKelas) cb.getUserData();
+            if (jk != null && jk.getId() == jadwal.getJenisKelas().getId()) {
+                cb.setSelected(true);
+            } else {
+                cb.setSelected(false);
+            }
+        }
+
         dpTanggal.setValue(jadwal.getWaktuBerangkat().toLocalDate());
         tfJamBerangkat.setText(jadwal.getWaktuBerangkat().toLocalTime().format(FORMAT_JAM));
         cbStatus.setValue(jadwal.getStatus());
 
         sembunyikanError();
         tampilkanModal();
-        // Trigger preview setelah autofill
         perbaruiPreview();
     }
 
@@ -401,14 +413,19 @@ public class KelolaJadwalController implements Initializable {
     private void handleSimpanJadwal() {
         Kereta     kereta    = cbKereta.getValue();
         Rute       rute      = cbRute.getValue();
-        JenisKelas kelas     = cbJenisKelas.getValue();
         String     status    = cbStatus.getValue();
         LocalDateTime waktuBerangkat = hitungWaktuBerangkat();
 
-        // ===== Validasi field wajib =====
+        List<JenisKelas> kelasTerpilih = new java.util.ArrayList<>();
+        for (var cb : listCheckBoxes) {
+            if (cb.isSelected()) {
+                kelasTerpilih.add((JenisKelas) cb.getUserData());
+            }
+        }
+
         if (kereta == null) { tampilkanError("Pilih kereta terlebih dahulu."); return; }
         if (rute == null)   { tampilkanError("Pilih rute terlebih dahulu."); return; }
-        if (kelas == null)  { tampilkanError("Pilih jenis kelas terlebih dahulu."); return; }
+        if (kelasTerpilih.isEmpty()) { tampilkanError("Pilih minimal 1 jenis kelas."); return; }
         if (status == null) { tampilkanError("Pilih status jadwal."); return; }
         if (waktuBerangkat == null) {
             tampilkanError("Tanggal dan jam berangkat wajib diisi (format jam: HH:mm, contoh: 08:00)."); return;
@@ -416,38 +433,56 @@ public class KelolaJadwalController implements Initializable {
         if (waktuBerangkat.isBefore(LocalDateTime.now().minusMinutes(5)) && jadwalDiedit == null) {
             tampilkanError("Waktu keberangkatan tidak boleh di masa lalu."); return;
         }
+        if (jadwalDiedit != null && kelasTerpilih.size() != 1) {
+            tampilkanError("Pilih tepat 1 jenis kelas saat mengedit jadwal."); return;
+        }
 
         LocalDateTime waktuTiba = waktuBerangkat.plusMinutes(rute.getEstimasiMenit());
 
-        // ===== Validasi konflik kereta =====
         int kecualiId = jadwalDiedit != null ? jadwalDiedit.getId() : 0;
-        String konflik = jadwalDAO.cekKonflikKereta(kereta.getId(), waktuBerangkat, waktuTiba, kecualiId);
+        String konflik = jadwalDAO.cekKonflikKereta(kereta.getId(), waktuBerangkat, waktuTiba, rute.getId(), kecualiId);
         if (konflik != null) {
             tampilkanError(
-                "Kereta \"" + kereta.getNama() + "\" sudah dijadwalkan pada waktu yang berdekatan:\n"
+                "Kereta \"" + kereta.getNama() + "\" sudah dijadwal pada waktu yang berdekatan:\n"
                 + "\u2022 " + konflik
                 + "\n\nPilih kereta lain atau ubah waktu keberangkatan."
             );
             return;
         }
 
-        // ===== Kalkulasi harga dengan dynamic pricing =====
-        HasilPerhitungan pricing = PricingEngine.hitung(
-            kelas.getHargaPerKm(), rute.getJarakKm(), waktuBerangkat
-        );
-
-        // ===== Buat objek Jadwal =====
-        Jadwal jadwalBaru = new Jadwal(kereta, rute, kelas, waktuBerangkat, waktuTiba);
-        jadwalBaru.setStatus(status);
-        jadwalBaru.setHargaFinal(pricing.hargaFinal);
-        jadwalBaru.setInfoHarga(pricing.getRingkasanAturan());
-
-        boolean berhasil;
+        boolean berhasil = true;
         if (jadwalDiedit == null) {
-            berhasil = adminController.tambahJadwal(jadwalBaru);
-            if (berhasil) daftarJadwal.add(jadwalBaru);
+            // Tambah Jadwal Baru (Bisa banyak sekaligus)
+            for (JenisKelas kelas : kelasTerpilih) {
+                HasilPerhitungan pricing = PricingEngine.hitung(
+                    kelas.getHargaPerKm(), rute.getJarakKm(), waktuBerangkat
+                );
+
+                Jadwal jadwalBaru = new Jadwal(kereta, rute, kelas, waktuBerangkat, waktuTiba);
+                jadwalBaru.setStatus(status);
+                jadwalBaru.setHargaFinal(pricing.hargaFinal);
+                jadwalBaru.setInfoHarga(pricing.getRingkasanAturan());
+
+                boolean ok = adminController.tambahJadwal(jadwalBaru);
+                if (ok) {
+                    daftarJadwal.add(jadwalBaru);
+                } else {
+                    berhasil = false;
+                }
+            }
         } else {
+            // Edit Jadwal
+            JenisKelas kelas = kelasTerpilih.get(0);
+            HasilPerhitungan pricing = PricingEngine.hitung(
+                kelas.getHargaPerKm(), rute.getJarakKm(), waktuBerangkat
+            );
+
+            Jadwal jadwalBaru = new Jadwal(kereta, rute, kelas, waktuBerangkat, waktuTiba);
+            jadwalBaru.setStatus(status);
+            jadwalBaru.setHargaFinal(pricing.hargaFinal);
+            jadwalBaru.setInfoHarga(pricing.getRingkasanAturan());
             jadwalBaru.setId(jadwalDiedit.getId());
+
             berhasil = adminController.editJadwal(jadwalBaru);
             if (berhasil) {
                 int indeks = daftarJadwal.indexOf(jadwalDiedit);
@@ -483,7 +518,8 @@ public class KelolaJadwalController implements Initializable {
     private void kosongkanForm() {
         cbKereta.setValue(null);
         cbRute.setValue(null);
-        cbJenisKelas.setValue(null);
+        vboxKelasCheckboxes.getChildren().clear();
+        listCheckBoxes.clear();
         dpTanggal.setValue(null);
         tfJamBerangkat.clear();
         cbStatus.setValue("TERSEDIA");

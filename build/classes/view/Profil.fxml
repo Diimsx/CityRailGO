@@ -20,7 +20,6 @@
             stylesheets="@Profil.css"
             styleClass="root-bg">
 
-    <!-- Sidebar -->
     <left>
         <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
             <VBox alignment="CENTER" spacing="4" styleClass="brand-box">
@@ -52,7 +51,6 @@
 
     <center>
         <VBox>
-            <!-- Topbar -->
             <HBox alignment="CENTER_LEFT" styleClass="topbar">
                 <VBox>
                     <Label text="Profil Saya" styleClass="page-title"/>
@@ -71,17 +69,14 @@
                 <VBox spacing="24">
                     <padding><Insets top="28" right="28" bottom="28" left="28"/></padding>
 
-                    <!-- ===== Avatar Banner ===== -->
                     <VBox styleClass="avatar-card" spacing="20">
                         <HBox spacing="28" alignment="CENTER_LEFT">
 
-                            <!-- Avatar lingkaran -->
                             <StackPane styleClass="avatar-circle">
                                 <FontIcon fx:id="avatarIcon" iconLiteral="fas-user" styleClass="avatar-icon"/>
                                 <ImageView fx:id="mainAvatar" visible="false" managed="false"/>
                             </StackPane>
 
-                            <!-- Info nama -->
                             <VBox spacing="8" HBox.hgrow="ALWAYS">
                                 <Label fx:id="lblNamaLengkap" text="—" styleClass="avatar-name"/>
                                 <Label fx:id="lblUsername" text="@username" styleClass="avatar-username"/>
@@ -101,7 +96,6 @@
 
                             <Region HBox.hgrow="ALWAYS"/>
 
-                            <!-- Stats -->
                             <HBox spacing="32" alignment="CENTER_RIGHT">
                                 <VBox alignment="CENTER" spacing="4">
                                     <Label fx:id="lblStatTiket" text="0" styleClass="stat-value"/>
@@ -115,15 +109,12 @@
                             </HBox>
                         </HBox>
 
-                        <!-- Foto path (jika sudah dipilih) -->
                         <Label fx:id="lblFotoPath" text="" styleClass="avatar-username"
                                visible="false" managed="false"/>
                     </VBox>
 
-                    <!-- ===== Data Diri + Password (2 kolom) ===== -->
                     <HBox spacing="20" alignment="TOP_LEFT">
 
-                        <!-- KIRI: Data Diri -->
                         <VBox styleClass="data-card" spacing="18" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
                                 <FontIcon iconLiteral="fas-id-card" styleClass="card-icon"/>
@@ -131,48 +122,40 @@
                             </HBox>
                             <Region styleClass="divider-h"/>
 
-                            <!-- Username (readonly) -->
                             <VBox spacing="5">
                                 <Label text="Username" styleClass="form-label"/>
                                 <TextField fx:id="tfUsername" styleClass="form-field-readonly" editable="false"/>
                                 <Label text="Username tidak dapat diubah" styleClass="hint-label"/>
                             </VBox>
 
-                            <!-- Nama Lengkap -->
                             <VBox spacing="5">
                                 <Label text="Nama Lengkap" styleClass="form-label"/>
                                 <TextField fx:id="tfNamaLengkap" promptText="Nama lengkap sesuai KTP" styleClass="form-field"/>
                             </VBox>
 
-                            <!-- Email -->
                             <VBox spacing="5">
                                 <Label text="Email" styleClass="form-label"/>
                                 <TextField fx:id="tfEmail" promptText="Alamat email aktif" styleClass="form-field"/>
                             </VBox>
 
-                            <!-- NIK -->
                             <VBox spacing="5">
                                 <Label text="NIK / Nomor Identitas" styleClass="form-label"/>
                                 <TextField fx:id="tfNik" promptText="16 digit NIK" styleClass="form-field"/>
                             </VBox>
 
-                            <!-- No Telepon -->
                             <VBox spacing="5">
                                 <Label text="Nomor Telepon" styleClass="form-label"/>
                                 <TextField fx:id="tfTelp" promptText="Nomor HP aktif" styleClass="form-field"/>
                             </VBox>
 
-                            <!-- Jenis Kelamin -->
                             <VBox spacing="5">
                                 <Label text="Jenis Kelamin" styleClass="form-label"/>
                                 <javafx.scene.control.ComboBox fx:id="cbJenisKelamin"
                                                                styleClass="form-field" maxWidth="Infinity"/>
                             </VBox>
 
-                            <!-- Status message -->
                             <Label fx:id="lblStatusData" text="" wrapText="true" managed="false" visible="false"/>
 
-                            <!-- Tombol simpan -->
                             <HBox alignment="CENTER_RIGHT">
                                 <Button styleClass="btn-simpan" onAction="#handleSimpanData">
                                     <graphic>
@@ -186,7 +169,6 @@
                             </HBox>
                         </VBox>
 
-                        <!-- KANAN: Ganti Password -->
                         <VBox spacing="18" prefWidth="360" minWidth="320">
                             <VBox styleClass="pw-card" spacing="18">
                                 <HBox alignment="CENTER_LEFT" spacing="10">
@@ -221,7 +203,6 @@
                                 </Button>
                             </VBox>
 
-                            <!-- Info Akun Card -->
                             <VBox styleClass="pw-card" spacing="14">
                                 <HBox alignment="CENTER_LEFT" spacing="10">
                                     <FontIcon iconLiteral="fas-info-circle" styleClass="card-icon"/>

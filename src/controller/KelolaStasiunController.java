@@ -116,7 +116,6 @@ public class KelolaStasiunController implements Initializable {
         });
     }
 
-    // ===== CREATE =====
     @FXML
     private void handleTambahStasiun() {
         stasiunDiedit = null;
@@ -126,7 +125,6 @@ public class KelolaStasiunController implements Initializable {
         tampilkanModal();
     }
 
-    // ===== UPDATE =====
     private void handleEditStasiun(Stasiun stasiun) {
         if (stasiun == null) {
             return;
@@ -137,17 +135,15 @@ public class KelolaStasiunController implements Initializable {
         tfNama.setText(stasiun.getNamaStasiun());
         tfKota.setText(stasiun.getKota());
         sembunyikanError();
-        disableKodeField();  // Kode tidak boleh diubah (UNIQUE)
+        disableKodeField();
         tampilkanModal();
     }
 
-    // ===== DELETE =====
     private void handleHapusStasiun(Stasiun stasiun) {
         if (stasiun == null) {
             return;
         }
 
-        // Validasi FK: apakah stasiun digunakan di rute?
         boolean usedInRute = stasiunDAO.isUsedInRute(stasiun.getId());
         boolean usedInRuteStasiun = stasiunDAO.isUsedInRuteStasiun(stasiun.getId());
 
@@ -159,7 +155,6 @@ public class KelolaStasiunController implements Initializable {
             return;
         }
 
-        // Konfirmasi
         Alert konfirmasi = new Alert(Alert.AlertType.CONFIRMATION);
         konfirmasi.setTitle("Hapus Stasiun");
         konfirmasi.setHeaderText(null);
@@ -177,14 +172,12 @@ public class KelolaStasiunController implements Initializable {
         }
     }
 
-    // ===== SAVE (CREATE & UPDATE) =====
     @FXML
     private void handleSimpanStasiun() {
         String kode = tfKode.getText().trim().toUpperCase();
         String nama = tfNama.getText().trim();
         String kota = tfKota.getText().trim();
 
-        // Validasi
         if (kode.isEmpty()) {
             tampilkanError("Kode stasiun tidak boleh kosong.");
             return;
@@ -208,7 +201,6 @@ public class KelolaStasiunController implements Initializable {
 
         boolean berhasil;
         if (stasiunDiedit == null) {
-            // === CREATE ===
             if (stasiunDAO.kodeStasiunExists(kode)) {
                 tampilkanError("Kode stasiun '" + kode + "' sudah terdaftar.");
                 return;
@@ -224,7 +216,6 @@ public class KelolaStasiunController implements Initializable {
                 tampilkanError("Gagal menyimpan stasiun. Silakan coba lagi.");
             }
         } else {
-            // === UPDATE ===
             if (stasiunDAO.kodeStasiunExistsExcept(kode, stasiunDiedit.getId())) {
                 tampilkanError("Kode stasiun '" + kode + "' sudah digunakan stasiun lain.");
                 return;
@@ -327,7 +318,6 @@ public class KelolaStasiunController implements Initializable {
 
     @FXML
     private void handleNavStasiun() {
-        // Sudah di halaman Kelola Stasiun
     }
 
     @FXML

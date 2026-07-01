@@ -22,8 +22,12 @@ import java.util.List;
 
 public class TiketDAO {
 
+    public TiketDAO() {
+        ensureSchema();
+    }
+
     private static final String SQL_SELECT_BASE =
-            "SELECT t.id AS tiket_id, t.kode_tiket, t.harga_total, t.status AS tiket_status, " +
+            "SELECT t.id AS tiket_id, t.kode_tiket, t.harga_total, t.status AS tiket_status, t.nama_penumpang, t.nik_penumpang, t.usia_penumpang, " +
             "u.id AS penumpang_id, u.username, u.password, u.email, u.nama_lengkap, u.no_telepon, " +
             "p.nik, p.tgl_lahir AS penumpang_tgl_lahir, p.jenis_kelamin AS penumpang_jenis_kelamin, " +
             "j.id AS jadwal_id, j.waktu_berangkat, j.waktu_tiba, j.status AS jadwal_status, " +
@@ -38,7 +42,7 @@ public class TiketDAO {
             "JOIN kereta k ON j.kereta_id = k.id " +
             "JOIN rute r ON j.rute_id = r.id " +
             "JOIN jenis_kelas jk ON j.jenis_kelas_id = jk.id " +
-            "JOIN kursi ku ON t.kursi_id = ku.id ";
+            "LEFT JOIN kursi ku ON t.kursi_id = ku.id ";
 
     public Tiket findById(int id) {
         String sql = SQL_SELECT_BASE + "WHERE t.id = ?";
@@ -94,16 +98,23 @@ public class TiketDAO {
     }
 
     public boolean save(Tiket tiket) {
-        String sql = "INSERT INTO tiket (kode_tiket, penumpang_id, jadwal_id, kursi_id, harga_total, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tiket (kode_tiket, penumpang_id, jadwal_id, kursi_id, harga_total, status, nama_penumpang, nik_penumpang, usia_penumpang) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, tiket.getKodeTiket());
             ps.setInt(2, tiket.getPenumpang().getId());
             ps.setInt(3, tiket.getJadwal().getId());
-            ps.setInt(4, tiket.getKursi().getId());
+            if (tiket.getKursi() != null && tiket.getKursi().getId() > 0) {
+                ps.setInt(4, tiket.getKursi().getId());
+            } else {
+                ps.setNull(4, Types.INTEGER);
+            }
             ps.setDouble(5, tiket.getHargaTotal());
             ps.setString(6, tiket.getStatus());
+            ps.setString(7, tiket.getNamaPenumpang());
+            ps.setString(8, tiket.getNikPenumpang());
+            ps.setInt(9, tiket.getUsiaPenumpang());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -120,13 +131,15 @@ public class TiketDAO {
     }
 
     public boolean update(Tiket tiket) {
-        String sql = "UPDATE tiket SET kode_tiket=?, status=? WHERE id=?";
+        String sql = "UPDATE tiket SET kode_tiket=?, status=?, nama_penumpang=?, nik_penumpang=? WHERE id=?";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, tiket.getKodeTiket());
             ps.setString(2, tiket.getStatus());
-            ps.setInt(3, tiket.getId());
+            ps.setString(3, tiket.getNamaPenumpang());
+            ps.setString(4, tiket.getNikPenumpang());
+            ps.setInt(5, tiket.getId());
             int rows = ps.executeUpdate();
             return rows > 0;
 
@@ -180,18 +193,58 @@ public class TiketDAO {
         jadwal.setId(rs.getInt("jadwal_id"));
         jadwal.setStatus(rs.getString("jadwal_status"));
 
-        Kursi kursi = new Kursi(jadwal, jenisKelas, rs.getString("nomor_kursi"));
-        kursi.setId(rs.getInt("kursi_id"));
-        kursi.setStatus(rs.getString("kursi_status"));
+        Kursi kursi = null;
+        int kursiId = rs.getInt("kursi_id");
+        if (!rs.wasNull()) {
+            kursi = new Kursi(jadwal, jenisKelas, rs.getString("nomor_kursi"));
+            kursi.setId(kursiId);
+            kursi.setStatus(rs.getString("kursi_status"));
+        }
 
         Tiket tiket = new Tiket(penumpang, jadwal, kursi, rs.getDouble("harga_total"));
         tiket.setId(rs.getInt("tiket_id"));
         tiket.setKodeTiket(rs.getString("kode_tiket"));
         tiket.setStatus(rs.getString("tiket_status"));
+        tiket.setNamaPenumpang(rs.getString("nama_penumpang"));
+        tiket.setNikPenumpang(rs.getString("nik_penumpang"));
+        tiket.setUsiaPenumpang(rs.getInt("usia_penumpang"));
         return tiket;
     }
 
     private LocalDate toLocalDate(Date sqlDate) {
         return (sqlDate != null) ? sqlDate.toLocalDate() : null;
+    }
+
+    private void ensureSchema() {
+        Connection conn = DBConnection.getInstance();
+        if (conn == null) return;
+        try {
+            java.sql.DatabaseMetaData metaData = conn.getMetaData();
+            boolean hasNama = false;
+            boolean hasNik = false;
+            boolean hasUsia = false;
+            try (ResultSet rs = metaData.getColumns(conn.getCatalog(), null, "tiket", "nama_penumpang")) {
+                if (rs.next()) hasNama = true;
+            }
+            try (ResultSet rs = metaData.getColumns(conn.getCatalog(), null, "tiket", "nik_penumpang")) {
+                if (rs.next()) hasNik = true;
+            }
+            try (ResultSet rs = metaData.getColumns(conn.getCatalog(), null, "tiket", "usia_penumpang")) {
+                if (rs.next()) hasUsia = true;
+            }
+            try (Statement statement = conn.createStatement()) {
+                if (!hasNama) {
+                    statement.executeUpdate("ALTER TABLE tiket ADD COLUMN nama_penumpang VARCHAR(255) NULL");
+                }
+                if (!hasNik) {
+                    statement.executeUpdate("ALTER TABLE tiket ADD COLUMN nik_penumpang VARCHAR(50) NULL");
+                }
+                if (!hasUsia) {
+                    statement.executeUpdate("ALTER TABLE tiket ADD COLUMN usia_penumpang INT NULL");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Gagal memastikan schema tiket: " + e.getMessage());
+        }
     }
 }

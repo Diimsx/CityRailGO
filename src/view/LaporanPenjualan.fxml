@@ -20,7 +20,6 @@
             stylesheets="@LaporanPenjualan.css"
             styleClass="root-bg">
 
-    <!-- ===================== SIDEBAR ===================== -->
     <left>
         <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
 
@@ -71,11 +70,9 @@
         </VBox>
     </left>
 
-    <!-- ===================== KONTEN UTAMA ===================== -->
     <center>
         <VBox styleClass="content-area">
 
-            <!-- Topbar -->
             <HBox alignment="CENTER_LEFT" styleClass="topbar">
                 <VBox>
                     <Label text="Laporan Penjualan" styleClass="page-title"/>
@@ -85,7 +82,6 @@
                 <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
             </HBox>
 
-            <!-- Stat KPI cards (mengikuti hasil filter) -->
             <HBox spacing="16" styleClass="stat-row">
 
                 <VBox alignment="CENTER_LEFT" spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS">
@@ -114,7 +110,6 @@
 
             </HBox>
 
-            <!-- Toolbar filter -->
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="toolbar">
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-box">
                     <FontIcon iconLiteral="fas-search" styleClass="search-icon"/>
@@ -134,7 +129,6 @@
 
                 <Button text="Reset" styleClass="btn-secondary" onAction="#handleResetFilter"/>
 
-                <!-- Toggle Breakdown -->
                 <HBox styleClass="toggle-group" spacing="0">
                     <Button fx:id="btnToggleHarian" text="Harian" styleClass="toggle-btn-active" onAction="#handleToggleHarian"/>
                     <Button fx:id="btnToggleBulanan" text="Bulanan" styleClass="toggle-btn" onAction="#handleToggleBulanan"/>
@@ -150,10 +144,8 @@
                 </Button>
             </HBox>
 
-            <!-- Layout bawah: Tabel + Panel Breakdown berdampingan -->
             <HBox spacing="16" VBox.vgrow="ALWAYS">
 
-                <!-- Tabel Transaksi -->
                 <VBox spacing="12" styleClass="table-card" HBox.hgrow="ALWAYS">
                     <HBox alignment="CENTER_LEFT">
                         <Label text="Rincian Transaksi" styleClass="card-title"/>
@@ -174,19 +166,15 @@
                     </TableView>
                 </VBox>
 
-                <!-- Panel Breakdown Harian/Bulanan -->
                 <VBox spacing="12" styleClass="breakdown-card" prefWidth="260">
                     <HBox alignment="CENTER_LEFT">
                         <Label fx:id="lblBreakdownTitle" text="Breakdown Harian" styleClass="card-title"/>
                     </HBox>
                     <Label fx:id="lblBreakdownSubtitle" text="Pendapatan per hari" styleClass="breakdown-subtitle"/>
 
-                    <!-- Scrollable list breakdown rows -->
                     <VBox fx:id="vboxBreakdown" spacing="6" VBox.vgrow="ALWAYS" styleClass="breakdown-list">
-                        <!-- Baris diisi secara dinamis dari controller -->
                     </VBox>
 
-                    <!-- Footer total breakdown -->
                     <VBox styleClass="breakdown-footer" spacing="4">
                         <Label styleClass="breakdown-footer-label" text="Total Periode Ini"/>
                         <Label fx:id="lblBreakdownTotal" text="Rp 0" styleClass="breakdown-footer-value"/>

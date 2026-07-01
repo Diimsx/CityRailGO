@@ -19,28 +19,20 @@ public class RuteDAO {
         ensureSchema();
     }
 
-    // =========================================================
-    // SCHEMA MIGRATION (auto-run saat startup)
-    // =========================================================
-
     private void ensureSchema() {
         Connection conn = DBConnection.getInstance();
         if (conn == null) return;
 
         try {
-            // 1. Tambah kolom nama_rute ke tabel rute (jika belum ada)
             if (!columnExists(conn, "rute", "nama_rute")) {
                 execute(conn, "ALTER TABLE rute ADD COLUMN nama_rute VARCHAR(255) NOT NULL DEFAULT '' AFTER id");
             }
-            // 2. Tambah kolom stasiun_asal_id
             if (!columnExists(conn, "rute", "stasiun_asal_id")) {
                 execute(conn, "ALTER TABLE rute ADD COLUMN stasiun_asal_id INT NOT NULL DEFAULT 0 AFTER nama_rute");
             }
-            // 3. Tambah kolom stasiun_tujuan_id
             if (!columnExists(conn, "rute", "stasiun_tujuan_id")) {
                 execute(conn, "ALTER TABLE rute ADD COLUMN stasiun_tujuan_id INT NOT NULL DEFAULT 0 AFTER stasiun_asal_id");
             }
-            // 4. Buat tabel rute_stasiun (intermediate stops)
             execute(conn,
                 "CREATE TABLE IF NOT EXISTS rute_stasiun (" +
                 "  id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -51,17 +43,12 @@ public class RuteDAO {
                 "  FOREIGN KEY (stasiun_id) REFERENCES stasiun(id)" +
                 ")"
             );
-            // 5. Migrasi data lama: isi stasiun_asal_id / stasiun_tujuan_id dari nama text
             migrasiDataLama(conn);
         } catch (SQLException e) {
             System.out.println("RuteDAO ensureSchema error: " + e.getMessage());
         }
     }
 
-    /**
-     * Migrasi data lama: jika rute memiliki stasiun_asal_id = 0,
-     * coba cari stasiun berdasarkan nama di kolom stasiun_asal (teks lama).
-     */
     private void migrasiDataLama(Connection conn) {
         String sql = "SELECT id, stasiun_asal, stasiun_tujuan FROM rute WHERE stasiun_asal_id = 0";
         try (PreparedStatement ps = conn.prepareStatement(sql);
@@ -70,7 +57,6 @@ public class RuteDAO {
                 int ruteId = rs.getInt("id");
                 String namaAsal   = rs.getString("stasiun_asal");
                 String namaTujuan = rs.getString("stasiun_tujuan");
-                // Cari ID stasiun berdasarkan nama
                 int idAsal   = cariIdStasiunByNama(conn, namaAsal);
                 int idTujuan = cariIdStasiunByNama(conn, namaTujuan);
                 if (idAsal > 0 && idTujuan > 0) {
@@ -101,10 +87,6 @@ public class RuteDAO {
         }
         return 0;
     }
-
-    // =========================================================
-    // CRUD OPERATIONS
-    // =========================================================
 
     public Rute findById(int id) {
         String sql =
@@ -231,7 +213,6 @@ public class RuteDAO {
                 ps.setInt(8, rute.getId());
                 ps.executeUpdate();
             }
-            // Hapus stops lama, insert baru
             deleteStops(conn, rute.getId());
             saveStops(conn, rute);
             conn.commit();
@@ -246,7 +227,6 @@ public class RuteDAO {
     }
 
     public boolean delete(int id) {
-        // rute_stasiun akan terhapus CASCADE via FK
         String sql = "DELETE FROM rute WHERE id = ?";
         Connection conn = DBConnection.getInstance();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -258,26 +238,19 @@ public class RuteDAO {
         }
     }
 
-    // =========================================================
-    // HELPERS
-    // =========================================================
-
     private Rute buildRuteFromResultSet(ResultSet rs) throws SQLException {
-        // Stasiun asal
         Stasiun asal = null;
         int asalId = rs.getInt("asal_id");
         if (!rs.wasNull() && asalId > 0) {
             asal = new Stasiun(rs.getString("asal_kode"), rs.getString("asal_nama"), rs.getString("asal_kota"));
             asal.setId(asalId);
         }
-        // Stasiun tujuan
         Stasiun tujuan = null;
         int tujuanId = rs.getInt("tujuan_id");
         if (!rs.wasNull() && tujuanId > 0) {
             tujuan = new Stasiun(rs.getString("tujuan_kode"), rs.getString("tujuan_nama"), rs.getString("tujuan_kota"));
             tujuan.setId(tujuanId);
         }
-        // Fallback ke teks lama jika FK belum terisi
         if (asal == null) {
             asal = new Stasiun("", rs.getString("stasiun_asal"), "");
         }

@@ -5,31 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * JarakEstimator — menghitung jarak dan estimasi waktu perjalanan kereta
- * berdasarkan tabel jarak antar-stasiun (km) yang dikodekan secara statis.
- *
- * Jarak bersifat simetris (A→B = B→A).
- * Estimasi waktu dihitung dari jarak total dengan kecepatan rata-rata 80 km/jam,
- * ditambah 10 menit per stasiun transit untuk berhenti.
- *
- * Jika pasangan stasiun tidak ditemukan di tabel, sistem mencoba mengestimasi
- * lewat penjumlahan segmen yang ada (fallback sederhana).
- */
 public class JarakEstimator {
-
-    /** Kecepatan rata-rata kereta antar-kota dalam km/jam */
     private static final double KECEPATAN_KMH = 80.0;
-
-    /** Waktu berhenti per stasiun transit (menit) */
     private static final int MENIT_BERHENTI_PER_TRANSIT = 10;
-
-    /** Jarak minimum fallback jika tidak ada data (km) */
     private static final double JARAK_MINIMUM = 10.0;
 
-    /**
-     * Hasil kalkulasi yang dikembalikan oleh metode hitung().
-     */
     public record Hasil(double jarakKm, int estimasiMenit) {
         public String formatJarak()    { return String.format("%.0f km", jarakKm); }
         public String formatEstimasi() {
@@ -39,14 +19,10 @@ public class JarakEstimator {
         }
     }
 
-    // =========================================================
-    //  TABEL JARAK ANTAR-STASIUN (km)
-    //  Key format: "KODE_A|KODE_B"  (selalu urutkan secara alfabetis)
-    // =========================================================
     private static final Map<String, Double> TABEL_JARAK = new HashMap<>();
 
     static {
-        // ---------- Jalur Jakarta (GMR/PSE) ----------
+        // Jalur Jakarta (GMR/PSE)
         put("GMR", "BD",  173);
         put("GMR", "CN",  246);
         put("GMR", "PWT", 391);
@@ -72,7 +48,7 @@ public class JarakEstimator {
         put("PSE", "MLG", 848);
         put("PSE", "BJR", 1008);
 
-        // ---------- Jalur Barat–Tengah ----------
+        // Jalur Barat–Tengah
         put("BD",  "CN",  130);
         put("BD",  "PWT", 237);
         put("BD",  "YK",  356);
@@ -84,7 +60,7 @@ public class JarakEstimator {
         put("PWT", "YK",  121);
         put("KY",  "YK",   37);
 
-        // ---------- Jalur Tengah–Timur ----------
+        // Jalur Tengah–Timur
         put("YK",  "SLO",  60);
         put("YK",  "SGU", 311);
         put("YK",  "SBI", 309);
@@ -101,7 +77,7 @@ public class JarakEstimator {
         put("MKS", "SGU", 160);
         put("MKS", "SBI", 158);
 
-        // ---------- Jalur Surabaya–Timur ----------
+        // Jalur Surabaya–Timur
         put("SGU", "SBI",   8);
         put("SGU", "MLG",  89);
         put("SGU", "BJR", 274);
@@ -120,10 +96,6 @@ public class JarakEstimator {
     private static String kunci(String a, String b) {
         return a.compareTo(b) <= 0 ? a + "|" + b : b + "|" + a;
     }
-
-    // =========================================================
-    //  API PUBLIK
-    // =========================================================
 
     /**
      * Hitung total jarak dan estimasi waktu untuk rute:

@@ -11,8 +11,6 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <HBox prefHeight="720" prefWidth="1280" styleClass="auth-root" stylesheets="@login.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
-
-    <!-- ===================== PANEL KIRI - BRANDING ===================== -->
     <VBox alignment="CENTER" prefHeight="720" prefWidth="480" styleClass="brand-panel">
         <VBox alignment="CENTER" spacing="18">
 
@@ -34,7 +32,6 @@
         </VBox>
     </VBox>
 
-    <!-- ===================== PANEL KANAN - FORM LOGIN ===================== -->
     <VBox alignment="CENTER" prefHeight="720" prefWidth="800" styleClass="form-panel">
 
         <VBox alignment="CENTER" maxWidth="380" spacing="22" styleClass="auth-card">

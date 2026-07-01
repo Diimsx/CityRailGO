@@ -13,6 +13,22 @@ import java.util.List;
 
 public class JenisKelasDAO {
 
+    public JenisKelasDAO() {
+        ensureDefaultRates();
+    }
+
+    private void ensureDefaultRates() {
+        Connection conn = DBConnection.getInstance();
+        if (conn == null) return;
+        try (Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("UPDATE jenis_kelas SET harga_per_km = 250 WHERE LOWER(nama_kelas) LIKE '%ekonomi%'");
+            stmt.executeUpdate("UPDATE jenis_kelas SET harga_per_km = 450 WHERE LOWER(nama_kelas) LIKE '%bisnis%'");
+            stmt.executeUpdate("UPDATE jenis_kelas SET harga_per_km = 650 WHERE LOWER(nama_kelas) LIKE '%eksekutif%'");
+        } catch (SQLException e) {
+            System.out.println("Gagal memperbarui harga default jenis kelas: " + e.getMessage());
+        }
+    }
+
     public JenisKelas findById(int id) {
         String sql = "SELECT * FROM jenis_kelas WHERE id = ?";
         Connection conn = DBConnection.getInstance();

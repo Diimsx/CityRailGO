@@ -1,16 +1,8 @@
-/* =========================================================
-   KelolaKereta.css
-   Tema: modern minimalis, konsisten dengan HomeAdmin.css
-   Navbar : #0A192F
-   Background utama : #F0F4F8
-========================================================= */
-
 .root-bg {
     -fx-background-color: #F0F4F8;
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Sidebar (sama seperti HomeAdmin) ===== */
 .sidebar {
     -fx-background-color: #0A192F;
 }
@@ -91,7 +83,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* ===== Konten utama ===== */
 .content-area {
     -fx-padding: 30 36 30 36;
     -fx-spacing: 22;
@@ -118,7 +109,6 @@
     -fx-text-fill: #0A192F;
 }
 
-/* ===== Toolbar (search + tambah) ===== */
 .toolbar {
     -fx-padding: 0 0 0 0;
 }
@@ -180,7 +170,6 @@
     -fx-background-color: #E2E7EF;
 }
 
-/* ===== Tabel kereta ===== */
 .table-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -225,7 +214,6 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-/* Aksi tabel (edit/hapus) */
 .action-icon-edit {
     -fx-icon-size: 15;
     -fx-icon-color: #2979FF;
@@ -246,7 +234,6 @@
     -fx-icon-color: #C23F3F;
 }
 
-/* ===== Modal Tambah/Edit ===== */
 .modal-backdrop {
     -fx-background-color: rgba(10, 25, 47, 0.45);
 }

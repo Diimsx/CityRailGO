@@ -54,7 +54,6 @@ public class AdminController {
         return keretaDAO.delete(id);
     }
 
-    // ===== Validation methods =====
     public String validateKereta(Kereta kereta) {
         if (kereta.getNama() == null || kereta.getNama().trim().isEmpty()) {
             return "Nama kereta tidak boleh kosong.";
@@ -68,14 +67,14 @@ public class AdminController {
         if (kereta.getJumlahGerbong() <= 0) {
             return "Jumlah gerbong harus lebih dari 0.";
         }
-        return null;  // Valid
+        return null;
     }
 
     public String validateRute(Rute rute) {
         if (rute == null) {
             return "Data rute tidak valid.";
         }
-        return null;  // Valid
+        return null;
     }
 
     public String validateJadwal(Jadwal jadwal) {
@@ -97,7 +96,7 @@ public class AdminController {
         if (jadwal.getWaktuTiba().isBefore(jadwal.getWaktuBerangkat())) {
             return "Waktu tiba tidak boleh lebih awal dari waktu berangkat.";
         }
-        return null;  // Valid
+        return null;
     }
 
     public String validatePromo(Promo promo) {
@@ -110,7 +109,7 @@ public class AdminController {
         if (promo.getTanggalBerakhir().isBefore(promo.getTanggalMulai())) {
             return "Tanggal berakhir tidak boleh sebelum tanggal mulai.";
         }
-        return null;  // Valid
+        return null;
     }
 
     public boolean tambahRute(Rute rute) {
@@ -164,9 +163,24 @@ public class AdminController {
 
     private void buatKursiUntukJadwal(Jadwal jadwal) {
         JenisKelas jenisKelas = jadwal.getJenisKelas();
-        int kapasitas = jadwal.getKereta().getKapasitasTotal();
+        Kereta kereta = jadwal.getKereta();
 
-        for (int i = 1; i <= kapasitas; i++) {
+        int kapasitasJadwal = 0;
+        String kelas = jenisKelas.getNamaKelas().toLowerCase();
+
+        if (kelas.contains("eksekutif")) {
+            kapasitasJadwal = kereta.getGerbongEksekutif() * 50;
+        } else if (kelas.contains("bisnis")) {
+            kapasitasJadwal = kereta.getGerbongBisnis() * 60;
+        } else {
+            kapasitasJadwal = kereta.getGerbongEkonomi() * 80;
+        }
+
+        if (kapasitasJadwal == 0) {
+            kapasitasJadwal = kereta.getKapasitasTotal();
+        }
+
+        for (int i = 1; i <= kapasitasJadwal; i++) {
             String nomorKursi = String.format("%03d", i);
             Kursi kursi = new Kursi(jadwal, jenisKelas, nomorKursi);
             kursiDAO.save(kursi);

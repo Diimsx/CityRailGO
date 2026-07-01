@@ -1,15 +1,7 @@
-/* =========================================================
-   login.css
-   Tema   : modern minimalis - auth screen (split layout)
-   Navbar/Brand panel : #0A192F
-   Background utama   : #F0F4F8
-========================================================= */
-
 .auth-root {
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Panel kiri - branding ===== */
 .brand-panel {
     -fx-background-color: #0A192F;
 }
@@ -54,7 +46,6 @@
     -fx-text-fill: #C2CEE0;
 }
 
-/* ===== Panel kanan - form ===== */
 .form-panel {
     -fx-background-color: #F0F4F8;
     -fx-spacing: 18;

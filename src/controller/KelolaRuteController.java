@@ -51,17 +51,13 @@ public class KelolaRuteController implements Initializable {
     @FXML private TableColumn<Rute, Double>  colJarak;
     @FXML private TableColumn<Rute, Integer> colEstimasi;
     @FXML private TableColumn<Rute, Void>    colAksi;
-
-    // Modal fields
     @FXML private StackPane   modalOverlay;
     @FXML private Label       lblModalTitle;
     @FXML private TextField   tfNamaRute;
     @FXML private ComboBox<Stasiun> cbStasiunAsal;
     @FXML private ComboBox<Stasiun> cbStasiunTujuan;
-    // Hidden fields (diisi otomatis)
     @FXML private TextField   tfJarakKm;
     @FXML private TextField   tfEstimasiMenit;
-    // Label auto-calc display
     @FXML private Label       lblJarakKm;
     @FXML private Label       lblEstimasiMenit;
     @FXML private Label       lblAutoCalcHint;
@@ -79,10 +75,6 @@ public class KelolaRuteController implements Initializable {
 
     private Rute ruteDiedit;
 
-    // =========================================================
-    // INITIALIZE
-    // =========================================================
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         lblAdminName.setText("Halo, " + SessionManager.getInstance().getCurrentUser().getUsername());
@@ -91,7 +83,6 @@ public class KelolaRuteController implements Initializable {
         setupComboStasiun(cbStasiunAsal);
         setupComboStasiun(cbStasiunTujuan);
 
-        // Auto-kalkulasi saat stasiun asal/tujuan berubah
         cbStasiunAsal.valueProperty().addListener((obs, o, n)   -> perbaruiAutoCalc());
         cbStasiunTujuan.valueProperty().addListener((obs, o, n) -> perbaruiAutoCalc());
 
@@ -115,10 +106,6 @@ public class KelolaRuteController implements Initializable {
             }
         });
     }
-
-    // =========================================================
-    // TABEL
-    // =========================================================
 
     private void setupTabel() {
         colNo.setCellValueFactory(data ->
@@ -193,10 +180,6 @@ public class KelolaRuteController implements Initializable {
         });
     }
 
-    // =========================================================
-    // CRUD HANDLERS
-    // =========================================================
-
     @FXML
     private void handleTambahRute() {
         ruteDiedit = null;
@@ -214,14 +197,11 @@ public class KelolaRuteController implements Initializable {
 
         tfNamaRute.setText(rute.getNamaRute());
 
-        // Load stops dulu sebelum set ComboBox
-        // agar listener auto-calc sudah punya stops saat dipicu
         vboxStops.getChildren().clear();
         for (Stasiun stop : rute.getStasiunPemberhentian()) {
             tambahBarisStop(stop);
         }
 
-        // Set ComboBox â€” memicu perbaruiAutoCalc() via listener
         cbStasiunAsal.setValue(cariStasiunById(rute.getStasiunAsalObj()));
         cbStasiunTujuan.setValue(cariStasiunById(rute.getStasiunTujuanObj()));
 
@@ -256,9 +236,7 @@ public class KelolaRuteController implements Initializable {
         String namaRute      = tfNamaRute.getText().trim();
         Stasiun stasiunAsal  = cbStasiunAsal.getValue();
         Stasiun stasiunTujuan = cbStasiunTujuan.getValue();
-        // Tidak lagi baca teksJarak/teksEstimasi langsung — sudah di hidden field
-
-        // --- Validasi field wajib ---
+        
         if (namaRute.isEmpty()) {
             tampilkanError("Nama rute tidak boleh kosong.");
             return;
@@ -276,7 +254,6 @@ public class KelolaRuteController implements Initializable {
             return;
         }
 
-        // Jarak dan estimasi diisi otomatis — ambil dari hidden TextField
         double jarakKm;
         int estimasiMenit;
         try {
@@ -291,18 +268,15 @@ public class KelolaRuteController implements Initializable {
             return;
         }
 
-        // --- Kumpulkan stops dari vboxStops ---
         List<Stasiun> stops = kumpulkanStops();
-        if (stops == null) return; // validasi gagal, error sudah ditampilkan
+        if (stops == null) return;
 
-        // --- Validasi duplikat stop ---
         String pesanDuplikat = validasiDuplikatStop(stasiunAsal, stasiunTujuan, stops);
         if (pesanDuplikat != null) {
             tampilkanError(pesanDuplikat);
             return;
         }
 
-        // --- Buat objek Rute ---
         Rute ruteBaru = new Rute(namaRute, stasiunAsal, stasiunTujuan, jarakKm, estimasiMenit);
         ruteBaru.setStasiunPemberhentian(stops);
 
@@ -326,27 +300,17 @@ public class KelolaRuteController implements Initializable {
         }
     }
 
-    // =========================================================
-    // DYNAMIC STOPS (Stasiun Pemberhentian)
-    // =========================================================
-
     @FXML
     private void handleTambahStop() {
         tambahBarisStop(null);
     }
 
-    /**
-     * Menambah satu baris ComboBox pemberhentian ke vboxStops.
-     * @param preselect Stasiun yang sudah dipilih sebelumnya (untuk mode Edit), atau null.
-     */
     private void tambahBarisStop(Stasiun preselect) {
         int urutan = vboxStops.getChildren().size() + 1;
 
-        // Badge urutan
         Label lblUrutan = new Label(String.valueOf(urutan));
         lblUrutan.getStyleClass().add("stop-index");
 
-        // ComboBox pilih stasiun
         ComboBox<Stasiun> cbStop = new ComboBox<>(daftarStasiun);
         cbStop.getStyleClass().add("stop-combo");
         cbStop.setMaxWidth(Double.MAX_VALUE);
@@ -356,7 +320,6 @@ public class KelolaRuteController implements Initializable {
             cbStop.setValue(cariStasiunById(preselect));
         }
 
-        // Tombol hapus baris
         Button btnHapus = new Button("×");
         btnHapus.getStyleClass().add("btn-remove-stop");
 
@@ -368,16 +331,14 @@ public class KelolaRuteController implements Initializable {
         btnHapus.setOnAction(e -> {
             vboxStops.getChildren().remove(baris);
             renumberStops();
-            perbaruiAutoCalc(); // recalc setelah stop dihapus
+            perbaruiAutoCalc();
         });
 
-        // Auto-calc saat pilihan stop berubah
         cbStop.valueProperty().addListener((obs, o, n) -> perbaruiAutoCalc());
 
         vboxStops.getChildren().add(baris);
     }
 
-    /** Update semua badge nomor urutan setelah penghapusan baris. */
     private void renumberStops() {
         for (int i = 0; i < vboxStops.getChildren().size(); i++) {
             if (vboxStops.getChildren().get(i) instanceof HBox row) {
@@ -388,16 +349,11 @@ public class KelolaRuteController implements Initializable {
         }
     }
 
-    /**
-     * Mengambil daftar Stasiun dari semua baris stop di vboxStops.
-     * Mengembalikan null jika ada baris yang belum dipilih.
-     */
     @SuppressWarnings("unchecked")
     private List<Stasiun> kumpulkanStops() {
         List<Stasiun> stops = new ArrayList<>();
         for (int i = 0; i < vboxStops.getChildren().size(); i++) {
             if (vboxStops.getChildren().get(i) instanceof HBox row) {
-                // ComboBox ada di index 1 dalam HBox (setelah Label badge)
                 if (row.getChildren().size() > 1 && row.getChildren().get(1) instanceof ComboBox<?> cb) {
                     Stasiun s = (Stasiun) cb.getValue();
                     if (s == null) {
@@ -411,10 +367,6 @@ public class KelolaRuteController implements Initializable {
         return stops;
     }
 
-    /**
-     * Validasi: tidak boleh ada duplikat stasiun dalam satu rute
-     * (asal, semua stops, tujuan harus unik).
-     */
     private String validasiDuplikatStop(Stasiun asal, Stasiun tujuan, List<Stasiun> stops) {
         Set<Integer> idSet = new HashSet<>();
         idSet.add(asal.getId());
@@ -428,10 +380,6 @@ public class KelolaRuteController implements Initializable {
         }
         return null;
     }
-
-    // =========================================================
-    // MODAL HELPERS
-    // =========================================================
 
     @FXML
     private void handleTutupModal() { tutupModal(); }
@@ -459,15 +407,6 @@ public class KelolaRuteController implements Initializable {
         sembunyikanError();
     }
 
-    // =========================================================
-    // AUTO-KALKULASI JARAK & ESTIMASI
-    // =========================================================
-
-    /**
-     * Dipanggil setiap kali stasiun asal, tujuan, atau transit berubah.
-     * Menghitung ulang jarak total dan estimasi waktu via JarakEstimator
-     * lalu mengisi lblJarakKm, lblEstimasiMenit, dan hidden tfJarakKm/tfEstimasiMenit.
-     */
     @SuppressWarnings("unchecked")
     private void perbaruiAutoCalc() {
         Stasiun asal   = cbStasiunAsal.getValue();
@@ -478,7 +417,6 @@ public class KelolaRuteController implements Initializable {
             return;
         }
 
-        // Kumpulkan stops yang sudah dipilih (abaikan yang null)
         List<Stasiun> stops = new java.util.ArrayList<>();
         for (var node : vboxStops.getChildren()) {
             if (node instanceof HBox row && row.getChildren().size() > 1
@@ -494,15 +432,12 @@ public class KelolaRuteController implements Initializable {
             return;
         }
 
-        // Update display labels
         lblJarakKm.setText(hasil.formatJarak());
         lblEstimasiMenit.setText(hasil.formatEstimasi());
 
-        // Isi hidden field untuk dipakai saat simpan
         tfJarakKm.setText(String.valueOf(hasil.jarakKm()));
         tfEstimasiMenit.setText(String.valueOf(hasil.estimasiMenit()));
 
-        // Hint: apakah ada pasangan yang data jaraknya tidak diketahui
         boolean semuaAda = JarakEstimator.adaData(asal, tujuan);
         if (semuaAda) {
             lblAutoCalcHint.setText("Dihitung dari tabel jarak antar-stasiun resmi KAI.");
@@ -522,11 +457,6 @@ public class KelolaRuteController implements Initializable {
         lblAutoCalcHint.setStyle("");
     }
 
-    // =========================================================
-    // UTILS
-    // =========================================================
-
-    /** Cari Stasiun di daftarStasiun berdasarkan ID dari objek yang diberikan. */
     private Stasiun cariStasiunById(Stasiun ref) {
         if (ref == null) return null;
         return daftarStasiun.stream()
@@ -554,17 +484,32 @@ public class KelolaRuteController implements Initializable {
         alert.showAndWait();
     }
 
-    // =========================================================
-    // NAVIGASI
-    // =========================================================
-
-    @FXML private void handleNavDashboard() { SceneManager.switchScene("HomeAdmin.fxml"); }
-    @FXML private void handleNavKereta()    { SceneManager.switchScene("KelolaKereta.fxml"); }
-    @FXML private void handleNavRute()      { /* sudah berada di halaman ini */ }
-    @FXML private void handleNavStasiun()   { SceneManager.switchScene("KelolaStasiun.fxml"); }
-    @FXML private void handleNavJadwal()    { SceneManager.switchScene("KelolaJadwal.fxml"); }
-    @FXML private void handleNavPromo()     { SceneManager.switchScene("KelolaPromo.fxml"); }
-    @FXML private void handleNavLaporan()   { SceneManager.switchScene("LaporanPenjualan.fxml"); }
+    @FXML private void handleNavDashboard() { 
+        SceneManager.switchScene("HomeAdmin.fxml"); 
+    }
+    
+    @FXML private void handleNavKereta() {
+        SceneManager.switchScene("KelolaKereta.fxml"); 
+    }
+    
+    @FXML private void handleNavRute() { 
+    }
+    
+    @FXML private void handleNavStasiun() { 
+        SceneManager.switchScene("KelolaStasiun.fxml"); 
+    }
+    
+    @FXML private void handleNavJadwal() { 
+        SceneManager.switchScene("KelolaJadwal.fxml"); 
+    }
+    
+    @FXML private void handleNavPromo() { 
+        SceneManager.switchScene("KelolaPromo.fxml"); 
+    }
+    
+    @FXML private void handleNavLaporan() { 
+        SceneManager.switchScene("LaporanPenjualan.fxml"); 
+    }
 
     @FXML
     private void handleLogout() {

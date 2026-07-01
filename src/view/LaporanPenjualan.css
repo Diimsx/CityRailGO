@@ -1,16 +1,8 @@
-/* =========================================================
-   LaporanPenjualan.css
-   Tema: modern minimalis, konsisten dengan screen admin lainnya
-   Navbar : #0A192F
-   Background utama : #F0F4F8
-========================================================= */
-
 .root-bg {
     -fx-background-color: #F0F4F8;
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Sidebar (sama seperti screen admin lainnya) ===== */
 .sidebar {
     -fx-background-color: #0A192F;
 }
@@ -91,7 +83,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* ===== Konten utama ===== */
 .content-area {
     -fx-padding: 30 36 30 36;
     -fx-spacing: 22;
@@ -118,7 +109,6 @@
     -fx-text-fill: #0A192F;
 }
 
-/* ===== Stat cards ===== */
 .stat-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -162,7 +152,6 @@
     -fx-text-fill: #6E84A8;
 }
 
-/* ===== Toolbar filter ===== */
 .search-box {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -258,7 +247,6 @@
     -fx-background-color: #E2E7EF;
 }
 
-/* ===== Tabel laporan ===== */
 .table-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -303,14 +291,12 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-/* Nilai harga */
 .harga-value {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: #0A192F;
 }
 
-/* Badge status tiket */
 .badge-status {
     -fx-background-radius: 20;
     -fx-padding: 4 12 4 12;
@@ -328,7 +314,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* ===== Toggle Harian / Bulanan ===== */
 .toggle-group {
     -fx-background-color: #EEF1F6;
     -fx-background-radius: 8;
@@ -361,7 +346,6 @@
     -fx-effect: dropshadow(gaussian, rgba(41, 121, 255, 0.12), 4, 0, 0, 1);
 }
 
-/* ===== Export button ===== */
 .btn-export {
     -fx-background-color: #167A42;
     -fx-background-radius: 10;
@@ -373,7 +357,6 @@
     -fx-background-color: #0E5A30;
 }
 
-/* ===== Breakdown Panel ===== */
 .breakdown-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -393,7 +376,6 @@
     -fx-spacing: 5;
 }
 
-/* Satu baris breakdown: tanggal/bulan + bar + nilai */
 .breakdown-row {
     -fx-background-radius: 6;
     -fx-padding: 6 8 6 8;
@@ -411,21 +393,18 @@
     -fx-min-width: 72;
 }
 
-/* Mini bar background track */
 .breakdown-bar-track {
     -fx-background-color: #EEF1F6;
     -fx-background-radius: 4;
     -fx-pref-height: 8;
 }
 
-/* Mini bar fill */
 .breakdown-bar-fill {
     -fx-background-color: #2979FF;
     -fx-background-radius: 4;
     -fx-pref-height: 8;
 }
 
-/* Baris terbaik (tertinggi) */
 .breakdown-bar-fill-top {
     -fx-background-color: #2BB673;
     -fx-background-radius: 4;
@@ -445,7 +424,6 @@
     -fx-text-fill: #9AAAC4;
 }
 
-/* Footer total breakdown */
 .breakdown-footer {
     -fx-background-color: #F7F9FC;
     -fx-background-radius: 8;
@@ -466,14 +444,12 @@
     -fx-text-fill: #2979FF;
 }
 
-/* Label jumlah baris ditampilkan */
 .jumlah-tampil {
     -fx-font-size: 11px;
     -fx-text-fill: #9AAAC4;
     -fx-font-style: italic;
 }
 
-/* Empty breakdown message */
 .breakdown-empty {
     -fx-font-size: 12px;
     -fx-text-fill: #9AAAC4;

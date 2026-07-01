@@ -13,6 +13,10 @@ public class Kereta {
     private String kelasTersedia;
     private String status;
 
+    private int gerbongEksekutif;
+    private int gerbongBisnis;
+    private int gerbongEkonomi;
+
     public Kereta(String nama, String nomorKereta, int kapasitasTotal) {
         this(nama, nomorKereta, 1, kapasitasTotal, "", STATUS_AKTIF);
     }
@@ -25,6 +29,47 @@ public class Kereta {
         this.kapasitasTotal = kapasitasTotal;
         this.kelasTersedia = kelasTersedia;
         this.status = status;
+        applyFallbackCarriages();
+    }
+
+    public Kereta(String nama, String nomorKereta, int gerbongEks, int gerbongBis, int gerbongEko,
+                  String kelasTersedia, String status) {
+        this.nama = nama;
+        this.nomorKereta = nomorKereta;
+        this.gerbongEksekutif = gerbongEks;
+        this.gerbongBisnis = gerbongBis;
+        this.gerbongEkonomi = gerbongEko;
+        this.jumlahGerbong = gerbongEks + gerbongBis + gerbongEko;
+        this.kapasitasTotal = gerbongEks * 50 + gerbongBis * 60 + gerbongEko * 80;
+        this.kelasTersedia = kelasTersedia;
+        this.status = status;
+    }
+
+    private void applyFallbackCarriages() {
+        if (this.gerbongEksekutif == 0 && this.gerbongBisnis == 0 && this.gerbongEkonomi == 0 && this.jumlahGerbong > 0) {
+            String kelas = (this.kelasTersedia == null ? "" : this.kelasTersedia).toLowerCase();
+            boolean hasEks = kelas.contains("eksekutif");
+            boolean hasBis = kelas.contains("bisnis");
+            boolean hasEko = kelas.contains("ekonomi");
+            int count = (hasEks ? 1 : 0) + (hasBis ? 1 : 0) + (hasEko ? 1 : 0);
+            if (count > 0) {
+                int base = this.jumlahGerbong / count;
+                int rem = this.jumlahGerbong % count;
+                if (hasEks) {
+                    this.gerbongEksekutif = base + rem;
+                    rem = 0;
+                }
+                if (hasBis) {
+                    this.gerbongBisnis = base + (hasEks ? 0 : rem);
+                    rem = 0;
+                }
+                if (hasEko) {
+                    this.gerbongEkonomi = base + (hasEks || hasBis ? 0 : rem);
+                }
+            } else {
+                this.gerbongEkonomi = this.jumlahGerbong;
+            }
+        }
     }
 
     public int getId() {
@@ -81,6 +126,30 @@ public class Kereta {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getGerbongEksekutif() {
+        return gerbongEksekutif;
+    }
+
+    public void setGerbongEksekutif(int gerbongEksekutif) {
+        this.gerbongEksekutif = gerbongEksekutif;
+    }
+
+    public int getGerbongBisnis() {
+        return gerbongBisnis;
+    }
+
+    public void setGerbongBisnis(int gerbongBisnis) {
+        this.gerbongBisnis = gerbongBisnis;
+    }
+
+    public int getGerbongEkonomi() {
+        return gerbongEkonomi;
+    }
+
+    public void setGerbongEkonomi(int gerbongEkonomi) {
+        this.gerbongEkonomi = gerbongEkonomi;
     }
 
     public boolean isAktif() {

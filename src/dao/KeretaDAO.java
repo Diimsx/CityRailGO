@@ -91,7 +91,7 @@ public class KeretaDAO {
     }
 
     public boolean save(Kereta kereta) {
-        String sql = "INSERT INTO kereta (nama, nomor_kereta, jumlah_gerbong, kapasitas_total, kelas_tersedia, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO kereta (nama, nomor_kereta, jumlah_gerbong, kapasitas_total, kelas_tersedia, status, gerbong_eksekutif, gerbong_bisnis, gerbong_ekonomi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -101,6 +101,9 @@ public class KeretaDAO {
             ps.setInt(4, kereta.getKapasitasTotal());
             ps.setString(5, kereta.getKelasTersedia());
             ps.setString(6, kereta.getStatus());
+            ps.setInt(7, kereta.getGerbongEksekutif());
+            ps.setInt(8, kereta.getGerbongBisnis());
+            ps.setInt(9, kereta.getGerbongEkonomi());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -117,7 +120,7 @@ public class KeretaDAO {
     }
 
     public boolean update(Kereta kereta) {
-        String sql = "UPDATE kereta SET nama=?, nomor_kereta=?, jumlah_gerbong=?, kapasitas_total=?, kelas_tersedia=?, status=? WHERE id=?";
+        String sql = "UPDATE kereta SET nama=?, nomor_kereta=?, jumlah_gerbong=?, kapasitas_total=?, kelas_tersedia=?, status=?, gerbong_eksekutif=?, gerbong_bisnis=?, gerbong_ekonomi=? WHERE id=?";
         Connection conn = DBConnection.getInstance();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -127,7 +130,10 @@ public class KeretaDAO {
             ps.setInt(4, kereta.getKapasitasTotal());
             ps.setString(5, kereta.getKelasTersedia());
             ps.setString(6, kereta.getStatus());
-            ps.setInt(7, kereta.getId());
+            ps.setInt(7, kereta.getGerbongEksekutif());
+            ps.setInt(8, kereta.getGerbongBisnis());
+            ps.setInt(9, kereta.getGerbongEkonomi());
+            ps.setInt(10, kereta.getId());
             int rows = ps.executeUpdate();
             return rows > 0;
 
@@ -213,14 +219,28 @@ public class KeretaDAO {
     }
 
     private Kereta buildKeretaFromResultSet(ResultSet rs) throws SQLException {
-        Kereta kereta = new Kereta(
-                rs.getString("nama"),
-                rs.getString("nomor_kereta"),
-                rs.getInt("jumlah_gerbong"),
-                rs.getInt("kapasitas_total"),
-                rs.getString("kelas_tersedia"),
-                rs.getString("status")
-        );
+        int gEks = rs.getInt("gerbong_eksekutif");
+        int gBis = rs.getInt("gerbong_bisnis");
+        int gEko = rs.getInt("gerbong_ekonomi");
+        Kereta kereta;
+        if (gEks == 0 && gBis == 0 && gEko == 0) {
+            kereta = new Kereta(
+                    rs.getString("nama"),
+                    rs.getString("nomor_kereta"),
+                    rs.getInt("jumlah_gerbong"),
+                    rs.getInt("kapasitas_total"),
+                    rs.getString("kelas_tersedia"),
+                    rs.getString("status")
+            );
+        } else {
+            kereta = new Kereta(
+                    rs.getString("nama"),
+                    rs.getString("nomor_kereta"),
+                    gEks, gBis, gEko,
+                    rs.getString("kelas_tersedia"),
+                    rs.getString("status")
+            );
+        }
         kereta.setId(rs.getInt("id"));
         return kereta;
     }
@@ -240,6 +260,15 @@ public class KeretaDAO {
             }
             if (!columnExists(conn, "status")) {
                 executeAlter(conn, "ALTER TABLE kereta ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'AKTIF' AFTER kelas_tersedia");
+            }
+            if (!columnExists(conn, "gerbong_eksekutif")) {
+                executeAlter(conn, "ALTER TABLE kereta ADD COLUMN gerbong_eksekutif INT NOT NULL DEFAULT 0 AFTER status");
+            }
+            if (!columnExists(conn, "gerbong_bisnis")) {
+                executeAlter(conn, "ALTER TABLE kereta ADD COLUMN gerbong_bisnis INT NOT NULL DEFAULT 0 AFTER gerbong_eksekutif");
+            }
+            if (!columnExists(conn, "gerbong_ekonomi")) {
+                executeAlter(conn, "ALTER TABLE kereta ADD COLUMN gerbong_ekonomi INT NOT NULL DEFAULT 0 AFTER gerbong_bisnis");
             }
             if (!indexExists(conn, "uk_kereta_nomor")) {
                 executeAlter(conn, "ALTER TABLE kereta ADD CONSTRAINT uk_kereta_nomor UNIQUE (nomor_kereta)");

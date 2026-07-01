@@ -1,16 +1,8 @@
-/* =========================================================
-   HomeAdmin.css
-   Tema: modern minimalis, sidebar dashboard
-   Navbar : #0A192F
-   Background utama : #F0F4F8
-========================================================= */
-
 .root-bg {
     -fx-background-color: #F0F4F8;
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Sidebar ===== */
 .sidebar {
     -fx-background-color: #0A192F;
 }
@@ -91,7 +83,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* ===== Konten utama ===== */
 .content-area {
     -fx-padding: 30 36 30 36;
     -fx-spacing: 24;
@@ -118,7 +109,6 @@
     -fx-text-fill: #0A192F;
 }
 
-/* ===== Stat cards ===== */
 .stat-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -158,7 +148,6 @@
     -fx-text-fill: #6E84A8;
 }
 
-/* ===== Tabel tiket terbaru ===== */
 .table-card {
     -fx-background-color: white;
     -fx-background-radius: 14;

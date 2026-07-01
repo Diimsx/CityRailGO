@@ -1,16 +1,8 @@
-/* =========================================================
-   KelolaRute.css
-   Tema: modern minimalis, konsisten dengan HomeAdmin.css
-   Navbar : #0A192F
-   Background utama : #F0F4F8
-========================================================= */
-
 .root-bg {
     -fx-background-color: #F0F4F8;
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Sidebar (sama seperti HomeAdmin) ===== */
 .sidebar {
     -fx-background-color: #0A192F;
 }
@@ -91,7 +83,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* ===== Konten utama ===== */
 .content-area {
     -fx-padding: 30 36 30 36;
     -fx-spacing: 22;
@@ -118,7 +109,6 @@
     -fx-text-fill: #0A192F;
 }
 
-/* ===== Toolbar (search + tambah) ===== */
 .toolbar {
     -fx-padding: 0 0 0 0;
 }
@@ -180,7 +170,6 @@
     -fx-background-color: #E2E7EF;
 }
 
-/* ===== Tabel kereta ===== */
 .table-card {
     -fx-background-color: white;
     -fx-background-radius: 14;
@@ -225,7 +214,6 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-/* Aksi tabel (edit/hapus) */
 .action-icon-edit {
     -fx-icon-size: 15;
     -fx-icon-color: #2979FF;
@@ -246,7 +234,6 @@
     -fx-icon-color: #C23F3F;
 }
 
-/* ===== Modal Tambah/Edit ===== */
 .modal-backdrop {
     -fx-background-color: rgba(10, 25, 47, 0.45);
 }
@@ -297,7 +284,6 @@
     -fx-text-fill: #E05C5C;
 }
 
-/* ===== Modal Rute: scrollable card ===== */
 .modal-card-tall {
     -fx-background-color: white;
     -fx-background-radius: 16;
@@ -320,7 +306,6 @@
     -fx-background-color: transparent;
 }
 
-/* ===== Section pemberhentian ===== */
 .stops-section-label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
@@ -334,13 +319,11 @@
     -fx-spacing: 8;
 }
 
-/* Satu baris stop (ComboBox + tombol hapus) */
 .transit-row {
     -fx-spacing: 8;
     -fx-alignment: CENTER_LEFT;
 }
 
-/* Badge nomor urutan pemberhentian */
 .stop-index {
     -fx-background-color: #E8F0FF;
     -fx-background-radius: 999;
@@ -352,7 +335,6 @@
     -fx-alignment: CENTER;
 }
 
-/* ComboBox di baris stop */
 .stop-combo {
     -fx-background-color: white;
     -fx-background-radius: 8;
@@ -365,7 +347,6 @@
     -fx-border-color: #2979FF;
 }
 
-/* Tombol + Tambah Pemberhentian */
 .btn-add-stop {
     -fx-background-color: #E5F7EE;
     -fx-background-radius: 8;
@@ -385,7 +366,6 @@
     -fx-icon-color: #167A42;
 }
 
-/* Tombol × hapus baris stop */
 .btn-remove-stop {
     -fx-background-color: #FCE8E8;
     -fx-background-radius: 6;
@@ -401,7 +381,6 @@
     -fx-background-color: #F5C0C0;
 }
 
-/* ===== Preview urutan di tabel ===== */
 .rute-table .table-cell {
     -fx-font-size: 12px;
     -fx-text-fill: #0A192F;
@@ -414,7 +393,6 @@
     -fx-text-fill: #9AAAC4;
     -fx-font-style: italic;
 }
-/* ===== Auto-Calc Panel (Jarak & Estimasi otomatis) ===== */
 .auto-calc-panel {
     -fx-background-color: #F0F7FF;
     -fx-background-radius: 10;

@@ -1,14 +1,8 @@
-/* ==========================================================
-   HomePenumpang.css — Dashboard & Pencarian Jadwal
-   Design System: konsisten dengan admin (#0A192F, Inter)
-========================================================== */
-
 .root-bg {
     -fx-background-color: #F0F4F8;
     -fx-font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* ===== Sidebar ===== */
 .sidebar {
     -fx-background-color: #0A192F;
     -fx-min-width: 240;
@@ -96,7 +90,6 @@
     -fx-text-fill: #FF6B6B;
 }
 
-/* ===== Topbar ===== */
 .topbar {
     -fx-background-color: white;
     -fx-padding: 18 28 18 28;
@@ -126,7 +119,6 @@
     -fx-padding: 6 14 6 14;
 }
 
-/* ===== Content Area ===== */
 .content-scroll {
     -fx-background: #F0F4F8;
     -fx-background-color: #F0F4F8;
@@ -137,7 +129,6 @@
     -fx-background-color: #F0F4F8;
 }
 
-/* ===== Hero Banner ===== */
 .hero-card {
     -fx-background-color: linear-gradient(to right, #0A192F, #1B3A6B);
     -fx-background-radius: 20;
@@ -174,7 +165,6 @@
     -fx-min-height: 40;
 }
 
-/* ===== Search Card ===== */
 .search-card {
     -fx-background-color: white;
     -fx-background-radius: 20;
@@ -268,7 +258,6 @@
     -fx-icon-color: white;
 }
 
-/* ===== Info Cards ===== */
 .info-card {
     -fx-background-color: white;
     -fx-background-radius: 16;
@@ -306,7 +295,7 @@
     -fx-font-size: 12px;
     -fx-text-fill: #6E84A8;
 }
-/* ===== Promo Section ===== */
+
 .promo-card {
     -fx-background-color: white;
     -fx-background-radius: 20;
@@ -321,27 +310,95 @@
     -fx-padding: 14 16 14 16;
 }
 
-.promo-item-blue   { -fx-background-color: #EEF3FF; -fx-border-color: #B3CAFB; }
-.promo-item-green  { -fx-background-color: #E6FAF2; -fx-border-color: #9AE6B4; }
-.promo-item-orange { -fx-background-color: #FFF4E6; -fx-border-color: #FBD38D; }
-.promo-item-red    { -fx-background-color: #FFF0F0; -fx-border-color: #FEB2B2; }
-.promo-item-purple { -fx-background-color: #F5F0FF; -fx-border-color: #D6BCFA; }
+.promo-item-blue {
+    -fx-background-color: #EEF3FF;
+    -fx-border-color: #B3CAFB;
+}
 
-.promo-kode-blue   { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2B6CB0; }
-.promo-kode-green  { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #276749; }
-.promo-kode-orange { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #C05621; }
-.promo-kode-red    { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #9B2335; }
-.promo-kode-purple { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #553C9A; }
+.promo-item-green {
+    -fx-background-color: #E6FAF2;
+    -fx-border-color: #9AE6B4;
+}
 
-.promo-desc { -fx-font-size: 12px; -fx-text-fill: #4A5568; -fx-wrap-text: true; }
-.promo-exp  { -fx-font-size: 11px; -fx-text-fill: #9CACC4; }
+.promo-item-orange {
+    -fx-background-color: #FFF4E6;
+    -fx-border-color: #FBD38D;
+}
+
+.promo-item-red {
+    -fx-background-color: #FFF0F0;
+    -fx-border-color: #FEB2B2;
+}
+
+.promo-item-purple {
+    -fx-background-color: #F5F0FF; 
+    -fx-border-color: #D6BCFA;
+}
+
+.promo-kode-blue {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B6CB0;
+}
+
+.promo-kode-green  {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #276749;
+}
+
+.promo-kode-orange {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #C05621;
+}
+
+.promo-kode-red {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9B2335;
+}
+
+.promo-kode-purple {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #553C9A;
+}
+
+.promo-desc {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4A5568;
+    -fx-wrap-text: true;
+}
+
+.promo-exp  {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9CACC4;
+}
+
 .promo-badge {
     -fx-background-radius: 20;
     -fx-padding: 3 12 3 12;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
 }
-.promo-badge-diskon { -fx-background-color: #4D8AFF; -fx-text-fill: white; }
-.promo-badge-nominal { -fx-background-color: #2BB673; -fx-text-fill: white; }
-.no-promo-label { -fx-font-size: 13px; -fx-text-fill: #9CACC4; -fx-font-style: italic; }
-.error-label { -fx-text-fill: #D64545; -fx-font-size: 12px; }
+.promo-badge-diskon {
+    -fx-background-color: #4D8AFF;
+    -fx-text-fill: white;
+}
+
+.promo-badge-nominal {
+    -fx-background-color: #2BB673;
+    -fx-text-fill: white;
+}
+
+.no-promo-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #9CACC4;
+    -fx-font-style: italic;
+}
+
+.error-label {
+    -fx-text-fill: #D64545;
+    -fx-font-size: 12px;
+}

@@ -11,7 +11,6 @@
 
 <BorderPane prefHeight="720" prefWidth="1280" styleClass="root-bg" stylesheets="@HomeAdmin.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeAdminController">
 
-    <!-- ===================== SIDEBAR ===================== -->
     <left>
         <VBox prefHeight="720" prefWidth="240" styleClass="sidebar">
 
@@ -62,7 +61,6 @@
         </VBox>
     </left>
 
-    <!-- ===================== KONTEN UTAMA ===================== -->
     <center>
         <VBox styleClass="content-area">
 

@@ -50,8 +50,10 @@ public class KelolaKeretaController implements Initializable {
     @FXML private Label lblModalTitle;
     @FXML private TextField tfNama;
     @FXML private TextField tfNomorKereta;
-    @FXML private TextField tfJumlahGerbong;
-    @FXML private TextField tfKapasitas;
+    @FXML private TextField tfGerbongEksekutif;
+    @FXML private TextField tfGerbongBisnis;
+    @FXML private TextField tfGerbongEkonomi;
+    @FXML private TextField tfKalkulasi;
     @FXML private CheckBox chkEksekutif;
     @FXML private CheckBox chkBisnis;
     @FXML private CheckBox chkEkonomi;
@@ -75,6 +77,30 @@ public class KelolaKeretaController implements Initializable {
         setupTabel();
         muatDataKereta();
         setupPencarian();
+        setupKalkulasiOtomatis();
+    }
+
+    private void setupKalkulasiOtomatis() {
+        javafx.beans.value.ChangeListener<String> listener = (obs, oldVal, newVal) -> {
+            int eks = parseInteger(tfGerbongEksekutif.getText());
+            int bis = parseInteger(tfGerbongBisnis.getText());
+            int eko = parseInteger(tfGerbongEkonomi.getText());
+            int totalGerbong = eks + bis + eko;
+            int totalKapasitas = eks * 50 + bis * 60 + eko * 80;
+            tfKalkulasi.setText(totalKapasitas + " Kursi (Total Gerbong: " + totalGerbong + ")");
+        };
+        tfGerbongEksekutif.textProperty().addListener(listener);
+        tfGerbongBisnis.textProperty().addListener(listener);
+        tfGerbongEkonomi.textProperty().addListener(listener);
+    }
+
+    private int parseInteger(String text) {
+        if (text == null || text.trim().isEmpty()) return 0;
+        try {
+            return Integer.parseInt(text.trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     private void setupTabel() {
@@ -173,8 +199,12 @@ public class KelolaKeretaController implements Initializable {
         btnSimpan.setText("Perbarui");
         tfNama.setText(kereta.getNama());
         tfNomorKereta.setText(kereta.getNomorKereta());
-        tfJumlahGerbong.setText(String.valueOf(kereta.getJumlahGerbong()));
-        tfKapasitas.setText(String.valueOf(kereta.getKapasitasTotal()));
+        tfGerbongEksekutif.setText(String.valueOf(kereta.getGerbongEksekutif()));
+        tfGerbongBisnis.setText(String.valueOf(kereta.getGerbongBisnis()));
+        tfGerbongEkonomi.setText(String.valueOf(kereta.getGerbongEkonomi()));
+        int totalGerbong = kereta.getGerbongEksekutif() + kereta.getGerbongBisnis() + kereta.getGerbongEkonomi();
+        tfKalkulasi.setText(kereta.getKapasitasTotal() + " Kursi (Total Gerbong: " + totalGerbong + ")");
+        
         setKelasDipilih(kereta.getKelasTersedia());
         cbStatus.setValue(kereta.getStatus());
         sembunyikanError();
@@ -186,7 +216,6 @@ public class KelolaKeretaController implements Initializable {
             return;
         }
 
-        // --- Dialog konfirmasi hapus ---
         ButtonType btnYa = new ButtonType("Ya, Hapus", ButtonBar.ButtonData.OK_DONE);
         ButtonType btnTidak = new ButtonType("Batal", ButtonBar.ButtonData.CANCEL_CLOSE);
         Dialog<ButtonType> konfirmasi = new Dialog<>();
@@ -200,7 +229,6 @@ public class KelolaKeretaController implements Initializable {
             return;
         }
 
-        // --- Cek apakah kereta masih ada jadwal aktif ---
         String jadwalAktif = keretaDAO.getJadwalAktifPertama(kereta.getId());
         if (jadwalAktif != null) {
             tampilkanDialogBlokir(
@@ -221,10 +249,6 @@ public class KelolaKeretaController implements Initializable {
         }
     }
 
-    /**
-     * Menampilkan dialog error premium saat penghapusan diblokir karena masih ada jadwal aktif.
-     * Menyertakan tombol "Lihat Jadwal Terkait" sebagai shortcut ke halaman Kelola Jadwal.
-     */
     private void tampilkanDialogBlokir(String nomorKereta, String pesanDetail) {
         ButtonType btnLihatJadwal = new ButtonType("Lihat Jadwal Terkait →", ButtonBar.ButtonData.OTHER);
         ButtonType btnTutup = new ButtonType("Tutup", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -246,43 +270,26 @@ public class KelolaKeretaController implements Initializable {
     private void handleSimpanKereta() {
         String nama = tfNama.getText().trim();
         String nomorKereta = tfNomorKereta.getText().trim();
-        String teksJumlahGerbong = tfJumlahGerbong.getText().trim();
-        String teksKapasitas = tfKapasitas.getText().trim();
-        String kelasTersedia = kumpulkanKelasDipilih();
         String status = cbStatus.getValue();
 
-        if (nama.isEmpty() || nomorKereta.isEmpty() || teksJumlahGerbong.isEmpty()
-                || teksKapasitas.isEmpty() || status == null) {
+        if (nama.isEmpty() || nomorKereta.isEmpty() || status == null) {
             tampilkanError("Semua field wajib diisi.");
             return;
         }
 
-        int jumlahGerbong;
-        try {
-            jumlahGerbong = Integer.parseInt(teksJumlahGerbong);
-            if (jumlahGerbong <= 0) {
-                tampilkanError("Jumlah gerbong harus berupa angka positif.");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            tampilkanError("Jumlah gerbong harus berupa angka.");
+        int eks = parseInteger(tfGerbongEksekutif.getText());
+        int bis = parseInteger(tfGerbongBisnis.getText());
+        int eko = parseInteger(tfGerbongEkonomi.getText());
+        int totalGerbong = eks + bis + eko;
+
+        if (totalGerbong <= 0) {
+            tampilkanError("Masukkan jumlah gerbong minimal 1.");
             return;
         }
 
-        int kapasitas;
-        try {
-            kapasitas = Integer.parseInt(teksKapasitas);
-            if (kapasitas <= 0) {
-                tampilkanError("Kapasitas harus berupa angka positif.");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            tampilkanError("Kapasitas harus berupa angka.");
-            return;
-        }
-
+        String kelasTersedia = kumpulkanKelasDipilih();
         if (kelasTersedia.isEmpty()) {
-            tampilkanError("Pilih minimal satu kelas yang didukung kereta.");
+            tampilkanError("Pilih minimal satu kelas (dengan mengisi gerbong).");
             return;
         }
 
@@ -306,7 +313,7 @@ public class KelolaKeretaController implements Initializable {
             }
         }
 
-        Kereta dataKereta = new Kereta(nama, nomorKereta, jumlahGerbong, kapasitas, kelasTersedia, status);
+        Kereta dataKereta = new Kereta(nama, nomorKereta, eks, bis, eko, kelasTersedia, status);
         boolean berhasil;
         if (keretaDiedit == null) {
             berhasil = adminController.tambahKereta(dataKereta);
@@ -349,8 +356,10 @@ public class KelolaKeretaController implements Initializable {
     private void kosongkanForm() {
         tfNama.clear();
         tfNomorKereta.clear();
-        tfJumlahGerbong.clear();
-        tfKapasitas.clear();
+        tfGerbongEksekutif.clear();
+        tfGerbongBisnis.clear();
+        tfGerbongEkonomi.clear();
+        tfKalkulasi.setText("0 Kursi (Total Gerbong: 0)");
         chkEksekutif.setSelected(false);
         chkBisnis.setSelected(false);
         chkEkonomi.setSelected(false);
@@ -360,13 +369,16 @@ public class KelolaKeretaController implements Initializable {
 
     private String kumpulkanKelasDipilih() {
         List<String> kelas = new ArrayList<>();
-        if (chkEksekutif.isSelected()) {
+        int eks = parseInteger(tfGerbongEksekutif.getText());
+        int bis = parseInteger(tfGerbongBisnis.getText());
+        int eko = parseInteger(tfGerbongEkonomi.getText());
+        if (eks > 0) {
             kelas.add("Eksekutif");
         }
-        if (chkBisnis.isSelected()) {
+        if (bis > 0) {
             kelas.add("Bisnis");
         }
-        if (chkEkonomi.isSelected()) {
+        if (eko > 0) {
             kelas.add("Ekonomi");
         }
         return String.join(", ", kelas);
@@ -424,7 +436,6 @@ public class KelolaKeretaController implements Initializable {
 
     @FXML
     private void handleNavKereta() {
-        // sudah berada di halaman Kelola Kereta
     }
     
     @FXML

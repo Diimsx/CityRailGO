@@ -20,7 +20,6 @@ import util.SessionManager;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PilihJadwalController implements Initializable {
@@ -97,7 +96,6 @@ public class PilihJadwalController implements Initializable {
         card.setSpacing(16);
         card.setAlignment(Pos.CENTER_LEFT);
 
-        // ---- Nama Kereta & Kelas ----
         VBox infoKereta = new VBox(4);
         Label namaKereta = new Label(jadwal.getKereta().getNama());
         namaKereta.getStyleClass().add("kereta-nama");
@@ -116,7 +114,6 @@ public class PilihJadwalController implements Initializable {
         infoKereta.getChildren().addAll(namaKereta, nomorKereta, labelKelas);
         infoKereta.setPrefWidth(180);
 
-        // ---- Waktu Berangkat ----
         VBox waktuBerangkat = new VBox(2);
         waktuBerangkat.setAlignment(Pos.CENTER);
         Label jamBerangkat = new Label(jadwal.getWaktuBerangkat().format(FMT_WAKTU));
@@ -125,7 +122,6 @@ public class PilihJadwalController implements Initializable {
         stasiAsal.getStyleClass().add("rute-text");
         waktuBerangkat.getChildren().addAll(jamBerangkat, stasiAsal);
 
-        // ---- Panah & Durasi ----
         VBox tengah = new VBox(4);
         tengah.setAlignment(Pos.CENTER);
         FontIcon panah = new FontIcon("fas-arrow-right");
@@ -139,7 +135,6 @@ public class PilihJadwalController implements Initializable {
         lblDurasi.getStyleClass().add("durasi-text");
         tengah.getChildren().addAll(panah, lblDurasi);
 
-        // ---- Waktu Tiba ----
         VBox waktuTiba = new VBox(2);
         waktuTiba.setAlignment(Pos.CENTER);
         Label jamTiba = new Label(jadwal.getWaktuTiba().format(FMT_WAKTU));
@@ -148,11 +143,9 @@ public class PilihJadwalController implements Initializable {
         stasiTujuan.getStyleClass().add("rute-text");
         waktuTiba.getChildren().addAll(jamTiba, stasiTujuan);
 
-        // ---- Divider ----
         Region div1 = new Region();
         div1.getStyleClass().add("divider-v");
 
-        // ---- Harga & Kursi ----
         VBox infoHarga = new VBox(4);
         infoHarga.setAlignment(Pos.CENTER_RIGHT);
         String hargaStr = IDR.format((long) jadwal.getHargaEfektif())
@@ -167,13 +160,11 @@ public class PilihJadwalController implements Initializable {
         lblSisaKursi.getStyleClass().add(sisaKursi > 0 ? "kursi-text" : "kursi-habis");
         infoHarga.getChildren().addAll(lblHarga, lblPerOrang, lblSisaKursi);
 
-        // ---- Tombol Pilih ----
         Button btnPilih = new Button(sisaKursi > 0 ? "Pilih" : "Habis");
         btnPilih.getStyleClass().add(sisaKursi > 0 ? "btn-pilih" : "btn-pilih-disabled");
         btnPilih.setDisable(sisaKursi == 0);
         btnPilih.setOnAction(e -> handlePilihJadwal(jadwal));
 
-        // ---- Spacer ----
         Region spacer = new Region();
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
@@ -183,7 +174,8 @@ public class PilihJadwalController implements Initializable {
 
     private void handlePilihJadwal(Jadwal jadwal) {
         PenumpangSession.setJadwalDipilih(jadwal);
-        SceneManager.switchScene("PilihKursi.fxml");
+        PenumpangSession.setSisaDetikTimer(15 * 60);
+        SceneManager.switchScene("DataPenumpang.fxml");
     }
 
     private void tampilkanKosong() {
@@ -195,21 +187,5 @@ public class PilihJadwalController implements Initializable {
         lblCountHasil.setText("");
     }
 
-    // ===== Nav =====
-    @FXML private void handleNavBeranda()   { SceneManager.switchScene("HomePenumpang.fxml"); }
-    @FXML private void handleNavTiketSaya() { SceneManager.switchScene("TiketSaya.fxml"); }
-
-    @FXML
-    private void handleLogout() {
-        Alert konfirmasi = new Alert(Alert.AlertType.CONFIRMATION);
-        konfirmasi.setTitle("Logout");
-        konfirmasi.setHeaderText(null);
-        konfirmasi.setContentText("Yakin ingin logout?");
-        Optional<ButtonType> hasil = konfirmasi.showAndWait();
-        if (hasil.isPresent() && hasil.get() == ButtonType.OK) {
-            PenumpangSession.reset();
-            SessionManager.getInstance().logout();
-            SceneManager.switchScene("login.fxml");
-        }
-    }
+    @FXML private void handleNavBeranda() { SceneManager.switchScene("HomePenumpang.fxml"); }
 }

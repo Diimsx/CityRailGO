@@ -21,7 +21,6 @@
             stylesheets="@KelolaRute.css"
             styleClass="root-bg">
 
-    <!-- ===================== SIDEBAR ===================== -->
     <left>
         <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
 
@@ -72,13 +71,11 @@
         </VBox>
     </left>
 
-    <!-- ===================== KONTEN UTAMA ===================== -->
     <center>
         <StackPane>
 
             <VBox styleClass="content-area">
 
-                <!-- Topbar -->
                 <HBox alignment="CENTER_LEFT" styleClass="topbar">
                     <VBox>
                         <Label text="Kelola Rute" styleClass="page-title"/>
@@ -88,7 +85,6 @@
                     <Label fx:id="lblAdminName" text="Halo, Admin" styleClass="admin-name"/>
                 </HBox>
 
-                <!-- Toolbar: search + tambah -->
                 <HBox alignment="CENTER_LEFT" spacing="14" styleClass="toolbar">
                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-box">
                         <FontIcon iconLiteral="fas-search" styleClass="search-icon"/>
@@ -105,7 +101,6 @@
                     </Button>
                 </HBox>
 
-                <!-- Tabel rute -->
                 <VBox spacing="14" styleClass="table-card" VBox.vgrow="ALWAYS">
                     <Label text="Daftar Rute" styleClass="card-title"/>
                     <TableView fx:id="tblRute" styleClass="rute-table" VBox.vgrow="ALWAYS">
@@ -122,13 +117,11 @@
 
             </VBox>
 
-            <!-- ===================== MODAL TAMBAH/EDIT (Scrollable) ===================== -->
             <StackPane fx:id="modalOverlay" styleClass="modal-backdrop" alignment="CENTER"
                        visible="false" managed="false">
 
                 <VBox styleClass="modal-card-tall" maxHeight="640" spacing="0">
 
-                    <!-- Header modal (fixed, tidak scroll) -->
                     <HBox alignment="CENTER_LEFT" spacing="0">
                         <padding><Insets top="22" right="24" bottom="16" left="24"/></padding>
                         <Label fx:id="lblModalTitle" text="Buat Rute Baru" styleClass="modal-title"/>
@@ -136,19 +129,16 @@
                         <FontIcon iconLiteral="fas-times" styleClass="modal-close-icon" onMouseClicked="#handleTutupModal"/>
                     </HBox>
 
-                    <!-- Body modal yang bisa di-scroll -->
                     <ScrollPane styleClass="modal-scroll" VBox.vgrow="ALWAYS"
                                 fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
                         <VBox spacing="16">
                             <padding><Insets top="0" right="24" bottom="16" left="24"/></padding>
 
-                            <!-- Nama Rute -->
                             <VBox spacing="6">
                                 <Label text="Nama Rute" styleClass="form-label"/>
                                 <TextField fx:id="tfNamaRute" promptText="Contoh: Jalur Utara Premium" styleClass="form-field"/>
                             </VBox>
 
-                            <!-- Stasiun Asal & Tujuan (2 kolom) -->
                             <HBox spacing="12">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
                                     <Label text="Stasiun Asal" styleClass="form-label"/>
@@ -162,7 +152,6 @@
                                 </VBox>
                             </HBox>
 
-                            <!-- Jarak & Estimasi - AUTO-GENERATE -->
                             <VBox spacing="8" styleClass="auto-calc-panel">
                                 <HBox alignment="CENTER_LEFT" spacing="8">
                                     <FontIcon iconLiteral="fas-calculator" styleClass="auto-calc-icon"/>
@@ -190,7 +179,6 @@
                                 <Label fx:id="lblAutoCalcHint" text="Pilih stasiun asal dan tujuan untuk menghitung otomatis." styleClass="auto-calc-hint" wrapText="true"/>
                             </VBox>
 
-                            <!-- Section Stasiun Pemberhentian -->
                             <VBox spacing="10">
                                 <HBox alignment="CENTER_LEFT">
                                     <Label text="Stasiun Pemberhentian (Transit)" styleClass="stops-section-label"/>
@@ -206,23 +194,19 @@
                                     </Button>
                                 </HBox>
 
-                                <!-- Container baris stop dinamis -->
                                 <VBox fx:id="vboxStops" styleClass="stops-container" spacing="8">
-                                    <!-- Baris ComboBox ditambah secara dinamis via controller -->
                                 </VBox>
 
                                 <Label text="Urutan 1 = Stasiun Asal, pemberhentian ditengah, urutan terakhir = Stasiun Tujuan."
                                        styleClass="form-hint" wrapText="true"/>
                             </VBox>
 
-                            <!-- Error label -->
                             <Label fx:id="lblModalError" styleClass="modal-error"
                                    wrapText="true" visible="false" managed="false"/>
 
                         </VBox>
                     </ScrollPane>
 
-                    <!-- Footer modal (fixed, tidak scroll) -->
                     <HBox spacing="12" alignment="CENTER_RIGHT">
                         <padding><Insets top="14" right="24" bottom="20" left="24"/></padding>
                         <Button text="Batal" styleClass="btn-secondary" onAction="#handleTutupModal"/>

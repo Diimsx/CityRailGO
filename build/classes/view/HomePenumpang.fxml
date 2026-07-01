@@ -22,7 +22,6 @@
             stylesheets="@HomePenumpang.css"
             styleClass="root-bg">
 
-    <!-- ===================== SIDEBAR ===================== -->
     <left>
         <VBox prefWidth="240" prefHeight="720" styleClass="sidebar">
             <VBox alignment="CENTER" spacing="4" styleClass="brand-box">
@@ -55,10 +54,8 @@
         </VBox>
     </left>
 
-    <!-- ===================== KONTEN UTAMA ===================== -->
     <center>
         <VBox>
-            <!-- Topbar -->
             <HBox alignment="CENTER_LEFT" styleClass="topbar">
                 <VBox>
                     <Label text="Beranda" styleClass="page-title"/>
@@ -72,13 +69,11 @@
                 </HBox>
             </HBox>
 
-            <!-- Scrollable Content -->
             <ScrollPane styleClass="content-scroll" VBox.vgrow="ALWAYS"
                         fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
                 <VBox spacing="24">
                     <padding><Insets top="28" right="28" bottom="28" left="28"/></padding>
 
-                    <!-- Hero Banner -->
                     <HBox styleClass="hero-card" spacing="0" alignment="CENTER_LEFT">
                         <VBox spacing="8" HBox.hgrow="ALWAYS">
                             <Label text="Perjalanan Anda," styleClass="hero-title"/>
@@ -103,10 +98,8 @@
                         </HBox>
                     </HBox>
 
-                    <!-- Form Pencarian + Promo (2 kolom) -->
                     <HBox spacing="20" alignment="TOP_LEFT">
 
-                        <!-- KIRI: Form Pencarian -->
                         <VBox styleClass="search-card" spacing="20" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
                                 <FontIcon iconLiteral="fas-search" styleClass="info-icon-blue"/>
@@ -116,7 +109,6 @@
                                 </VBox>
                             </HBox>
 
-                            <!-- Asal + swap + Tujuan -->
                             <HBox spacing="12" alignment="CENTER_LEFT">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
                                     <HBox alignment="CENTER_LEFT" spacing="6">
@@ -141,7 +133,6 @@
                                 </VBox>
                             </HBox>
 
-                            <!-- Tanggal + Jumlah -->
                             <HBox spacing="12">
                                 <VBox spacing="6" HBox.hgrow="ALWAYS">
                                     <HBox alignment="CENTER_LEFT" spacing="6">
@@ -151,12 +142,20 @@
                                     <DatePicker fx:id="dpTanggal" promptText="Pilih tanggal..."
                                                 styleClass="form-field" maxWidth="Infinity"/>
                                 </VBox>
-                                <VBox spacing="6" prefWidth="200">
+                                <VBox spacing="6" prefWidth="130">
                                     <HBox alignment="CENTER_LEFT" spacing="6">
                                         <FontIcon iconLiteral="fas-users" styleClass="info-icon-blue"/>
-                                        <Label text="Jumlah Penumpang" styleClass="form-label"/>
+                                        <Label text="Dewasa (≥ 3 thn)" styleClass="form-label"/>
                                     </HBox>
-                                    <Spinner fx:id="spJumlah" min="1" max="8" initialValue="1"
+                                    <Spinner fx:id="spDewasa"
+                                             styleClass="form-field" prefHeight="42"/>
+                                </VBox>
+                                <VBox spacing="6" prefWidth="130">
+                                    <HBox alignment="CENTER_LEFT" spacing="6">
+                                        <FontIcon iconLiteral="fas-users" styleClass="info-icon-orange"/>
+                                        <Label text="Bayi (&lt; 3 thn)" styleClass="form-label"/>
+                                    </HBox>
+                                    <Spinner fx:id="spBayi"
                                              styleClass="form-field" prefHeight="42"/>
                                 </VBox>
                             </HBox>
@@ -175,7 +174,6 @@
                             </Button>
                         </VBox>
 
-                        <!-- KANAN: Promo -->
                         <VBox styleClass="promo-card" spacing="16" prefWidth="320" minWidth="290">
                             <HBox alignment="CENTER_LEFT" spacing="10">
                                 <FontIcon iconLiteral="fas-tags" styleClass="info-icon-orange"/>
@@ -184,14 +182,12 @@
                                     <Label text="Gunakan kode saat pembayaran" styleClass="search-card-subtitle"/>
                                 </VBox>
                             </HBox>
-                            <!-- Promo cards — di-generate controller -->
                             <VBox fx:id="vboxPromo" spacing="12"/>
                             <Label fx:id="lblNoPromo" text="Belum ada promo aktif saat ini."
                                    styleClass="no-promo-label" visible="false" managed="false" wrapText="true"/>
                         </VBox>
                     </HBox>
 
-                    <!-- Info Cards -->
                     <HBox spacing="20">
                         <VBox styleClass="info-card" spacing="14" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="14">
