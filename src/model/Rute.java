@@ -12,10 +12,8 @@ public class Rute {
     private double jarakKm;
     private int estimasiMenit;
 
-    /** Stasiun yang dilewati di TENGAH perjalanan (tidak termasuk asal & tujuan). */
     private List<Stasiun> stasiunPemberhentian = new ArrayList<>();
 
-    // ===== Constructor penuh (dipakai controller saat membuat rute baru) =====
     public Rute(String namaRute, Stasiun stasiunAsal, Stasiun stasiunTujuan,
                 double jarakKm, int estimasiMenit) {
         this.namaRute       = namaRute;
@@ -25,7 +23,6 @@ public class Rute {
         this.estimasiMenit  = estimasiMenit;
     }
 
-    // ===== Backward-compat constructor (DAO lama, dipertahankan sementara) =====
     public Rute(String stasiunAsal, String stasiunTujuan, double jarakKm, int estimasiMenit) {
         this.namaRute         = stasiunAsal + " \u2192 " + stasiunTujuan;
         this.stasiunAsalObj   = new Stasiun("", stasiunAsal, "");
@@ -34,36 +31,42 @@ public class Rute {
         this.estimasiMenit    = estimasiMenit;
     }
 
-    // ===== Getters =====
+    public int getId() {
+        return id;
+    }
 
-    public int getId() { return id; }
+    public String getNamaRute() {
+        return namaRute;
+    }
 
-    public String getNamaRute() { return namaRute; }
+    public Stasiun getStasiunAsalObj() {
+        return stasiunAsalObj;
+    }
 
-    public Stasiun getStasiunAsalObj() { return stasiunAsalObj; }
+    public Stasiun getStasiunTujuanObj() {
+        return stasiunTujuanObj;
+    }
 
-    public Stasiun getStasiunTujuanObj() { return stasiunTujuanObj; }
-
-    /** Nama teks stasiun asal — backward compat untuk KelolaJadwalController dll. */
     public String getStasiunAsal() {
         return stasiunAsalObj == null ? "" : stasiunAsalObj.getNamaStasiun();
     }
 
-    /** Nama teks stasiun tujuan — backward compat. */
     public String getStasiunTujuan() {
         return stasiunTujuanObj == null ? "" : stasiunTujuanObj.getNamaStasiun();
     }
 
-    public double getJarakKm() { return jarakKm; }
+    public double getJarakKm() {
+        return jarakKm;
+    }
 
-    public int getEstimasiMenit() { return estimasiMenit; }
+    public int getEstimasiMenit() {
+        return estimasiMenit;
+    }
 
-    public List<Stasiun> getStasiunPemberhentian() { return stasiunPemberhentian; }
+    public List<Stasiun> getStasiunPemberhentian() {
+        return stasiunPemberhentian;
+    }
 
-    /**
-     * Mengembalikan string preview urutan stasiun lengkap.
-     * Contoh: "Gambir → Cirebon → Semarang → Surabaya"
-     */
     public String getPreviewUrutan() {
         StringBuilder sb = new StringBuilder(getStasiunAsal());
         for (Stasiun s : stasiunPemberhentian) {
@@ -73,11 +76,13 @@ public class Rute {
         return sb.toString();
     }
 
-    // ===== Setters =====
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public void setId(int id) { this.id = id; }
-
-    public void setNamaRute(String namaRute) { this.namaRute = namaRute; }
+    public void setNamaRute(String namaRute) {
+        this.namaRute = namaRute;
+    }
 
     public void setStasiunAsalObj(Stasiun stasiunAsalObj) {
         this.stasiunAsalObj = stasiunAsalObj;

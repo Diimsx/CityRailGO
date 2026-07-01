@@ -3,9 +3,9 @@ package model;
 public class Stasiun {
 
     private int id;
-    private String kodeStasiun;      // YK, GMR, SUB, etc (UNIQUE, 2-4 chars)
-    private String namaStasiun;      // Yogyakarta, Gambir, Surabaya
-    private String kota;             // Yogyakarta, Jakarta, Surabaya
+    private String kodeStasiun;
+    private String namaStasiun;
+    private String kota;
 
     public Stasiun(String kodeStasiun, String namaStasiun, String kota) {
         this.kodeStasiun = kodeStasiun;
